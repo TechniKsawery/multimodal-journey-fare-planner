@@ -1,0 +1,9 @@
+# Repository owner reviews everything; workflows and security files are called out explicitly.
+* @TechniKsawery
+/.github/ @TechniKsawery
+/SECURITY.md @TechniKsawery
+/SECURITY.pl.md @TechniKsawery
+/LICENSE @TechniKsawery
+/NOTICE @TechniKsawery
+/DATA_SOURCES.md @TechniKsawery
+/DATA_SOURCES.pl.md @TechniKsawery

@@ -15,7 +15,7 @@ are downloaded by scripts, not stored in the repo.
 | German local GTFS (NV) | https://download.gtfs.de/germany/nv_free/latest.zip | CC BY 4.0 (gtfs.de) | `scripts/fetch_data.py` |
 | ZTM Lublin GTFS | https://mkuran.pl/gtfs/lublin.zip | CC0 | `scripts/fetch_data.py` |
 | ZTM Warsaw GTFS | https://mkuran.pl/gtfs/warsaw.zip | ZTM terms + ODbL (see `motis/PL-CITIES-GTFS-NOTES.md`) | `scripts/fetch_data.py` |
-| ZTP Krakow GTFS | https://gtfs.ztp.krakow.pl/ | licence unconfirmed: testing only, do not redistribute; not downloaded by default | optional: `scripts/fetch_data_extended.py --krakow` |
+| ZTP Krakow GTFS | https://gtfs.ztp.krakow.pl/ | page declares "Creative Commons (CC BY 4.0)" (read 2026-11-15, feed ver. 20261113); page gives no link to full terms and no attribution wording, so treat as not fully confirmed: attribute ZTP Krakow, do not redistribute until confirmed with ZTP; not downloaded by default | optional: `scripts/fetch_data_extended.py --krakow` |
 | Hamburg / Munich / Cologne GTFS | see `motis/DE-FULL-CITY-GTFS-NOTES.md` | DL-DE-BY-2.0 / CC BY 4.0 / CC BY 4.0 | manual (notes) |
 | OpenStreetMap extracts | https://download.geofabrik.de/ | ODbL, © OpenStreetMap contributors | `scripts/fetch_data.py` |
 | Fares, discounts, attractions, city cards | per-record `zrodlo_url` + `data_weryfikacji` in `fares/data/*.json`, `attractions/data/*.json` | facts with source links; operators' terms apply; entries with `price_verified: false` are unverified estimates | maintained by hand |
