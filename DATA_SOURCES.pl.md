@@ -15,7 +15,7 @@ pobierane przez skrypty, a nie przechowywane w repozytorium.
 | Niemiecki GTFS lokalny (NV) | https://download.gtfs.de/germany/nv_free/latest.zip | CC BY 4.0 (gtfs.de) | `scripts/fetch_data.py` |
 | GTFS ZTM Lublin | https://mkuran.pl/gtfs/lublin.zip | CC0 | `scripts/fetch_data.py` |
 | GTFS ZTM Warszawa | https://mkuran.pl/gtfs/warsaw.zip | Warunki ZTM + ODbL (zob. `motis/PL-CITIES-GTFS-NOTES.md`) | `scripts/fetch_data.py` |
-| GTFS ZTP Kraków | https://gtfs.ztp.krakow.pl/ | licencja niepotwierdzona: tylko testy, nie redystrybuować; domyślnie NIE jest pobierany | opcjonalnie: `scripts/fetch_data_extended.py --krakow` |
+| GTFS ZTP Kraków | https://gtfs.ztp.krakow.pl/ | strona deklaruje „Creative Commons (CC BY 4.0)” (odczyt 2026-11-15, wersja feedu 20261113); brak linku do pełnych warunków i wzoru atrybucji, więc traktować jako niepotwierdzone w pełni: wskazywać ZTP Kraków jako źródło, nie redystrybuować do czasu potwierdzenia z ZTP; domyślnie NIE jest pobierany | opcjonalnie: `scripts/fetch_data_extended.py --krakow` |
 | GTFS Hamburg / Monachium / Kolonii | zob. `motis/DE-FULL-CITY-GTFS-NOTES.md` | DL-DE-BY-2.0 / CC BY 4.0 / CC BY 4.0 | ręcznie (notatki) |
 | Wyciągi OpenStreetMap | https://download.geofabrik.de/ | ODbL, © współtwórcy OpenStreetMap | `scripts/fetch_data.py` |
 | Taryfy, zniżki, atrakcje, karty miejskie | według rekordu: `zrodlo_url` + `data_weryfikacji` w `fares/data/*.json`, `attractions/data/*.json` | fakty ze źródłami; obowiązują warunki operatorów; wpisy z `price_verified: false` to niezweryfikowane szacunki | utrzymywane ręcznie |
