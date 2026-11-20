@@ -17,7 +17,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const BLUE = '#1f6feb'
 const BLUE_DARK = '#1857bd'
 const AMBER = '#ffc83d'
-const DEFAULT = 'B2'
+const DEFAULT = 'D1'
 
 // Elementy rysowane w układzie 512x512, mieszczą się w kole o promieniu ~190 od środka
 // (strefa bezpieczna ikon maskable to koło o promieniu 40% szerokości, czyli ~205).
@@ -27,6 +27,8 @@ const GLYPH = {
   eur: 'M32 -30A38 38 0 1 0 32 30M-44 -9H20M-44 9H20',
   usd: 'M24 -27C12 -42 -26 -38 -22 -15C-18 6 24 0 24 21C24 44 -14 46 -26 28M0 -52V52',
   gbp: 'M26 -31C14 -50 -24 -44 -24 -13V26M-24 26C-24 38 -36 44 -42 46H30M-40 4H12',
+  jpy: 'M-30 -48L0 -6L30 -48M0 -6V50M-26 8H26M-26 30H26',
+  inr: 'M-28 -42H28M-28 -18H28M-28 -42C24 -42 24 4 -28 4L18 50',
   pln: 'M-56 -14H-18L-56 36H-18M20 -48V34M4 12L38 -14',
 }
 const glyph = (k, x, y, s, color, sw) =>
@@ -34,6 +36,12 @@ const glyph = (k, x, y, s, color, sw) =>
 const coin = (x, y, r, fill = '#fff') => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`
 const ring = (x, y, r, w, color) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${color}" stroke-width="${w}"/>`
 
+const orbit = (r) => `<circle cx="256" cy="256" r="${r}" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="8"/>`
+const around = (list, r, cr, gs, sw, fill, color, start = -90) => list.map((k, i) => {
+  const a = ((start + (360 / list.length) * i) * Math.PI) / 180
+  const x = Math.round(256 + r * Math.cos(a)), y = Math.round(256 + r * Math.sin(a))
+  return coin(x, y, cr, fill) + glyph(k, x, y, gs, color, sw)
+}).join('')
 const VARIANTS = {
   // B1: duża moneta zł z czerwonym pierścieniem, obok mniejsze € i $
   B1: {
@@ -63,6 +71,30 @@ const VARIANTS = {
   ${coin(206, 160, 58, AMBER)}${glyph('eur', 206, 160, 0.56, BLUE_DARK, 15)}
   ${coin(372, 190, 58, '#e7efff')}${glyph('gbp', 372, 190, 0.52, BLUE, 16)}
   ${coin(290, 262, 96)}${ring(290, 262, 84, 12, RED)}${glyph('pln', 290, 262, 0.74, BLUE, 17)}`,
+  },
+  // D1: złoty w centrum (biało-czerwony), wokół orbita monet z walutami świata
+  D1: {
+    name: 'Orbita walut: zł w centrum, 4 waluty',
+    fg: `
+  ${orbit(142)}
+  ${around(['eur', 'usd', 'gbp', 'jpy'], 142, 42, 0.42, 19, '#fff', BLUE, -135)}
+  ${coin(256, 256, 90)}${ring(256, 256, 77, 13, RED)}${glyph('pln', 256, 256, 0.78, BLUE, 17)}`,
+  },
+  // D2: czerwona moneta zł w centrum, 5 walut dookoła
+  D2: {
+    name: 'Orbita walut: czerwone zł, 5 walut',
+    fg: `
+  ${orbit(150)}
+  ${around(['eur', 'usd', 'gbp', 'jpy', 'inr'], 150, 36, 0.36, 20, '#fff', BLUE)}
+  ${coin(256, 256, 92, RED)}${ring(256, 256, 78, 7, '#fff')}${glyph('pln', 256, 256, 0.8, '#fff', 17)}`,
+  },
+  // D3: biała moneta zł, 5 walut, bursztynowa kropka jako "podróżnik" na orbicie
+  D3: {
+    name: 'Orbita walut: białe zł, złote monety',
+    fg: `
+  ${orbit(150)}
+  ${around(['eur', 'usd', 'gbp', 'jpy', 'inr'], 150, 36, 0.36, 20, AMBER, BLUE_DARK)}
+  ${coin(256, 256, 92)}${ring(256, 256, 79, 13, RED)}${glyph('pln', 256, 256, 0.8, BLUE, 17)}`,
   },
   // A: trasa z punktem startu i pinezką celu
   A: {
@@ -148,7 +180,7 @@ async function main() {
 
   // Podglądy wszystkich wariantów: jasne i ciemne tło, kształt zaokrąglony i okrągły, rozmiary 128/48/24.
   const cell = (svg, bgc, round, s) => `<div style="background:${bgc};padding:14px;display:flex;align-items:center;justify-content:center"><div style="width:${s}px;height:${s}px;${round ? 'border-radius:50%;overflow:hidden' : ''}">${svg.replace('<svg ', `<svg width="${s}" height="${s}" `)}</div></div>`
-  const rows = Object.entries(VARIANTS).filter(([k]) => k.startsWith('B') && k.length > 1).map(([k, vv]) => {
+  const rows = Object.entries(VARIANTS).filter(([k]) => k.startsWith('D')).map(([k, vv]) => {
     const any = svgAny(vv), mask = svgMaskable(vv)
     const cells = ['#f6f7f9', '#0f1216'].map((c) => [cell(any, c, false, 128), cell(mask, c, true, 128), cell(any, c, false, 48), cell(any, c, false, 24)].join('')).join('')
     return `<div style="font:600 18px system-ui;padding:8px 12px;grid-column:1/-1">Wariant ${k}: ${vv.name}${k === pick ? ' (domyślny)' : ''}</div>${cells}`
