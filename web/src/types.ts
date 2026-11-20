@@ -54,5 +54,5 @@ export interface Profile {
   status: 'none' | 'student' | 'pupil';
   idCountry: 'pl' | 'de';
   age: number;
-  bahncard: 'none' | '25' | '50';
+  bahncard: 'none' | '25' | '50' | '100';
 }

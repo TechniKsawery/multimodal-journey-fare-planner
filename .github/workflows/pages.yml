@@ -54,9 +54,12 @@ jobs:
           if grep -rEIl -i 'travelpayouts|api[_-]?key|secret|token|authorization|bearer|BEGIN (RSA|EC|OPENSSH|PRIVATE)|ghp_[A-Za-z0-9]{20,}|github_pat_|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{30,}' dist; then
             echo "::error::Possible secret or forbidden token reference in build output"; exit 1
           fi
-          # external hosts present in the bundle (http/https URLs), minus the allow-list
+          # external hosts present in the bundle (http/https URLs), minus the allow-list.
+          # The tariff modules from core/ carry source links (documentation, shown as links in the UI,
+          # never fetched: CSP connect-src allows only api.transitous.org), so those carrier/city
+          # tariff sites are listed here too.
           bad=$(grep -rEIoh 'https?://[A-Za-z0-9.-]+' dist | sort -u \
-            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl)$' || true)
+            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl|bip\.poznan\.pl|eezy\.nrw|kolejedolnoslaskie\.pl|kolejemalopolskie\.com\.pl|krakow\.pl|lka\.lodzkie\.pl|mpk\.krakow\.pl|warszawa19115\.pl|www\.bvg\.de|www\.hvv\.de|www\.mazowieckie\.com\.pl|www\.mvv-muenchen\.de|www\.skm\.pkp\.pl|www\.vrr\.de|www\.vrs\.de|www\.wroclaw\.pl|www\.wtp\.waw\.pl|www\.ztm\.poznan\.pl|www\.zvon\.de|zdtm\.lublin\.eu|ztp\.krakow\.pl)$' || true)
           if [ -n "$bad" ]; then
             echo "::error::Unexpected external hosts in build output:"; echo "$bad"; exit 1
           fi

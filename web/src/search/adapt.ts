@@ -1,73 +1,84 @@
 // Transitous itineraries -> priced, ranked itineraries for the UI.
 // Routing comes from the public Transitous API; prices, transfer safety and the "cheapest / fastest /
 // safest" tags come from core/ (the TypeScript port of the Python oracle).
+import { truthy } from "../../../core/src/pyCompat";
+import type { DiscountProfile } from "../../../core/src/fares/model";
 import {
   LegMode,
   isInfeasible,
-  makeLeg,
+  makePricedLeg,
   priceKnown,
   priceStatus,
   type Itinerary as CoreItinerary,
   type Leg as CoreLeg,
   type PricedLeg,
 } from "../../../core/src/routing/model";
+import { itineraryToLegs, type Raw } from "../../../core/src/routing/motis";
+import { priceLeg as corePriceLeg } from "../../../core/src/routing/pricing";
 import { buildItinerary, pickRecommendations } from "../../../core/src/routing/scoring";
-import type { Itinerary as TItinerary, Leg as TLeg } from "../transitous";
 import type { Itinerary, Leg, Mode, PriceStatus, Profile, Transfer } from "../types";
-import { metaOf, priceLeg, toDiscountProfile } from "./pricing";
-import { haversineKm } from "./geo";
+import { toDiscountProfile } from "./profile";
+
+// Raw Transitous (MOTIS v6) itinerary/leg: only what this adapter reads.
+interface TPlace { name: string; lat: number; lon: number; tz?: string }
+interface TLeg { mode: string; from: TPlace; to: TPlace; startTime: string; endTime: string; agencyName?: string | null; routeShortName?: string | null }
+interface TItinerary { startTime: string; endTime: string; legs: TLeg[] }
 
 const RAIL_MODES = new Set(["HIGHSPEED_RAIL", "LONG_DISTANCE", "NIGHT_RAIL", "REGIONAL_FAST_RAIL", "REGIONAL_RAIL", "RAIL"]);
+const SOURCE_LABELS: Record<string, string> = {
+  international_pl_de: "Taryfa PL–DE (bahn.de, cena od)",
+};
+const DB_SOURCE_URL = "https://www.bahn.de/faq/pk/angebot/flexpreis";
+
+/** How a leg was priced, for the UI. Lives in breakdown.ui so it survives core/ scoring. */
+export interface PriceMeta {
+  status: PriceStatus;
+  source?: string;
+  sourceUrl?: string;
+  verified?: string;
+  reason?: string;
+  note?: string;
+}
 
 /** UI warning threshold for a short transfer (minutes). */
 export const SHORT_TRANSFER_UI_MIN = 10;
 
-const isoDate = (s: string): Date => new Date(s);
+const str = (v: unknown): string | undefined => (typeof v === "string" && v ? v : undefined);
 
-/** Port of routing/motis_client.itinerary_to_legs: walking at both ends stays a leg, in-between walks only flag the transfer. */
-export function toCoreLegs(it: TItinerary): CoreLeg[] {
-  const legs: CoreLeg[] = [];
-  let precededByWalk = false;
-  const last = it.legs.length - 1;
-  it.legs.forEach((raw, idx) => {
-    const distance = haversineKm(raw.from.lat, raw.from.lon, raw.to.lat, raw.to.lon);
-    const common = {
-      origin_name: raw.from.name,
-      destination_name: raw.to.name,
-      depart: isoDate(raw.startTime),
-      arrive: isoDate(raw.endTime),
-      distance_km: distance,
-    };
-    if (raw.mode === "WALK") {
-      if (idx === 0 || idx === last) {
-        legs.push(makeLeg({ ...common, mode: LegMode.WALK, carrier_name: "pieszo", requires_walk: false, extra: { motis_mode: "WALK" } }));
-      } else {
-        precededByWalk = true;
-      }
-      return;
-    }
-    const hasPrevTransit = legs.some((l) => l.mode !== LegMode.WALK);
-    legs.push(
-      makeLeg({
-        ...common,
-        mode: RAIL_MODES.has(raw.mode) ? LegMode.RAIL : LegMode.BUS,
-        carrier_name: raw.agencyName || raw.routeShortName || "",
-        requires_walk: hasPrevTransit ? precededByWalk : false,
-        extra: {
-          motis_mode: raw.mode,
-          route_short_name: [raw.routeShortName, raw.displayName].filter(Boolean).join(" "),
-          route_long_name: raw.routeLongName ?? "",
-          origin_lat: raw.from.lat,
-          origin_lon: raw.from.lon,
-          destination_lat: raw.to.lat,
-          destination_lon: raw.to.lon,
-        },
-      }),
-    );
-    precededByWalk = false;
-  });
-  return legs;
+/** Unconfirmed = no amount (unknown price, a km-rate fallback or a placeholder): never summed. */
+function unconfirmed(leg: CoreLeg, reason: string, note?: string): PricedLeg {
+  const ui: PriceMeta = { status: "unconfirmed", reason, note };
+  return makePricedLeg({ leg, amount: 0, currency: "PLN", price_type: "szacunek", breakdown: { cena_nieznana: true, price_verified: false, ui } });
 }
+
+/** Prices one leg with core/ and classifies the result (official / estimate / unconfirmed). */
+export function priceOne(leg: CoreLeg, discounts: DiscountProfile): PricedLeg {
+  if (leg.mode === LegMode.WALK) return corePriceLeg(leg, discounts);
+  let pl: PricedLeg;
+  try {
+    pl = corePriceLeg(leg, discounts);
+  } catch {
+    return unconfirmed(leg, "calcError");
+  }
+  const bd = pl.breakdown;
+  if (!priceKnown(pl) || bd["price_verified"] === false || truthy(bd["wartosc_zastepcza"])) {
+    return unconfirmed(leg, "coreFallback", str(bd["powod_szacunku"]) ?? (bd["kategoria_pociagu"] ? str(pl.notes) : undefined));
+  }
+  const url = str(bd["zrodlo_url"]) ?? str(bd["zrodlo_url_cennik"]) ?? (pl.carrier === "db" ? DB_SOURCE_URL : undefined);
+  const verified = str(bd["data_weryfikacji"]);
+  const official = pl.price_type === "oficjalna_taryfa" && !!url && /^https:\/\//.test(url) && !!verified;
+  const ui: PriceMeta = {
+    status: official ? "official" : "estimate",
+    source: url ? new URL(url).hostname : (pl.carrier && SOURCE_LABELS[pl.carrier]) || pl.carrier || undefined,
+    sourceUrl: url,
+    verified,
+    reason: official ? undefined : pl.carrier === "db" ? "dbModel" : !verified ? "noVerifiedDate" : undefined,
+    note: pl.notes || undefined,
+  };
+  return { ...pl, breakdown: { ...bd, ui } };
+}
+
+const metaOf = (pl: PricedLeg): PriceMeta => (pl.breakdown["ui"] as PriceMeta | undefined) ?? { status: "official" };
 
 function clock(iso: string, tz?: string): string {
   const d = new Date(iso);
@@ -103,7 +114,7 @@ function toUiLeg(raw: TLeg, pl: PricedLeg): Leg {
     source: meta.source,
     sourceUrl: meta.sourceUrl,
     verified: meta.verified,
-    note: known ? pl.notes || undefined : undefined,
+    note: meta.note,
     reason: meta.reason,
   };
 }
@@ -163,8 +174,8 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
   const fallbacks: Itinerary[] = [];
   const built = raw.flatMap((it, index) => {
     try {
-      const coreLegs = toCoreLegs(it);
-      const priced = coreLegs.map((leg) => priceLeg(leg, discounts));
+      const coreLegs = itineraryToLegs(it as unknown as Raw);
+      const priced = coreLegs.map((leg) => priceOne(leg, discounts));
       const core = buildItinerary(`v${index}`, priced);
       const transit = it.legs.filter((l) => l.mode !== "WALK");
       return [{ index, it, coreLegs, priced, core, transit }];

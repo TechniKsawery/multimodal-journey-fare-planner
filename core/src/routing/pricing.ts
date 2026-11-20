@@ -782,6 +782,6 @@ export function priceLeg(leg: Leg, discounts: DiscountProfile): PricedLeg {
   if (leg.mode === LegMode.RAIL) return priceRailLeg(leg, discounts);
   if (leg.mode === LegMode.BUS) return priceBusLeg(leg, discounts);
   if (leg.mode === LegMode.WALK) return priceWalkLeg(leg);
-  if (leg.mode === LegMode.FLIGHT) throw new ValueError("lot: wycena lotów nie jest wdrożona w core (wymaga Travelpayouts)");
+  if (leg.mode === LegMode.FLIGHT) throw new ValueError("lot: wycena lotów nie jest wdrożona w core (brak podłączonego źródła cen lotów)");
   throw new ValueError(`nieznany LegMode: ${leg.mode}`);
 }

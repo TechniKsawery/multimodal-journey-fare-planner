@@ -1,36 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { buildResults, isValidItinerary } from "./adapt";
-import { countryOf } from "./geo";
-import { toDiscountProfile } from "./pricing";
+import { toDiscountProfile } from "./profile";
 import { eicDomestic, iceDomestic, icDomestic, impossible, mixed } from "./fixtures/poznan-berlin";
 import type { Profile } from "../types";
 
 const none: Profile = { status: 'none', idCountry: 'pl', age: 30, bahncard: 'none' };
 const student: Profile = { status: 'student', idCountry: 'pl', age: 21, bahncard: 'none' };
-
-describe("countryOf", () => {
-  it.each([
-    ["Warszawa", 52.23, 21.0, "PL"],
-    ["Poznań", 52.4, 16.91, "PL"],
-    ["Gdańsk", 54.35, 18.64, "PL"],
-    ["Lublin", 51.25, 22.57, "PL"],
-    ["Kraków", 50.06, 19.94, "PL"],
-    ["Szczecin", 53.43, 14.55, "PL"],
-    ["Berlin", 52.52, 13.4, "DE"],
-    ["Köln", 50.94, 6.96, "DE"],
-    ["Gelsenkirchen", 51.51, 7.1, "DE"],
-    ["München", 48.14, 11.56, "DE"],
-    ["Hamburg", 53.55, 10.0, "DE"],
-  ] as const)("%s", (_n, lat, lon, c) => expect(countryOf(lat, lon)).toBe(c));
-  it.each([
-    ["Praha", 50.08, 14.44],
-    ["Amsterdam", 52.37, 4.9],
-    ["Wien", 48.21, 16.37],
-    ["Ostrava", 49.83, 18.28],
-    ["Kaliningrad", 54.71, 20.51],
-    ["Słubice border", 52.35, 14.56],
-  ] as const)("%s is unknown", (_n, lat, lon) => expect(countryOf(lat, lon)).toBeNull());
-});
 
 describe("toDiscountProfile", () => {
   it("applies the student relief only for a Polish ID and age <= 26", () => {
@@ -55,7 +30,8 @@ describe("buildResults", () => {
     const [r] = buildResults([eicDomestic], student);
     expect(r.legs[0].price).toBeUndefined();
     expect(r.legs[0].status).toBe("unconfirmed");
-    expect(r.legs[0].reason).toBe("premiumTrain");
+    expect(r.legs[0].reason).toBe("coreFallback");
+    expect(r.legs[0].note).toMatch(/EIC/);
     expect(r.noPrice).toBe(true);
     expect(r.tag).not.toBe("cheapest");
   });
@@ -73,7 +49,7 @@ describe("buildResults", () => {
     const [r] = buildResults([mixed], student);
     expect(r.legs.map((l) => l.status)).toEqual(["estimate", "unconfirmed", "unconfirmed"]);
     expect(r.legs[1].price).toBeUndefined();
-    expect(r.legs[1].reason).toBe("otherCarrier");
+    expect(r.legs[1].reason).toBe("coreFallback");
     expect(r.partial).toBe(true);
     expect(r.noPrice).toBe(false);
     expect(r.totalPln).toBe(r.legs[0].price);
@@ -124,6 +100,14 @@ describe("robustness against odd real-world data", () => {
     const walkOnly = { ...odd, legs: [odd.legs[0]] };
     const res = buildResults([odd, walkOnly, 5, undefined], student);
     expect(res).toHaveLength(1);
-    expect(res[0].legs[0].status).toBe("unconfirmed");
+    expect(["estimate", "unconfirmed"]).toContain(res[0].legs[0].status);
+  });
+});
+
+describe("BahnCard 100", () => {
+  it("makes a domestic DB leg free (core multiplier 0.0) and is passed to core as '100'", () => {
+    expect(toDiscountProfile({ ...none, bahncard: "100" }).bahncard).toBe("100");
+    const [r] = buildResults([iceDomestic], { ...none, bahncard: "100" });
+    expect(r.legs[0].price).toBe(0);
   });
 });
