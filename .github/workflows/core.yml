@@ -35,7 +35,8 @@ jobs:
           python tools/golden/generate_attractions.py
           python tools/golden/generate_motis.py
           python tools/golden/generate_pricing.py
-          git diff --exit-code -- core/golden
+          python tools/golden/generate_i18n.py
+          git diff --exit-code -- core/golden core/src/i18n/locales
 
       - name: Install core
         working-directory: core

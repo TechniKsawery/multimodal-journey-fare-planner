@@ -17,7 +17,7 @@ and this package must reproduce it.
 Regenerate only when the Python logic or `data/**` changes on purpose:
 
 ```bash
-python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py, generate_attractions.py, generate_motis.py, generate_pricing.py
+python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py, generate_attractions.py, generate_motis.py, generate_pricing.py, generate_i18n.py
 ```
 
 ## Conventions
@@ -76,6 +76,15 @@ generated itineraries; floats compared with a tolerance) and `test/transitousCli
 (fake `fetch`). Transitous itself is not reachable from the build environment, so there are no
 recorded live responses yet: the first recording (4-5 reference routes) should be done from a
 machine with access and added as fixtures.
+
+## i18n
+
+`src/i18n/index.ts` renders `Msg` objects (`{key, params}`) in the six UI languages (`renderMsg`, `t`,
+`tm`, `transportModeName`, `labelOr`). The dictionaries in `src/i18n/locales/*.json` are GENERATED from the
+Python files by `tools/golden/generate_i18n.py` (CI fails on a diff), so the Python dictionaries stay the
+source and a new key is added there. Parameters can be strings, numbers, booleans, `null`, nested `Msg`,
+`joined([...], sep)` and `pyFloat(x)` (a Python float that must print as `5.0`; JS numbers cannot tell it
+from `5`). Domain code returns `Text = string | Msg`; the UI calls `tm(text, lang)`.
 
 ## Status
 
