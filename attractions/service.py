@@ -347,7 +347,7 @@ def _strip_note_parentheticals(text: str) -> str:
 
 @cache
 def _translations(lang: str) -> dict:
-    """Tłumaczenia tekstów atrakcji (attractions/data/translations/<lang>.json: opisy i notatki
+    """Tłumaczenia tekstów atrakcji (data/attractions/translations/<lang>.json: opisy i notatki
     o cenach "od", klucz = id atrakcji). Brak pliku = brak tłumaczeń (zostaje polski)."""
     try:
         return load(f"translations/{lang}.json")

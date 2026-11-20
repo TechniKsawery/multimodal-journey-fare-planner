@@ -11,13 +11,13 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FARES = ROOT / "fares" / "data"
-ATTRACTIONS = json.loads((ROOT / "attractions/data/attractions.json").read_text(encoding="utf-8"))
-CARDS = json.loads((ROOT / "attractions/data/city_cards.json").read_text(encoding="utf-8"))
+FARES = ROOT / "data" / "fares"
+ATTRACTIONS = json.loads((ROOT / "data/attractions/attractions.json").read_text(encoding="utf-8"))
+CARDS = json.loads((ROOT / "data/attractions/city_cards.json").read_text(encoding="utf-8"))
 
 ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
-# Miasto -> plik taryfy lokalnej w fares/data. Gelsenkirchen jedzie na taryfie VRR (eezy.nrw).
+# Miasto -> plik taryfy lokalnej w data/fares. Gelsenkirchen jedzie na taryfie VRR (eezy.nrw).
 LOCAL_FARE = {
     "lublin": "ztm_lublin.json",
     "warszawa": "ztm_warszawa.json",
@@ -45,7 +45,7 @@ KNOWN_GAPS: dict[tuple[str, str], str] = {}
 def _fare_gaps(city: str) -> list[str]:
     name = LOCAL_FARE.get(city)
     if not name or not (FARES / name).exists():
-        return ["taryfa lokalna: brak pliku w fares/data"]
+        return ["taryfa lokalna: brak pliku w data/fares"]
     data = json.loads((FARES / name).read_text(encoding="utf-8"))
     gaps = []
     src = " ".join(str(v) for k, v in data.items() if k.startswith("_zrodlo") or k == "source")

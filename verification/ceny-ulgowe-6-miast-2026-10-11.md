@@ -14,7 +14,7 @@ Data weryfikacji: 2026-10-11. Zasada: żadna cena nie jest zgadnięta — każda
 
 Z 61 atrakcji w 6 miastach:
 - **11 jest bezpłatnych** (`normal_price: 0`) — nie wymagają cen grupowych (parki, targowiska, skwer).
-- **32 atrakcje dostały nowe pola `child_price`/`student_price`/`senior_price`/`family_price`** — patrz lista commitów w `attractions/data/attractions.json`, każda z `source_url`+`verified_date`+`price_verified: true`.
+- **32 atrakcje dostały nowe pola `child_price`/`student_price`/`senior_price`/`family_price`** — patrz lista commitów w `data/attractions/attractions.json`, każda z `source_url`+`verified_date`+`price_verified: true`.
 - **Pozostałe ~18 atrakcji (głównie Kolonia: Museum Ludwig, Wallraf-Richartz, Römisch-Germanisches Museum, NS-Dokumentationszentrum, Kölner Seilbahn, Minigolf Familienpark; Monachium: BMW Museum; Wrocław: Ogród Botaniczny; Kolonia: Zoo, Claudius-Therme, Brewery Tour, Jochen Schweizer Kletterpark, SEA LIFE)** — strony operatorów albo nie publikują rozbicia na kategorie wiekowe, albo blokowały automatyczny dostęp (robots disallowed / brak strony), albo mają w pełni dynamiczne ceny (Kölner Zoo) nieadekwatne do modelu stałej `GroupPrice`. Te pozycje **zostały pozostawione bez zmian** (bez zgadywania) — ich dotychczasowe `normal_price`/`price_verified` NIE zostały ruszone, bo nie udało się ich ponownie potwierdzić ani zaprzeczyć w tej sesji.
 
 ## Weryfikacja cen podstawowych (`normal_price`)

@@ -1,6 +1,6 @@
 """Placeholderowa tabela kosztów dodatkowych (bagaż, dojazd, transfer) dla wybranych relacji.
 
-Dane w flights/data/extras_placeholder.json są PRZYKŁADOWE — patrz README.md w tym katalogu.
+Dane w data/flights/extras_placeholder.json są PRZYKŁADOWE — patrz README.md w tym katalogu.
 """
 
 from ._data_loading import load
@@ -41,7 +41,7 @@ def get_baggage_by_airline(airline_code: str | None) -> tuple[float, str, str] |
     """Zwraca (kwota, waluta, opis_zrodla) dla znanego kodu IATA przewoźnika, albo None gdy
     przewoźnik nieznany w tabeli.
 
-    Dane w flights/data/baggage_by_airline.json to REALNE cenniki (Ryanair, Wizz Air, LOT,
+    Dane w data/flights/baggage_by_airline.json to REALNE cenniki (Ryanair, Wizz Air, LOT,
     Eurowings) sprawdzone w publicznych źródłach — ale opłaty za bagaż u tanich linii są
     DYNAMICZNE (zależą od trasy/terminu/sezonu), więc kwota to dolna granica opublikowanego
     przedziału, nie gwarantowana cena konkretnego lotu — patrz README.md."""

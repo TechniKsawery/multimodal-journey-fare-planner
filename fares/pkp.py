@@ -1,7 +1,7 @@
 """Szacowanie ceny segmentu PKP Intercity: cena z tabeli pasm odległości x mnożnik ulgi.
 
 Dane cenowe (pasma odległości, ulgi ustawowe) pochodzą z oficjalnych dokumentów PKP
-Intercity — patrz pole "_zrodlo" w fares/data/pkp_intercity.json oraz README.md w tym
+Intercity — patrz pole "_zrodlo" w data/fares/pkp_intercity.json oraz README.md w tym
 katalogu. Obejmują wyłącznie pociągi TLK/IC 2. klasy; ceny EIC/EIP są ustalane per
 relacja i nie są tu uwzględnione.
 """
@@ -54,7 +54,7 @@ def estimate(segment: Segment) -> PriceEstimate:
         breakdown=breakdown,
         notes=(
             "Cena bazowa i ulga z oficjalnego cennika/tabeli ulg PKP Intercity dla TLK/IC "
-            "2. klasy — patrz pole _zrodlo w fares/data/pkp_intercity.json. Nie obejmuje "
+            "2. klasy — patrz pole _zrodlo w data/fares/pkp_intercity.json. Nie obejmuje "
             "promocji/ofert specjalnych ani cen EIC/EIP (ustalanych per relacja)."
         ),
     )

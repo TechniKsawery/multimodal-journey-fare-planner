@@ -2,7 +2,7 @@
 strefy (1-2 Ringe / Hamburg AB).
 
 Dane pochodzą z oficjalnego cennika HVV (Tarifstand 01.01.2026), zweryfikowanego w przeglądarce
-— patrz pole "_zrodlo" w fares/data/hvv.json oraz README.md w tym katalogu. Taryfa HVV jest
+— patrz pole "_zrodlo" w data/fares/hvv.json oraz README.md w tym katalogu. Taryfa HVV jest
 strefowa (Ringe), a nie mamy mapowania przystanek->Ring, więc kalkulator zawsze liczy najniższą
 strefę — to NIEDOSZACOWUJE realną cenę dla relacji obejmujących więcej Ringów.
 
@@ -63,8 +63,8 @@ def estimate(segment: Segment) -> PriceEstimate:
         notes=(
             "Taryfa HVV (Tarifstand 01.01.2026): Einzelkarte najniższej strefy (1-2 Ringe / "
             "Hamburg AB). Kindertarif 6-14 lat (dzieci do 6 lat jeżdżą bezpłatnie, poza "
-            "zakresem tego pola — patrz fares/data/hvv.json). Brak mapowania przystanek->Ring "
+            "zakresem tego pola — patrz data/fares/hvv.json). Brak mapowania przystanek->Ring "
             "— relacje obejmujące więcej Ringów są w rzeczywistości droższe niż ten wynik "
-            "(patrz pełna tabela stref w fares/data/hvv.json)."
+            "(patrz pełna tabela stref w data/fares/hvv.json)."
         ),
     )

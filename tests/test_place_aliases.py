@@ -1,4 +1,4 @@
-"""Nazwy miast w 6 językach (places/aliases.json): kompletność danych, wyszukiwanie po dowolnej nazwie,
+"""Nazwy miast w 6 językach (data/places/aliases.json): kompletność danych, wyszukiwanie po dowolnej nazwie,
 wyświetlanie w języku interfejsu z nazwą lokalną, skrypt weryfikujący względem Wikidata (bez sieci).
 """
 
@@ -39,7 +39,7 @@ REQUIRED = {
 
 
 def _attraction_cities() -> set[str]:
-    data = json.loads((ROOT / "attractions/data/attractions.json").read_text(encoding="utf-8"))
+    data = json.loads((ROOT / "data/attractions/attractions.json").read_text(encoding="utf-8"))
     return {a["city"] for a in data["atrakcje"]}
 
 

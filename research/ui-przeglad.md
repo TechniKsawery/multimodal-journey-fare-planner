@@ -27,7 +27,7 @@ Profil docelowy: **Uczeń szkoły średniej / student podróżujący na trasach 
 
 ### 2.1. Diagnoza obecnego stanu
 * **Surowe identyfikatory w `Ulga PKP` (l. 514):**
-  * Lista rozwijana wyświetla bezpośrednio klucze z pliku JSON: `student_do_26_lat_doktorant_do_35_lat`, `dzieci_mlodziez_szkolna_do_24_lat`, `brak` (z `fares/data/pkp_intercity.json`).
+  * Lista rozwijana wyświetla bezpośrednio klucze z pliku JSON: `student_do_26_lat_doktorant_do_35_lat`, `dzieci_mlodziez_szkolna_do_24_lat`, `brak` (z `data/fares/pkp_intercity.json`).
   * Brakuje czytelnych etykiet, np. „Student do 26 lat / Doktorant do 35 lat (51%)”. Uczeń liceum/technikum często nie wie, czy ma wybrać `dzieci_mlodziez_szkolna_do_24_lat`, a student szuka skrótu „51%”.
 * **Rozbicie profilu atrakcji vs biletów transportu (l. 458–481 vs 513–601):**
   * Na samej górze (przed trasą i datą) znajduje się checkbox `Uczeń/student (legitymacja)` w l. 458, który – jak wyjaśnia `help` – wpływa **tylko** na atrakcje, a **nie** na bilety transportu.

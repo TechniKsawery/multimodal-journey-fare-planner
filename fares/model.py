@@ -52,19 +52,19 @@ class Carrier(str, Enum):
 class DiscountProfile:
     """Profil ulg pasażera, wspólny dla wszystkich przewoźników w segmencie."""
 
-    pkp_ulga_kod: str = "brak"  # klucz z fares/data/pkp_intercity.json -> ulgi_procent
+    pkp_ulga_kod: str = "brak"  # klucz z data/fares/pkp_intercity.json -> ulgi_procent
     bahncard: str | None = None  # None, "25", "50" lub "100" (DB, oficjalne rabaty Flexpreis)
     ztm_lublin_ulgowy: bool = False  # ZTM Lublin: bilet ulgowy (50%) zamiast normalnego -
     # uczniowie podstawowych/ponadpodstawowych/policealnych do 24 lat (legitymacja), doktoranci,
     # uczniowie i studenci szkół zagranicznych do 26 lat z ISIC, emeryci oraz studenci polskich
     # uczelni z legitymacją studencką (potwierdzone 2026-11-03, zob.
-    # fares/data/ztm_lublin.json::ulgi_potwierdzone_2026_11_03).
+    # data/fares/ztm_lublin.json::ulgi_potwierdzone_2026_11_03).
     ztm_lublin_bezplatny: bool = False  # ZTM/ZDiTM Lublin: przejazd bezpłatny (100%) -
     # uczniowie szkół PODSTAWOWYCH działających na terenie Gminy Lublin (legitymacja szkolna,
     # uchwała nr 206/VII/2024 z 19.12.2024), dzieci do 30.09 roku ukończenia 7 lat i osoby 65+.
     # Dla szkół ponadpodstawowych/policealnych zostaje ulgowy. Wiek 65+ i dzieci kalkulator
     # rozpoznaje też sam z `age`. Zweryfikowano zdtm.lublin.eu 2026-10-13 (patrz
-    # fares/data/ztm_lublin.json::_zrodlo_bezplatny).
+    # data/fares/ztm_lublin.json::_zrodlo_bezplatny).
     ztm_warszawa_ulgowy: bool = False  # ZTM/WTP Warszawa: bilet ulgowy (50%) - m.in. uczniowie
     # szkół ponadpodstawowych, studenci, emeryci/renciści DO 70 roku życia (polski organ
     # emerytalno-rentowy), osoby z UMIARKOWANYM stopniem niepełnosprawności 26+, uczniowie/
@@ -76,7 +76,7 @@ class DiscountProfile:
     # ZNACZNYM stopniem niepełnosprawności 26+, osoby całkowicie niezdolne do pracy I do
     # samodzielnej egzystencji 26+, dzieci/młodzież z niepełnosprawnością do 26 lat (wszystko
     # potwierdzone wtp.waw.pl/ulgi-znizki + warszawa19115.pl, zweryfikowano 2026-10-10 - patrz
-    # fares/data/ztm_warszawa.json::_zrodlo_senior_niepelnosprawnosc).
+    # data/fares/ztm_warszawa.json::_zrodlo_senior_niepelnosprawnosc).
     mpk_krakow_ulgowy: bool = False  # MPK Kraków (ZTP): bilet ulgowy (50%) - m.in. emeryci DO
     # 70 roku życia, UMIARKOWANY stopień niepełnosprawności (poza wąskimi wyjątkami niżej),
     # uczniowie/studenci szkół zagranicznych do 26 lat z ważną kartą ISIC (ztp.krakow.pl,
@@ -88,14 +88,14 @@ class DiscountProfile:
     # RMK z 6.07.2011) ogranicza ogólne uprawnienie uczniów do szkół PODSTAWOWYCH - liceiści/
     # technicy są objęci TYLKO wąską pozycją dla uczniów ze specjalnymi potrzebami edukacyjnymi,
     # nie ogółem - potwierdzone też projektem uchwały zmieniającej ten załącznik. Tam (poza tą
-    # wąską kategorią) zostaje ulgowy. Zob. fares/data/mpk_krakow.json::_zrodlo_bezplatny.
+    # wąską kategorią) zostaje ulgowy. Zob. data/fares/mpk_krakow.json::_zrodlo_bezplatny.
     # Ta sama flaga obejmuje też: osoby 70+ (bez wymogu zamieszkania w Krakowie, tylko dokument
     # z datą urodzenia), ZNACZNY stopień niepełnosprawności / całkowita niezdolność do pracy I
     # do samodzielnej egzystencji / I grupa inwalidztwa, oraz kilka WĄSKICH wyjątków gdzie nawet
     # "umiarkowany" stopień jest bezpłatny (konkretne symbole przyczyny: wzrok 04-O, ruch
     # 05-R/10-N, intelekt 01-U) - w przeciwieństwie do Warszawy, gdzie "umiarkowany" to zawsze
     # tylko 50%. Potwierdzone ztp.krakow.pl/kmk/przewodnik-po-biletach-kmk, zweryfikowano
-    # 2026-10-10 - patrz fares/data/mpk_krakow.json::_zrodlo_senior_niepelnosprawnosc.
+    # 2026-10-10 - patrz data/fares/mpk_krakow.json::_zrodlo_senior_niepelnosprawnosc.
     ztm_poznan_ulgowy: bool = False  # ZTM Poznań: bilet ulgowy (50%) - m.in. uczniowie,
     # emeryci/renciści (dowolny wiek, status emeryta wystarczy), UMIARKOWANY stopień
     # niepełnosprawności / II grupa inwalidzka (ztm.poznan.pl, zweryfikowano 2026-10-10)
@@ -107,7 +107,7 @@ class DiscountProfile:
     # osoby młodsze mają odrębną kategorię "dzieci i młodzież z niepełnosprawnością").
     # Potwierdzone ztm.poznan.pl/wszystko-o-biletach/ulgi-i-zwolnienia, niezależnie przez
     # centrumis.pl i PDF CUPT (Centrum Unijnych Projektów Transportowych), zweryfikowano
-    # 2026-10-10 - patrz fares/data/ztm_poznan.json::_zrodlo_senior_niepelnosprawnosc.
+    # 2026-10-10 - patrz data/fares/ztm_poznan.json::_zrodlo_senior_niepelnosprawnosc.
     mpk_wroclaw_ulgowy: bool = False  # MPK Wrocław: bilet ulgowy (50%) - studenci/doktoranci,
     # emeryci/renciści, uczniowie szkół policealnych/zagranicznych do 24 lat
     mpk_wroclaw_bezplatny: bool = False  # MPK Wrocław: przejazd bezpłatny (100%) - m.in.
@@ -132,7 +132,7 @@ class DiscountProfile:
     # bvg.de/mitnahmebestimmungen ("Schwerbehinderte Menschen können öffentliche Verkehrsmittel
     # kostenfrei nutzen" + wymóg Wertmarke) i vbb.de/barrierefrei ("Wer etwa einen
     # Schwerbehindertenausweis mit gültiger Wertmarke besitzt, fährt kostenfrei"). Zweryfikowano
-    # 2026-10-10 - patrz fares/data/bvg_berlin.json::_zrodlo_schwerbehindert.
+    # 2026-10-10 - patrz data/fares/bvg_berlin.json::_zrodlo_schwerbehindert.
     vrr_dziecko: bool = (
         False  # VRR/eezy.nrw: Kindertarif (6-14 lat), 50% rabatu wliczając sufity cenowe
     )

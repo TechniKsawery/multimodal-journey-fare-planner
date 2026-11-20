@@ -21,9 +21,9 @@ from attractions.service import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent
-ATTRACTIONS_JSON = ROOT / "attractions" / "data" / "attractions.json"
-CARDS_JSON = ROOT / "attractions" / "data" / "city_cards.json"
-FARE_FILES = sorted((ROOT / "fares" / "data").glob("*.json"))
+ATTRACTIONS_JSON = ROOT / "data" / "attractions" / "attractions.json"
+CARDS_JSON = ROOT / "data" / "attractions" / "city_cards.json"
+FARE_FILES = sorted((ROOT / "data" / "fares").glob("*.json"))
 
 CURRENCIES = {"PLN", "EUR"}
 ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")

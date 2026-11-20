@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Place aliases (data/places/aliases.json)",
+  "type": "object",
+  "required": ["jezyki", "miasta"],
+  "properties": {
+    "jezyki": { "type": "array", "items": { "type": "string" } },
+    "miasta": { "type": "object", "additionalProperties": { "type": "object", "required": ["kraj", "lat", "lon", "wyswietlana"],
+      "properties": {
+        "kraj": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "lat": { "type": "number" },
+        "lon": { "type": "number" },
+        "wyswietlana": { "type": "object", "additionalProperties": { "type": "string" } }
+      } } }
+  }
+}

@@ -1,6 +1,6 @@
 """Zweryfikowane tytuły do przejazdów bezpłatnych/ulgowych w komunikacji miejskiej, per przewoźnik.
 
-Treść pochodzi WYŁĄCZNIE z tego, co już jest potwierdzone w fares/data/*.json (pola `_zrodlo_*`)
+Treść pochodzi WYŁĄCZNIE z tego, co już jest potwierdzone w data/fares/*.json (pola `_zrodlo_*`)
 i w opisach checkboxów app.py. Niczego tu nie zgadujemy — nowy tytuł dodawaj dopiero po
 weryfikacji źródła.
 """

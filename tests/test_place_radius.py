@@ -1,6 +1,6 @@
 """Błąd „Toruń”: wieś o tej samej nazwie wygrywała z miastem, bo geokoder zwrócił ją pierwszą.
 
-Gdy wpisany tekst to miasto z places/aliases.json, kandydaci są rozstrzygani po odległości od jego
+Gdy wpisany tekst to miasto z data/places/aliases.json, kandydaci są rozstrzygani po odległości od jego
 współrzędnych (promień CITY_RADIUS_KM), najbliższy jest pierwszy, a wpisy o tej samej nazwie różnią się
 opisem (region, kraj, odległość, na końcu współrzędne)."""
 

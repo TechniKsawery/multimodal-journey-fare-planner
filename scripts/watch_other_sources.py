@@ -1,4 +1,4 @@
-"""Okresowo sprawdza, czy zmieniły się strony/pliki źródłowe spoza fares/data/*.json
+"""Okresowo sprawdza, czy zmieniły się strony/pliki źródłowe spoza data/fares/*.json
 (ten zakres ma już scripts/fetch_fare_sources.py): atrakcje, karty miejskie i feedy
 GTFS/OSM. Działa na tej samej zasadzie migawek (sha256 po normalizacji dla HTML,
 nagłówki HEAD dla dużych plików GTFS/OSM) co fetch_fare_sources.py — patrz jego
@@ -6,16 +6,16 @@ docstring po szczegóły normalizacji i retry. NIE interpretuje zmiany, tylko
 flaguje "sprawdź ręcznie".
 
 Trzy kategorie źródeł:
-1. Atrakcje (attractions/data/attractions.json, pole "official_url" per pozycja)
+1. Atrakcje (data/attractions/attractions.json, pole "official_url" per pozycja)
    — zmiana strony może znaczyć nową cenę albo że atrakcja już nie istnieje.
-2. Karty miejskie (attractions/data/city_cards.json, pole "official_url" per karta)
+2. Karty miejskie (data/attractions/city_cards.json, pole "official_url" per karta)
    — zmiana może znaczyć nową cenę LUB że karta już nie jest sprzedawana (patrz
    pamięć projektu: karta bez potwierdzonego istnienia nie wchodzi do rekomendacji).
 3. Feedy GTFS/OSM (scripts/fetch_data.py, słowniki GTFS/OSM) — to pliki
    dziesiątek/setek MB, więc sprawdzamy tylko nagłówki HEAD (ETag/Last-Modified/
    Content-Length), nie pobieramy całej treści.
 
-Snapshoty trzymane są w attractions/data/.snapshots/ (atrakcje, karty) i
+Snapshoty trzymane są w data/attractions/.snapshots/ (atrakcje, karty) i
 scripts/.gtfs_snapshots/ (feedy), commitowane do repo tak jak w fetch_fare_sources.py.
 
 Użycie:
@@ -40,7 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import fetch_fare_sources as ffs  # noqa: E402  (reużywamy retry/normalizację/hash)
 
 ROOT = Path(__file__).resolve().parent.parent
-ATTRACTIONS_DATA_DIR = ROOT / "attractions" / "data"
+ATTRACTIONS_DATA_DIR = ROOT / "data" / "attractions"
 ATTRACTIONS_SNAPSHOT_DIR = ATTRACTIONS_DATA_DIR / ".snapshots"
 GTFS_SNAPSHOT_DIR = ROOT / "scripts" / ".gtfs_snapshots"
 

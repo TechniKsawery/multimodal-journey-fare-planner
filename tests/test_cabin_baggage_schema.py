@@ -1,8 +1,8 @@
-"""Schemat flights/data/cabin_baggage.json: zasada absolutna - zweryfikowany wpis ma URL i datę."""
+"""Schemat data/flights/cabin_baggage.json: zasada absolutna - zweryfikowany wpis ma URL i datę."""
 import json
 from pathlib import Path
 
-DATA = json.loads((Path(__file__).parent.parent / "flights" / "data" / "cabin_baggage.json").read_text(encoding="utf-8"))
+DATA = json.loads((Path(__file__).parent.parent / "data" / "flights" / "cabin_baggage.json").read_text(encoding="utf-8"))
 STANY = set(DATA["stany"]) | {"zalezy_od_taryfy"}
 
 

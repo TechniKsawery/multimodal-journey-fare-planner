@@ -2,9 +2,9 @@
 produkt sprzedawany na TYCH SAMYCH pociągach co taryfa DB modelowana w fares/international.py
 (np. Berlin-Warszawa-Express). Pasażer może kupić bilet w KTÓRYMKOLWIEK z dwóch kanałów, więc
 routing/pricing.py liczy obie oferty i pokazuje tańszą jako cenę główną (zob.
-routing/pricing.py::price_rail_leg). Patrz fares/data/international_pl_de_pkp.json dla źródeł
+routing/pricing.py::price_rail_leg). Patrz data/fares/international_pl_de_pkp.json dla źródeł
 i zastrzeżeń. Oferta promocyjna "Super Promo International" (SPI) jest modelowana jako PRZEDZIAŁ
-(spi_range, dane: fares/data/pkp_spi_pl_de.json) — bez zgadywania, który poziom cenowy obowiązuje
+(spi_range, dane: data/fares/pkp_spi_pl_de.json) — bez zgadywania, który poziom cenowy obowiązuje
 danego dnia.
 
 Relacja rozpoznawana WYŁĄCZNIE po nazwie miasta (dopasowanie podłańcucha, analogicznie do

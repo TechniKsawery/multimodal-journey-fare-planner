@@ -1,6 +1,6 @@
 """Cena biletu jednorazowego Kolei Małopolskich (KMŁ) wg Tabeli nr 1 taryfy przewozowej TP-KMŁ.
 
-Dane: fares/data/koleje_malopolskie.json (30 pasm: bilet jednorazowy wg taryfy normalnej, 2. klasa,
+Dane: data/fares/koleje_malopolskie.json (30 pasm: bilet jednorazowy wg taryfy normalnej, 2. klasa,
 pociąg osobowy, Załącznik nr 2 do Uchwały Zarządu nr 43/2026 z 17.03.2026). Źródło i status są przy
 KAŻDYM paśmie: "wg Gemini, niezweryfikowane niezależnie" (domeny przewoźników są z chmury
 zablokowane, raport Gemini z 2026-10-12, research/km-malopolskie.md). Raport nie podaje daty wejścia

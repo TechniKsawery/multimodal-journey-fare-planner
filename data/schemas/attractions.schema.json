@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Attractions (data/attractions/attractions.json)",
+  "type": "object",
+  "required": ["atrakcje"],
+  "properties": {
+    "atrakcje": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "city", "normal_price", "currency", "price_verified"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "city": { "type": "string", "minLength": 1 },
+          "normal_price": { "type": "number", "minimum": 0 },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+          "price_verified": { "type": "boolean" },
+          "official_url": { "type": ["string", "null"], "pattern": "^(https?://.*)?$" }
+        },
+        "if": { "properties": { "price_verified": { "const": true } } },
+        "then": { "required": ["official_url"], "properties": { "official_url": { "type": "string", "pattern": "^https?://" } } }
+      }
+    }
+  }
+}

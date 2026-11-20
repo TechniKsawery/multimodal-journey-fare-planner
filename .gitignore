@@ -1,10 +1,14 @@
 # Duże dane pobierane skryptem, nie do repo
-/data/
+/data/gtfs/
+/data/osm/
+/data/profiles/
 *.part
 __pycache__/
 
 # Wygenerowane dane MOTIS (routing), budowane przez scripts/run_motis.sh import
-motis/data/
+motis/data/gtfs/
+/data/osm/
+/data/profiles/
 
 # Sekrety lokalne
 .env

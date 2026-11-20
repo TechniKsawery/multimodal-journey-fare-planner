@@ -39,5 +39,5 @@ każdym z 21 pasm (test `tests/test_local_rail_tariffs.py`).
 ## Co zrobić przed uznaniem za potwierdzone
 
 Otworzyć w przeglądarce PDF cennika SKM (Tabela nr 1, s. 15), stronę WTP (ceny i honorowanie w
-SKM/KM/WKD) oraz stronę ŁKA i porównać z `fares/data/skm_trojmiasto.json`,
-`fares/data/ztm_warszawa.json` (`_zrodlo_skm`, `_zrodlo_km_wkd`), `fares/data/lka_lodz.json`.
+SKM/KM/WKD) oraz stronę ŁKA i porównać z `data/fares/skm_trojmiasto.json`,
+`data/fares/ztm_warszawa.json` (`_zrodlo_skm`, `_zrodlo_km_wkd`), `data/fares/lka_lodz.json`.

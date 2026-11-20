@@ -1,7 +1,7 @@
 """Szacowanie ceny biletu jednorazowego POLREGIO / Koleje Dolnośląskie / Koleje Śląskie wg
 degresywnej tabeli odległościowej (Taryfa Podstawowa) zamiast sztywnego PLN/km.
 
-Dane: fares/data/polregio_taryfa_podstawowa.json. KAŻDE pasmo ma pole "potwierdzone": null albo
+Dane: data/fares/polregio_taryfa_podstawowa.json. KAŻDE pasmo ma pole "potwierdzone": null albo
 {"zrodlo_url": ..., "data": "YYYY-MM-DD"}. Tylko pasmo z takim obiektem daje wynik
 breakdown["price_verified"]=True (bez ulgi) i zrodlo_url/data_weryfikacji w breakdown. Typ
 wyniku to PriceType.OFFICIAL tylko, gdy Segment.distance_along_track (km po torach, ze źródłem w

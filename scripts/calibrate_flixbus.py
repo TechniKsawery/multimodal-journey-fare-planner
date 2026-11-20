@@ -2,7 +2,7 @@
 
 Uruchamiać LOKALNIE (API global.api.flixbus.com jest blokowane z chmury Claude):
 
-    python scripts/calibrate_flixbus.py --out fares/data/flixbus_calibration.json
+    python scripts/calibrate_flixbus.py --out data/fares/flixbus_calibration.json
 
 Dla listy tras PL-PL i PL-DE pobiera najtańszy przejazd (waluta PLN) na kilka dat w przyszłości,
 liczy odległość w linii prostej (tak samo jak routing/motis_client.py — to jest distance_km, które

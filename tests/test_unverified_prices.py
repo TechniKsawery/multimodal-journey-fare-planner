@@ -1,7 +1,7 @@
 """Regresje z testu na żywo PR #97: wartość zastępcza 4,00 i ceny niepotwierdzone.
 
 1) 4,00 EUR "oficjalna_taryfa" dla BER -> Potsdamer Platz / Lichtenberg to bilet BVG AB z
-   fares/data/bvg_berlin.json (udokumentowany), ale BER leży w strefie C — potrzebny ABC.
+   data/fares/bvg_berlin.json (udokumentowany), ale BER leży w strefie C — potrzebny ABC.
 2) Wartość zastępcza LOCAL_BUS_FLAT_PLN (4,00 PLN) i inne ceny niepotwierdzone nie mogą wygrać
    rankingu "Najtańsza" z wariantem o potwierdzonej cenie.
 3) demo.py dopisuje "cena niepotwierdzona" tak samo jak UI.

@@ -2,7 +2,7 @@
 1b (przejazd w obrębie miasta Kolonii lub Bonn — oficjalnie nazwana strefa, nie przybliżenie).
 
 Dane pochodzą z oficjalnej angielskiej strony vrs.de (Ticketsortiment ->
-Einzelticket, Stand 01.06.2026), zweryfikowanej w przeglądarce 2026-10-11 — patrz pole "_zrodlo" w fares/data/vrs_koln.json
+Einzelticket, Stand 01.06.2026), zweryfikowanej w przeglądarce 2026-10-11 — patrz pole "_zrodlo" w data/fares/vrs_koln.json
 oraz README.md w tym katalogu. To źródło NAZYWA jednoznacznie każdy poziom cenowy (1a = gmina
 w której się jest, poza Kolonią/Bonn; 1b = przejazd w obrębie Kolonii lub Bonn; 2a/2b/3/4/5 =
 coraz dalsze relacje), co rozwiązuje wcześniejszą niejednoznaczność mapowania nazwa->kwota
@@ -66,8 +66,8 @@ def estimate(segment: Segment) -> PriceEstimate:
         notes=(
             "Taryfa VRS/Rheinlandtarif: Preisstufe 1b (przejazd w obrębie Kolonii lub Bonn), "
             "Kindertarif 6-14 lat, dzieci do 6 lat jeżdżą bezpłatnie (poza zakresem tego pola "
-            "— patrz fares/data/vrs_koln.json). Dla relacji wychodzących poza miasto (Preisstufe "
+            "— patrz data/fares/vrs_koln.json). Dla relacji wychodzących poza miasto (Preisstufe "
             "2a i wyżej) rzeczywista cena jest wyższa — patrz pełna tabela w "
-            "fares/data/vrs_koln.json."
+            "data/fares/vrs_koln.json."
         ),
     )

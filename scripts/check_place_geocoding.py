@@ -1,4 +1,4 @@
-"""Sprawdza na PRAWDZIWYM geokoderze MOTIS, czy nazwy miast z places/aliases.json trafiają we właściwe miejsce.
+"""Sprawdza na PRAWDZIWYM geokoderze MOTIS, czy nazwy miast z data/places/aliases.json trafiają we właściwe miejsce.
 
     python scripts/check_place_geocoding.py [--url http://localhost:8080]
 

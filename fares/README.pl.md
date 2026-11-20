@@ -18,7 +18,7 @@ Szacuje cenę pojedynczego segmentu podróży dla sześciu przewoźników:
   więc taki odcinek nigdy nie trafia do krajowej tabeli PKP/DB, nawet jeśli agencyName brzmi jak
   jeden z nich. BahnCard: oficjalnie rabat dotyczy tylko niemieckiego odcinka trasy — nie mamy
   podziału PL/DE, więc to uproszczone (patrz `_uwaga_bahncard` w
-  `fares/data/international_pl_de.json`). Pasażerowie 15-26 lat (`DiscountProfile.age`) dostają
+  `data/fares/international_pl_de.json`). Pasażerowie 15-26 lat (`DiscountProfile.age`) dostają
   zamiast tego taryfę "Super Sparpreis Europa Young" — JEDNA cena "od" dla wszystkich relacji
   (bahn.de nie publikuje progów zależnych od odległości dla tej oferty), BahnCard działa tak samo
   jak dla dorosłych.
@@ -37,7 +37,7 @@ Szacuje cenę pojedynczego segmentu podróży dla sześciu przewoźników:
   (`ztm_lublin_ulgowy`): uczniowie do 24 lat, doktoranci, uczniowie/studenci zagraniczni do 26
   lat z ISIC, emeryci. Studenci polskich uczelni: brak ulgi (niepotwierdzone w źródle).
 - **BVG/VBB Berlin** (`fares/bvg_berlin.py`) — bilety Kurzstrecke/AB/ABC z cennika VBB od
-  1.01.2026 (źródło i data w `fares/data/bvg_berlin.json`). Dobiera bilet wg czasu jazdy; gdy
+  1.01.2026 (źródło i data w `data/fares/bvg_berlin.json`). Dobiera bilet wg czasu jazdy; gdy
   `Segment.tariff_zone == "ABC"` (routing/pricing.py ustawia to dla odcinka z/do lotniska BER,
   strefa C) — tylko bilet ABC. Wcześniej ABC wybierany był tylko jako „najdłuższy” bilet dla
   jazdy ponad 120 min (przy równym czasie ważności 120 min wygrywał AB), więc BER → centrum
@@ -50,13 +50,13 @@ Szacuje cenę pojedynczego segmentu podróży dla sześciu przewoźników:
   Bilety BVG obowiązują też dla S-Bahnu Berlin (tryb MOTIS `SUBURBAN`) w kole 20 km wokół centrum.
 - **Kolej podmiejska poza znanymi taryfami (SKM Szczecin, S-Bahn spoza Berlina i NRW)**
   — SKM Trójmiasto, SKM Warszawa i ŁKA w Łodzi mają od 2026-10-12 osobne taryfy (sekcja „Lokalne
-  taryfy kolejowe” niżej). Dla reszty `fares/` NIE ma modułu ani danych w `fares/data/*`. `routing/pricing.py` (tryb
+  taryfy kolejowe” niżej). Dla reszty `fares/` NIE ma modułu ani danych w `data/fares/*`. `routing/pricing.py` (tryb
   `SUBURBAN`, `price_suburban_leg`) wycenia ją jako niepotwierdzony szacunek PLN/km
   (`price_verified=False`), a nie jako autobus za 4 PLN. To samo dotyczy odcinków, które feed
   oznaczył jako `BUS`, ale są dłuższe niż 20 km (`LOCAL_BUS_MAX_KM`, np. RB66 Szczecin ->
   Angermünde, 58 km: ok. 20 PLN, niepotwierdzone) — ryczałt 4 PLN zostaje tylko dla krótkich
   odcinków lokalnych. Dodanie modułu wymaga cennika z URL źródła
-  i datą weryfikacji (jak pozostałe pliki w `fares/data/`).
+  i datą weryfikacji (jak pozostałe pliki w `data/fares/`).
 - **FlixBus** (`fares/flixbus.py` + `fares/_flixbus_api.py`) — REALNA cena z publicznego
   (nieoficjalnego) API FlixBusa dla konkretnej daty przejazdu, z fallbackiem do zgrubnego
   szacunku PLN/km gdy API jest niedostępne/bez wyniku — patrz sekcja niżej.
@@ -121,7 +121,7 @@ bo tabela pasm jest interpolacją).
   osiągnie sufitu).
 - **DB Flexpreis**: nie istnieje oficjalna tabela cena-za-km — cena Flexpreis jest wyliczana
   dynamicznie przez system rezerwacji DB per trasa/data/popyt. Tabela w
-  `fares/data/db_flexpreis.json` to nadal przybliżenie.
+  `data/fares/db_flexpreis.json` to nadal przybliżenie.
 - **ZTM Lublin**: ceny są oficjalne, ale (1) zawsze użyta jest cena strefy 1+2 (obejmuje całą
   sieć, w tym gminy ościenne) — nie mamy mapowania przystanek→strefa, więc przejazdy tylko w
   obrębie strefy 1 mogą być w rzeczywistości tańsze; (2) dobór biletu wg czasu jazdy z MOTIS to
@@ -144,7 +144,7 @@ bo tabela pasm jest interpolacją).
 - **HVV/MVV/VRS Köln**: każdy kalkulator zawsze liczy najniższą/bazową strefę cenową (Hamburg:
   Einzelkarte 1-2 Ringe; Monachium: Zone M; Kolonia: Preisstufe 1b) — brak mapowania
   przystanek→strefa, więc relacje wychodzące poza tę najniższą strefę są w rzeczywistości droższe
-  niż wynik kalkulatora (pełne tabele stref są w `fares/data/*.json`, do odczytu informacyjnego).
+  niż wynik kalkulatora (pełne tabele stref są w `data/fares/*.json`, do odczytu informacyjnego).
   Od 2026-10-10 mapowanie nazwy poziomu→kwota dla VRS/Köln jest jednoznacznie potwierdzone
   (dialogforum.vrs.de), więc wszystkie trzy kalkulatory zwracają `price_type=OFFICIAL`. Żaden z
   trzech kalkulatorów nie jest jeszcze używany przez `routing/pricing.py` w praktyce — patrz
@@ -163,7 +163,7 @@ bo tabela pasm jest interpolacją).
 Dla biletu PL↔DE (relacja polska stacja ↔ Berlin) silnik dokłada do wyniku
 `breakdown["zakres_cen"]` = „od X do Y" wg oficjalnego cennika *Super Promo International
 Polska–Niemcy* (ważny od 19.08.2026, oryginalny PDF pod linkiem źródła). Dane:
-`fares/data/pkp_spi_pl_de.json`, utrzymywane ręcznie na podstawie cennika (liczby i zasady; pełny tekst cennika nie jest w repozytorium).
+`data/fares/pkp_spi_pl_de.json`, utrzymywane ręcznie na podstawie cennika (liczby i zasady; pełny tekst cennika nie jest w repozytorium).
 
 - Dolna granica = min(poziom I SPI, cena główna, czyli tańsza z DB „od" i PKP regularnego);
   górna = min(poziom V SPI, cena regularna PKP). Dla stacji w kilku pociągach bierzemy minimum
@@ -197,7 +197,7 @@ Polska–Niemcy* (ważny od 19.08.2026, oryginalny PDF pod linkiem źródła). D
 
 ## POLREGIO / KD / KŚ: degresywna tabela zamiast 0,35 zł/km (2026-10-12)
 
-`fares/polregio.py` + `fares/data/polregio_taryfa_podstawowa.json` zastępują sztywne
+`fares/polregio.py` + `data/fares/polregio_taryfa_podstawowa.json` zastępują sztywne
 `0.35 PLN/km` dla pociągów regionalnych POLREGIO, Kolei Dolnośląskich i Kolei Śląskich w Polsce
 tabelą pasm odległości (do 5 km, 6-10, ... do 800 km; 30 pasm). Taryfa jest silnie degresywna
 (ok. 1,22 zł/km na 5 km, ok. 0,30 zł/km na 100 km), więc liniowa stawka
@@ -274,7 +274,7 @@ przeglądarce). Dla SKM Trójmiasto, Kolei Małopolskich i ŁKA przełącznikiem
 niż „wg Gemini, niezweryfikowane niezależnie” kwoty wracają do `price_verified=True`. Ranking
 (`Itinerary.price_verified`) traktuje je więc jak szacunek.
 
-- **SKM Trójmiasto** (`fares/skm_trojmiasto.py`, `fares/data/skm_trojmiasto.json`): tabela
+- **SKM Trójmiasto** (`fares/skm_trojmiasto.py`, `data/fares/skm_trojmiasto.json`): tabela
   odległościowa Taryfy Pomorskiej, 21 pasm (7,00 zł do 6 km … 42,00 zł do 500 km), cennik
   C-PKP SKM obowiązujący od 1.03.2026 (Uchwała Zarządu nr 20/2026), Tabela nr 1 s. 15 PDF:
   https://www.skm.pkp.pl/files/user-uploads/ms/1_marca_2026/Cennik_1_marca_2026_po_zm_1.pdf .
@@ -300,7 +300,7 @@ niż „wg Gemini, niezweryfikowane niezależnie” kwoty wracają do `price_ver
   (kwoty ZTM same w sobie są z cennika, odczyt z 2026-10-06). Wyjątek: linia lotniskowa KM Warszawa Płudy - Warszawa Lotnisko Chopina
   (w obu kierunkach, rozpoznawana po nazwach stacji) dostaje bilet czasowy ZTM
   (https://www.wtp.waw.pl/integracje/wspolny-bilet-ztm-km-wkd/ , `_zrodlo_km_wkd`).
-- **ŁKA w Łodzi** (`fares/lka_lodz.py`, `fares/data/lka_lodz.json`): w Strefie A (granice Łodzi)
+- **ŁKA w Łodzi** (`fares/lka_lodz.py`, `data/fares/lka_lodz.json`): w Strefie A (granice Łodzi)
   honorowane są bilety MPK Łódź (cennika MPK Łódź w repo nie ma) i własne bilety strefowe ŁKA
   20 min 4,40 zł, 40 min 5,60 zł, 80 min 6,80 zł (wybór wg czasu jazdy, dłużej niż 80 min to
   szacunek). Źródło: https://lka.lodzkie.pl/Honorowanie-biletow-komunikacji-miejskiej-w-Lodzi/ .
@@ -308,13 +308,13 @@ niż „wg Gemini, niezweryfikowane niezależnie” kwoty wracają do `price_ver
   honorowane. Ulgi (ulgowy 50%: 2,20 / 2,80 / 3,40 zł) i bilety okresowe nie są modelowane:
   przy uldze pokazujemy cenę normalną; `price_verified=False` zawsze (kwoty tylko z raportu Gemini).
 - **Koleje Dolnośląskie, Zgorzelec - Görlitz** (`fares/kd_zgorzelec_gorlitz.py`,
-  `fares/data/kd_zgorzelec_gorlitz.json`): pociąg KD dokładnie między tymi stacjami (oba kierunki)
+  `data/fares/kd_zgorzelec_gorlitz.json`): pociąg KD dokładnie między tymi stacjami (oba kierunki)
   jest bezpłatny (0 zł, oficjalna taryfa). Źródło: https://kolejedolnoslaskie.pl/oferty-taryfowe/oferty-przygraniczne/
   (odczyt 2026-10-13, treść strony sprawdzona przez właściciela projektu). Autobus zastępczy KD i
   ZVON EuropastadtTarif (komunikacja miejska) nie są objęte; dłuższe przejazdy (Wrocław - Görlitz)
   idą dalej ścieżką niepotwierdzonego szacunku.
 - **Bilet graniczny Polska-Niemcy, Zasieki - Forst** (`fares/bilet_graniczny_zasieki_forst.py`,
-  `fares/data/bilet_graniczny_zasieki_forst.json`, `Carrier.BILET_GRANICZNY_ZASIEKI_FORST`): stała
+  `data/fares/bilet_graniczny_zasieki_forst.json`, `Carrier.BILET_GRANICZNY_ZASIEKI_FORST`): stała
   cena 5,00 zł w jedną stronę (regulamin PDF, str. 1 §2 ust. 1), ważny na KD Zasieki - Zasieki(Gr)
   i DB Regio Zasieki(Gr) - Forst, obowiązuje od 2024-10-01. Brak ulg ustawowych (§5 ust. 2):
   uczniowie i studenci płacą pełną cenę. Z regulaminu: bilet na okaziciela, do 6 osób na blankiecie
@@ -332,7 +332,7 @@ niż „wg Gemini, niezweryfikowane niezależnie” kwoty wracają do `price_ver
   i https://kolejedolnoslaskie.pl/oferty-taryfowe/oferty-przygraniczne/ (odczyt 2026-10-13). Wycenia tylko odcinek
   pociągowy (KD lub DB Regio) z Zasieki do Forst w obie strony; odcinki cząstkowe, autobus
   zastępczy i dłuższe przejazdy idą dalej starą ścieżką (bez zgadywania ceny).
-- **Koleje Małopolskie** (`fares/koleje_malopolskie.py`, `fares/data/koleje_malopolskie.json`,
+- **Koleje Małopolskie** (`fares/koleje_malopolskie.py`, `data/fares/koleje_malopolskie.json`,
   `Carrier.KOLEJE_MALOPOLSKIE`): wyłącznie **Tabela nr 1** taryfy przewozowej TP-KMŁ, 30 pasm
   biletu jednorazowego wg taryfy normalnej, 2. klasa, pociąg osobowy, cena brutto z 8% VAT (8,00 zł
   do 5 km … 62,40 zł do 800 km; 91-100 km = 31,30 zł). Dokument: „Załącznik nr 2 do Uchwały Zarządu
@@ -362,7 +362,7 @@ niż „wg Gemini, niezweryfikowane niezależnie” kwoty wracają do `price_ver
 
 ### Koleje Mazowieckie (Tabela nr 1 TP-KM, 2026-10-13)
 
-`fares/koleje_mazowieckie.py`, `fares/data/koleje_mazowieckie.json`, `Carrier.KOLEJE_MAZOWIECKIE`:
+`fares/koleje_mazowieckie.py`, `data/fares/koleje_mazowieckie.json`, `Carrier.KOLEJE_MAZOWIECKIE`:
 bilet jednorazowy wg taryfy normalnej, 2. klasa, 27 pasm (do 5 km … 481–520 km), kwoty brutto
 (brutto = netto + PTU, oba w danych). Źródło: oficjalny PDF „Załącznik do TP-KM z uwzględnieniem
 zmian nr 1–6”, s. 13, Tabela nr 1
@@ -452,7 +452,7 @@ for s in suggest_bahncard(distance_km=550, journeys_per_year=2, age=22):
 `Itinerary` i sam wylicza sumę dystansów odcinków DB Fernverkehr w wariancie — używane w
 `demo.py` (`--age`) i `app.py` (pole "Wiek pasażera" już istniejące dla ulg ZTM/VRR).
 
-Warianty i ceny (`fares/data/bahncard.json`, sprawdzone 2026-10-11 na bahn.de/angebot/bahncard):
+Warianty i ceny (`data/fares/bahncard.json`, sprawdzone 2026-10-11 na bahn.de/angebot/bahncard):
 
 | Wariant | Cena roczna | Rabat na Flexpreis | Wiek |
 |---|---|---|---|
@@ -498,7 +498,7 @@ stały rabat na wiele przejazdów):
   posiadaczy ISIC/ESNcard (osobne członkostwo studenckie, wąska grupa, niepewna dostępność w
   Polsce) — uznane za zbyt niszowe, żeby modelować w silniku ogólnego użytku.
 - **VRR / transport lokalny DE**: **Deutschlandticket** — ogólnoniemiecki bilet miesięczny,
-  63 EUR/mies. od 2026-01-01 (wcześniej 58 EUR, dane w `fares/data/deutschlandticket.json`).
+  63 EUR/mies. od 2026-01-01 (wcześniej 58 EUR, dane w `data/fares/deutschlandticket.json`).
   Ciekawostka: własny sufit miesięczny taryfy eezy.nrw (`vrr_eezy.json`:
   `sufit_miesieczny_2_klasa`) to też 63 EUR — więc Deutschlandticket opłaca się bardziej niż
   same bilety VRR TYLKO gdy pasażer i tak przekroczyłby miesięczny sufit VRR ORAZ jeździ też
@@ -538,7 +538,7 @@ pytest tests/test_fares.py
 ### Kalibracja fallbacku FlixBus (2026-10-11)
 
 Fallback `pln_per_km` zmieniono z 0.35 na 0.27 (mediana z 72 prawdziwych cen API, 24 trasy PL-PL/PL-DE,
-3 daty; próbka z datami w `fares/data/flixbus_calibration.json`, zbierana `scripts/calibrate_flixbus.py`).
+3 daty; próbka z datami w `data/fares/flixbus_calibration.json`, zbierana `scripts/calibrate_flixbus.py`).
 Rozrzut jest duży (Q1 0.209, Q3 0.303), krótkie trasy są tańsze za km niż długie — to nadal szacunek.
 
 ## Nieoficjalne źródła cen (opcjonalne, domyślnie WYŁĄCZONE)

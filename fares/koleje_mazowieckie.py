@@ -1,6 +1,6 @@
 """Cena biletu jednorazowego Kolei Mazowieckich (KM) wg Tabeli nr 1 taryfy przewozowej TP-KM.
 
-Dane: fares/data/koleje_mazowieckie.json (27 pasm: bilet jednorazowy wg taryfy normalnej, 2. klasa,
+Dane: data/fares/koleje_mazowieckie.json (27 pasm: bilet jednorazowy wg taryfy normalnej, 2. klasa,
 kwoty brutto; od 1.07.2022 uchwała 268/Z/2022, zmiana nr 6 od 1.01.2025 tabeli cen nie zmienia).
 Źródło: oficjalny PDF TP-KM ze zmianami 1–6, s. 13 (URL w danych). Właściciel projektu potwierdził
 tabelę w PDF 2026-10-13, więc pasma mają price_verified=True; nic spoza Tabeli nr 1 nie jest tu

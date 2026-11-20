@@ -64,7 +64,7 @@ def test_tlumaczenia_etykiet_domenowych_pokrywaja_slowniki():
     for cat in AttractionCategory:
         assert PL[f"cat.{cat.value}"] == CATEGORY_LABELS[cat]
     assert PL["other_day.title"] == OTHER_DAY_SECTION_TITLE
-    pkp = json.loads((ROOT / "fares/data/pkp_intercity.json").read_text(encoding="utf-8"))
+    pkp = json.loads((ROOT / "data/fares/pkp_intercity.json").read_text(encoding="utf-8"))
     assert {f"pkp.{k}" for k in pkp["ulgi_procent"]} <= set(PL)
     assert label_or("pkp", "nie_ma_takiej_ulgi", "surowy") == "surowy"
 

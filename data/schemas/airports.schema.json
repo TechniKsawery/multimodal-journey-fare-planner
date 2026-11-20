@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Airports (data/routing/airports.json)",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["iata", "name", "city", "country", "lat", "lon"],
+    "properties": {
+      "iata": { "type": "string", "pattern": "^[A-Z]{3}$" },
+      "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+      "lon": { "type": "number", "minimum": -180, "maximum": 180 }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 ## PKP IC Polska-Niemcy — POTWIERDZONE z PDF
 PDF pobrany do `oryginalny PDF PKP IC (link w źródłach)`. Opłata podstawowa, 2 klasa, do Berlina:
-Warszawa, Kraków, Gdynia = 69 EUR; Lublin, Przemyśl = 79 EUR; Poznań = 47 EUR. Zgodne z `fares/data/international_pl_de_pkp.json`.
+Warszawa, Kraków, Gdynia = 69 EUR; Lublin, Przemyśl = 79 EUR; Poznań = 47 EUR. Zgodne z `data/fares/international_pl_de_pkp.json`.
 
 ## Fernsehturm Berlin — potwierdzone "od"
 tv-turm.de/tickets: Standard od 20,00 EUR (BESTPREIS, jeśli dostępny), wariant z napojem od 31,00 EUR. Ceny dynamiczne, dokładna kwota dopiero po wyborze terminu — zostaje oznaczone jako "od".

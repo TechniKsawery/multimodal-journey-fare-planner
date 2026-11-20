@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/TechniKsawery/multimodal-journey-fare-planner/data/schemas/fares.schema.json",
+  "title": "Fare table (data/fares/*.json)",
+  "description": "Loose common shape of all fare tables. Rule: every file names its source (a key starting with _zrodlo / zrodlo_url / _kopia_zrodla), the currency is an ISO code, and any verification date is YYYY-MM-DD or null (null = unverified; reported as a warning by validate-data).",
+  "type": "object",
+  "properties": {
+    "waluta": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "data_weryfikacji": { "$ref": "#/$defs/dateOrNull" },
+    "data_sprawdzenia": { "$ref": "#/$defs/dateOrNull" },
+    "_data_sprawdzenia": { "$ref": "#/$defs/dateOrNull" },
+    "_data_odczytu": { "$ref": "#/$defs/dateOrNull" },
+    "as_of": { "$ref": "#/$defs/dateOrNull" },
+    "zrodlo_url": { "$ref": "#/$defs/url" },
+    "zrodlo_url_cennik": { "$ref": "#/$defs/url" },
+    "zrodlo_url_ulgi": { "$ref": "#/$defs/url" }
+  },
+  "$defs": {
+    "dateOrNull": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "url": { "type": ["string", "null"], "pattern": "^https?://" }
+  }
+}

@@ -81,11 +81,11 @@ składniki (`ExtrasProfile` w `flights/model.py`), bo różnią się między lin
 - `destination_transfer_cost` — transfer z lotniska przylotu do miasta docelowego.
 
 Możesz podać własny `ExtrasProfile` w `FlightSegment.extras`. Jeśli go nie podasz, moduł sięga
-do placeholderowej tabeli `flights/data/extras_placeholder.json` (kilka przykładowych relacji
+do placeholderowej tabeli `data/flights/extras_placeholder.json` (kilka przykładowych relacji
 PL→NRW) — **te liczby też są przykładowe**, nie realne cenniki. Dla nieznanej relacji zwracany
 jest profil zerowy z notatką, żeby dało się doliczyć koszty ręcznie.
 
-### Realne cenniki bagażu wg linii (`flights/data/baggage_by_airline.json`)
+### Realne cenniki bagażu wg linii (`data/flights/baggage_by_airline.json`)
 
 `flights.extras.get_baggage_by_airline(kod_iata)` zwraca (kwota, waluta, opis_źródła) dla
 przewoźników, dla których sprawdziliśmy realny, publiczny cennik bagażu rejestrowanego (nie
@@ -106,7 +106,7 @@ sezonu) — kwota w tabeli to **dolna granica** opublikowanego przedziału (patr
 Silnik tras (`routing/`) używa tej funkcji, żeby doprecyzować szacunek bagażu, gdy z biletu
 Travelpayouts znana jest linia — patrz `routing/README.md`.
 
-### Bagaż podręczny (`flights/data/cabin_baggage.json`, `flights/cabin_baggage.py`)
+### Bagaż podręczny (`data/flights/cabin_baggage.json`, `flights/cabin_baggage.py`)
 
 `get_cabin_baggage(kod_iata)` zwraca jeden z trzech jawnych stanów: **wliczony**, **płatny**
 (dopłata jako kwota lub widełki w ORYGINALNEJ walucie przewoźnika — bez przeliczania po

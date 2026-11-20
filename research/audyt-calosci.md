@@ -1,6 +1,6 @@
 # Audyt zgodności całego produktu
 
-Data audytu: 2026-10-14. Stan repozytorium: `main` @ `2f0db2c` (po scaleniu #136). Zakres: `fares/` (kod i `fares/data/*.json`),
+Data audytu: 2026-10-14. Stan repozytorium: `main` @ `2f0db2c` (po scaleniu #136). Zakres: `fares/` (kod i `data/fares/*.json`),
 `routing/`, `flights/`, `common/`, `api/`, `app.py`, `ui_helpers.py`, `i18n/`, `tests/`. Nie obejmuje modułu atrakcji
 (`attractions/`) poza porównaniem progów wieku w tabeli 2 oraz tłumaczeń (te opisuje `research/audyt-taryf-db.md`).
 
@@ -78,7 +78,7 @@ Kalkulatory ZTM/MPK nie czytają `DiscountProfile.age`, poza ZTM Lublin. Wiek dz
 | **Posiadacz BahnCard** | nie dotyczy | nie dotyczy | nie dotyczy | nie dotyczy | nie dotyczy |
 | **Karty PKP i miejskie** | **brak** (LUBIKA tylko jako źródło cennika) | **brak** (Karta Ucznia tylko jako opis tytułu) | **brak** | **brak** | **brak** |
 
-Uwaga: karty miejskie typu City Card/Welcome Card są w module atrakcji (`attractions/data/city_cards.json`) i nie obniżają ceny odcinków w `fares/`.
+Uwaga: karty miejskie typu City Card/Welcome Card są w module atrakcji (`data/attractions/city_cards.json`) i nie obniżają ceny odcinków w `fares/`.
 SKM Warszawa i linia lotniskowa KM Płudy–Lotnisko Chopina dostają cenę biletu czasowego ZTM z tej samej kolumny, ale zawsze jako `ESTIMATE`
 (honorowanie biletów ZTM wg raportu Gemini). Kolumna „Lublin” dotyczy wyłącznie ZTM Lublin; ŁKA i SKM Trójmiasto są w 1a, kolumna C.
 
@@ -115,11 +115,11 @@ Skróty: **UI** = `app.py` (Streamlit), **API** = `api/schemas.py` + `api/main.p
 | 2.5 | UI `app.py:670–678` ↔ API `api/schemas.py:30` | Wiek domyślny w UI = 30, w API = `None` (brak wieku wyłącza ścieżki wiekowe: Young, dziecko, HVV/MVV/VRS <6, Lublin, ZVON, sugestie My/Jugend BahnCard). | Zapytanie API bez `age` = dorosły bez wyjątków. | **Nie** |
 | 2.6 | UI `app.py:754` ↔ `i18n/pl.py:152` (`form.kinder_other`: „od 15 lat obowiązuje bilet normalny”), `fares/eligibility_info.py` (BVG: dzieci 6–14), komentarz w Modelu | `bvg_berlin_ulgowy` domyślnie `wiek < 18`, a ulga BVG dotyczy 6–14. | 15–17 lat dostają cenę ulgową (AB 2,50 zamiast 4,00 EUR). 0–5 lat płacą ulgową zamiast 0 (reguły „dzieci do N lat” w repo **brak**). | **Nie** |
 | 2.7 | UI `app.py:789` ↔ `i18n/pl.py:168–169` (`free.wroclaw_help`) | `mpk_wroclaw_bezplatny` domyślnie `wiek <= 7 or wiek <= 21 or wiek >= 65`: pierwszy człon zbędny; `<= 21` zaznacza „bezpłatny” każdej osobie do 21 lat, a opis mówi o uczniach szkół podstawowych i ponadpodstawowych; „dzieci do 7 lat” w opisie vs `<= 7` w kodzie. | 19–21-latek niebędący uczniem dostaje domyślnie 0 zł zamiast ulgowego 50%. Student 22 lat nie jest dotknięty. | **Nie** |
-| 2.8 | UI `app.py:794` ↔ `fares/ztm_lublin.py:41–55`, `fares/data/ztm_lublin.json:37` | Checkbox „bezpłatny” w Lublinie domyślnie dla `wiek <= 14`. Kalkulator sam z wieku nadaje 0 zł: <6 zawsze, 6 lat tylko do 30.09, 7–14 przez założenie „uczeń podstawówki w Lublinie” (`uczniowie_podstawowek_zakladany_wiek: [7, 14]`). | 6-latek w terminie po 30.09 jest w UI darmowy (checkbox), a w samym kalkulatorze płaci. Założenie ucznia daje `OFFICIAL`. | Częściowo (`test_wiek_6_zalezy_od_daty_podrozy` bez udziału UI) |
+| 2.8 | UI `app.py:794` ↔ `fares/ztm_lublin.py:41–55`, `data/fares/ztm_lublin.json:37` | Checkbox „bezpłatny” w Lublinie domyślnie dla `wiek <= 14`. Kalkulator sam z wieku nadaje 0 zł: <6 zawsze, 6 lat tylko do 30.09, 7–14 przez założenie „uczeń podstawówki w Lublinie” (`uczniowie_podstawowek_zakladany_wiek: [7, 14]`). | 6-latek w terminie po 30.09 jest w UI darmowy (checkbox), a w samym kalkulatorze płaci. Założenie ucznia daje `OFFICIAL`. | Częściowo (`test_wiek_6_zalezy_od_daty_podrozy` bez udziału UI) |
 | 2.9 | `i18n/pl.py:107` (`age.help`) ↔ kod | Opis: „Używany tylko do PODPOWIEDZI zniżek… (VRR Kindertarif 6–14, ZTM Lublin ulgowy)”. W rzeczywistości wiek **bezpośrednio liczy cenę** w `international.py`, `international_pkp.py`, `ztm_lublin.py`, `zvon_gorlitz.py`, `_dzieci_do_6.py` (HVV/MVV/VRS), `bilet_graniczny_zasieki_forst.py` i `cards.py`. | Opis wprowadza w błąd: np. dorosły 30 l. 29,99 EUR, student 22 l. 18,99 EUR na PL↔DE wyłącznie z wieku. | **Nie** |
 | 2.10 | `i18n/pl.py:131` (`form.pkp`: „Ulga PKP”), `app.py:709` | Jeden wybór `pkp_ulga_kod` steruje 6 kalkulatorami, ale **KM, KMŁ i ŁKA go ignorują** (cena normalna, `price_verified=False`), a Polregio/KD/KŚ stosują ulgę PKP IC (`_ULGI = pkp_intercity.json`), bo własnych tabel ulg Polregio w danych nie ma. Opisu w UI brak. | Pasażer z ulgą w Mazowszu, Małopolsce lub Łodzi widzi cenę pełną bez wyjaśnienia (jest tylko `powod_szacunku`). | Tak dla mechanizmu (testy KM/KMŁ/ŁKA), **nie** dla komunikatu w UI |
 | 2.11 | `fares/vrr.py`, `fares/bvg_berlin.py` ↔ `fares/_dzieci_do_6.py`, `hvv.py`, `mvv.py`, `kvb.py` | Dzieci <6 lat jeżdżą bezpłatnie w HVV/MVV/VRS (kod), nie ma tej reguły w VRR i BVG. | Dziecko 3 lata w NRW (VRR) płaci cenę dorosłą, w Kolonii (VRS) 0. | **Nie** |
-| 2.12 | `fares/_dzieci_do_6.py:9` ↔ `fares/data/{hvv,mvv,vrs_koln}.json` | Próg 6 lat jest **wpisany na sztywno w kodzie** (`WIEK_GRANICA = 6`), a pliki danych podają go tylko tekstem (`wiek_dziecko_lata`, `dzieci_ponizej_6_lat_bezplatnie.cytat`). Inne moduły (ZVON, Zasieki, Lublin, `international*.json`) czytają próg z JSON. | Zmiana danych nie zmieni kodu. | Tak (`test_dziecko_ponizej_6_lat_bezplatnie_granice_wieku`) |
+| 2.12 | `fares/_dzieci_do_6.py:9` ↔ `data/fares/{hvv,mvv,vrs_koln}.json` | Próg 6 lat jest **wpisany na sztywno w kodzie** (`WIEK_GRANICA = 6`), a pliki danych podają go tylko tekstem (`wiek_dziecko_lata`, `dzieci_ponizej_6_lat_bezplatnie.cytat`). Inne moduły (ZVON, Zasieki, Lublin, `international*.json`) czytają próg z JSON. | Zmiana danych nie zmieni kodu. | Tak (`test_dziecko_ponizej_6_lat_bezplatnie_granice_wieku`) |
 | 2.13 | `i18n/pl.py:114–115` (`student.label`, `student.help`) ↔ transport | Checkbox „Zniżka uczniowska/studencka” dotyczy **tylko atrakcji** (`i18n/pl.py:114–115`), a w transporcie nie ma pola „student”; student 22 lat dostaje ulgi tylko po ręcznym wyborze kodu PKP i checkboxów miast. | Student 22 w UI: 13 z 17 wariantów e2e bez żadnej zmiany ceny względem dorosłego (tabela 4a). | **Nie** |
 
 ### 2b. Progi wieku w modułach
@@ -139,7 +139,7 @@ Skróty: **UI** = `app.py` (Streamlit), **API** = `api/schemas.py` + `api/main.p
 | ZTM Lublin | gratis do 30.09 roku **7. urodzin**, 65+, założony uczeń **7–14**; UI free **≤14 lub ≥65**, ulgowy **<18** | `ztm_lublin.json`, `app.py:742, 794` | zdtm.lublin.eu 2026-10-13 |
 | MPK Wrocław | UI free **≤7, ≤21, ≥65**; kalkulator wieku nie czyta | `app.py:789` | wroclaw.pl 2026-10-10 |
 | ZTM Warszawa, MPK Kraków, ZTM Poznań | UI free **≥70**, ulgowy **<18**; kalkulatory wieku nie czytają | `app.py:745–749, 774–784` | wtp.waw.pl, ztp.krakow.pl, ztm.poznan.pl 2026-10-10 |
-| Atrakcje | `child_price.max_age` 6–21 lat (17 różnych par min/max), `senior_price.min_age` 60 (2 atrakcje) albo brak | `attractions/data/attractions.json` | per atrakcja |
+| Atrakcje | `child_price.max_age` 6–21 lat (17 różnych par min/max), `senior_price.min_age` 60 (2 atrakcje) albo brak | `data/attractions/attractions.json` | per atrakcja |
 
 Wniosek: dziecko „bezpłatne” to w repo cztery różne progi (<4, <6, ≤7, ≤14), seniorzy mają progi 60, 65 i 70; nie ma wspólnego źródła progów.
 
@@ -166,8 +166,8 @@ Wniosek: dziecko „bezpłatne” to w repo cztery różne progi (<4, <6, ≤7, 
 | FlixBus fallback | 0,27 PLN/km | `flixbus_fallback.json` | kalibracja 72 odpowiedzi API | 2026-10-11 | Rozrzut Q1 0,209 – Q3 0,303; w `breakdown` tylko etykieta `fallback_km` |
 | Stałe rankingu | 40 PLN/h, kary 60 min/50 PLN i 20 min/30 PLN | `routing/scoring_config.py` | „SZACUNEK, do strojenia” | **brak** | Wpływa na „kompromis”, nie na ceny |
 | Dane „wg Gemini” | SKM Trójmiasto (21 pasm), KMŁ (30 pasm), ŁKA (3 bilety), honorowanie biletów ZTM w SKM/KM lotniskowej | `skm_trojmiasto.json`, `koleje_malopolskie.json`, `lka_lodz.json` | raporty `research/skm-km-tabele.md`, `research/km-malopolskie.md`, `research/ztm-lka-regio.md` — **tych plików w repo nie ma** | 2026-10-12 | Wszystko `ESTIMATE`; KMŁ ma `obowiazuje_od: null` |
-| `deutschlandticket.json` | 63 EUR/mies. | `fares/data/deutschlandticket.json` | iamexpat.de (wtórne) | 2026-09-27 | **Żaden kod nie czyta** |
-| `flights/data/extras_placeholder.json` | bagaż, dojazd | `flights/data/` | PLACEHOLDER (`_uwaga`) | **brak** | |
+| `deutschlandticket.json` | 63 EUR/mies. | `data/fares/deutschlandticket.json` | iamexpat.de (wtórne) | 2026-09-27 | **Żaden kod nie czyta** |
+| `data/flights/extras_placeholder.json` | bagaż, dojazd | `data/flights/` | PLACEHOLDER (`_uwaga`) | **brak** | |
 
 Odnośniki do plików, których nie ma w repo: `research/ui-styl.md` (`README.md:184`), `research/zrodla-znizek-kart.md` (`README.md:388`, `fares/README.md:45`),
 `research/skm-km-tabele.md`, `research/ztm-lka-regio.md`, `research/km-malopolskie.md` (`fares/README.md:263,338`, `fares/koleje_malopolskie.py`).

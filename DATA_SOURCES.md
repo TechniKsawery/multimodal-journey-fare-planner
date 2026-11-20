@@ -2,10 +2,17 @@ English | Polski: [wersja polska](DATA_SOURCES.pl.md)
 
 # Data sources and licences
 
-The original source code and documentation are licensed under the
-[PolyForm Noncommercial License 1.0.0](LICENSE). The data below is **not**
-covered by the project licence; each source keeps its own terms. Data files
-are downloaded by scripts, not stored in the repo.
+The source code and documentation are licensed under the
+[Apache License 2.0](LICENSE). The project's own curated tables in `data/`
+(fares, discounts, attractions, city cards, place aliases; numbers and rules
+with a source URL and verification date, no copied third-party texts) are
+licensed under [CC BY 4.0](data/LICENSE). The third-party data below is **not**
+covered by the project licences; each source keeps its own terms. Large feeds
+(GTFS, OSM) are downloaded by scripts, not stored in the repo.
+
+Routing for the public web app is provided by the
+[Transitous](https://transitous.org/sources/) API (see its source list and
+attribution rules; map data © OpenStreetMap contributors, ODbL).
 
 | Data | Source (URL) | Licence / terms | Fetched by |
 |---|---|---|---|
@@ -18,8 +25,8 @@ are downloaded by scripts, not stored in the repo.
 | ZTP Krakow GTFS | https://gtfs.ztp.krakow.pl/ | page declares "Creative Commons (CC BY 4.0)" (read 2026-11-15, feed ver. 20261113); page gives no link to full terms and no attribution wording, so treat as not fully confirmed: attribute ZTP Krakow, do not redistribute until confirmed with ZTP; not downloaded by default | optional: `scripts/fetch_data_extended.py --krakow` |
 | Hamburg / Munich / Cologne GTFS | see `motis/DE-FULL-CITY-GTFS-NOTES.md` | DL-DE-BY-2.0 / CC BY 4.0 / CC BY 4.0 | manual (notes) |
 | OpenStreetMap extracts | https://download.geofabrik.de/ | ODbL, © OpenStreetMap contributors | `scripts/fetch_data.py` |
-| Fares, discounts, attractions, city cards | per-record `zrodlo_url` + `data_weryfikacji` in `fares/data/*.json`, `attractions/data/*.json` | facts with source links; operators' terms apply; entries with `price_verified: false` are unverified estimates | maintained by hand |
-| PKP Intercity "Super Promo International" prices | URL in `fares/data/pkp_spi_pl_de.json` (`_zrodlo_url`) | only numbers/rules are stored; full price-list text and PDF are not in the repo | maintained by hand |
+| Fares, discounts, attractions, city cards | per-record `zrodlo_url` + `data_weryfikacji` in `data/fares/*.json`, `data/attractions/*.json` | facts with source links; operators' terms apply; entries with `price_verified: false` are unverified estimates | maintained by hand |
+| PKP Intercity "Super Promo International" prices | URL in `data/fares/pkp_spi_pl_de.json` (`_zrodlo_url`) | only numbers/rules are stored; full price-list text and PDF are not in the repo | maintained by hand |
 
 Some research notes were produced with AI assistance and are marked "according to Gemini, not independently verified"
 until checked against the primary source.
