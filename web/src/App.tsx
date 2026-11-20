@@ -135,7 +135,9 @@ export function App() {
     list.sort((a, b) => {
       if (sort === 'price') {
         if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
-        if (!!a.partial !== !!b.partial) return a.partial ? 1 : -1;
+        // fully priced first, then the better price coverage, then the lower (partial) sum
+        const cov = (x: typeof a) => (x.partial ? (x.pricedLegs ?? 0) / Math.max(x.totalLegs ?? 1, 1) : 2);
+        if (cov(a) !== cov(b)) return cov(b) - cov(a);
         return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
       }
       return a.durationMin - b.durationMin;
