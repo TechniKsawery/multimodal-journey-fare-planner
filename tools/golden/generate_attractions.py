@@ -146,7 +146,9 @@ def main() -> None:
         "city_queries": [[q, normalize_city(q)] for q in CITY_QUERIES],
         "attractions": [asdict(a) for a in attractions],
         "city_cards": [asdict(c) for c in cards],
-        "city_cards_by_city": {c: [x.id for x in get_city_cards(c)] for c in [None, *city_ids, "xx"]},
+        "city_cards_by_city": {
+            c: [x.id for x in get_city_cards(c)] for c in [None, *city_ids, "xx"]
+        },
         "attractions_filters": [
             {"city": city, "category": cat, "ids": [a.id for a in get_attractions(city, cat, True)]}
             for city in (None, "Berlin", "Lublin, Polska", "Köln", "nowhere")
@@ -188,11 +190,7 @@ def main() -> None:
     grid(
         "best_price",
         [["attraction", ids], ["profile", list(range(len(profs)))]],
-        [
-            _best(best_price_for_attraction(by_id[i], p))
-            for i in ids
-            for p in profs
-        ],
+        [_best(best_price_for_attraction(by_id[i], p)) for i in ids for p in profs],
     )
 
     eval_cases = []
@@ -224,7 +222,12 @@ def main() -> None:
             "ids": subsets["krakow"]["all"],
             "transit": 40,
             "profile": profile_json(p),
-            "evals": [asdict(e) for e in evaluate_city_cards("krakow", [by_id[i] for i in subsets["krakow"]["all"]], 40, p)],
+            "evals": [
+                asdict(e)
+                for e in evaluate_city_cards(
+                    "krakow", [by_id[i] for i in subsets["krakow"]["all"]], 40, p
+                )
+            ],
         }
         for p in (None, DiscountProfile(age=20, is_student=True), DiscountProfile(age=70))
     ]
