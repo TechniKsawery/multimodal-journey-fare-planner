@@ -59,6 +59,8 @@ export interface DiscountProfile {
   child_with_guardian: boolean;
   obywatelstwo: string | null;
   legitymacja_zagraniczna: boolean;
+  /** Holds a Deutschlandticket (BahnCard 100 includes one): local/regional legs in Germany cost 0 EUR extra, see fares/deutschlandticket.ts. */
+  deutschlandticket: boolean;
 }
 
 export function defaultProfile(): DiscountProfile {
@@ -86,6 +88,7 @@ export function defaultProfile(): DiscountProfile {
     child_with_guardian: false,
     obywatelstwo: null,
     legitymacja_zagraniczna: false,
+    deutschlandticket: false,
   };
 }
 

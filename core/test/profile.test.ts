@@ -9,6 +9,12 @@ describe("parseDiscountProfile", () => {
     expect("junk" in p).toBe(false);
   });
 
+  it("accepts the Deutschlandticket flag (default false) and rejects a non-boolean", () => {
+    expect(parseDiscountProfile({}).deutschlandticket).toBe(false);
+    expect(parseDiscountProfile({ deutschlandticket: true, bahncard: "100" })).toMatchObject({ deutschlandticket: true, bahncard: "100" });
+    expect(() => parseDiscountProfile({ deutschlandticket: "yes" })).toThrow(ProfileError);
+  });
+
   it("rejects non-objects and wrong types", () => {
     for (const bad of [null, "x", 5, [], { age: "20" }, { age: 20.5 }, { age: -1 }, { age: 999 }, { hvv_dziecko: "yes" }, { bahncard: 25 }]) {
       expect(() => parseDiscountProfile(bad)).toThrow(ProfileError);
