@@ -38,7 +38,7 @@ export function estimate(segment: Segment): PriceEstimate {
   return fallbackEstimate(
     segment,
     segment.travel_date
-      ? "Ceny na żywo z API FlixBus nie są pobierane w tej aplikacji (brak serwera)."
+      ? "API FlixBus niedostępne/bez wyniku (nie pobierane w tej aplikacji: brak serwera)"
       : "Brak travel_date w segmencie — API FlixBus wymaga konkretnej daty przejazdu.",
   );
 }

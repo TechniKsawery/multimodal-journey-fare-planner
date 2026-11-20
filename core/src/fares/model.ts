@@ -31,6 +31,9 @@ export const Carrier = {
 } as const;
 export type Carrier = (typeof Carrier)[keyof typeof Carrier];
 
+/** Python `str(Carrier.X)` as it appears in error messages: `Carrier.X`. */
+export const carrierRepr = (c: Carrier): string => `Carrier.${Object.entries(Carrier).find(([, v]) => v === c)?.[0] ?? c}`;
+
 /** Profil ulg pasażera (see the long field comments in fares/model.py — the meaning is unchanged). */
 export interface DiscountProfile {
   pkp_ulga_kod: string;
