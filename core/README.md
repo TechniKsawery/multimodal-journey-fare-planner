@@ -17,7 +17,7 @@ and this package must reproduce it.
 Regenerate only when the Python logic or `data/**` changes on purpose:
 
 ```bash
-python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py, generate_attractions.py, generate_motis.py
+python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py, generate_attractions.py, generate_motis.py, generate_pricing.py
 ```
 
 ## Conventions
@@ -38,6 +38,8 @@ python tools/golden/generate_fares.py   # also generate_misc.py, generate_scorin
 |---|---|---|
 | `fares/db.py` optional unofficial price lookup (`UNOFFICIAL_PRICES=1`) | not ported | no server; unofficial APIs are not called from the browser |
 | `motis_client.plan_leg_candidates` asks MOTIS for `max(max_candidates, 3)` itineraries | fast mode asks for 8, extended mode for the oracle's 30 (`MAIN_QUERY_ITINERARIES`) | Transitous is a shared best-effort service (> 720 `/plan` per day needs agreement): fewer, cached queries by default |
+| `routing/pricing.price_flight_leg` (Travelpayouts) | not ported: `priceLeg` throws for `LegMode.FLIGHT` | Travelpayouts is an affiliate/commercial API, excluded for Transitous's non-commercial terms (plan, decision 8.4); flights need their own source later |
+| `leg.depart.date()` as the travel date | `toISOString().slice(0, 10)` (UTC date) | MOTIS times are UTC (`Z`), so the date is the same as in the oracle; note that a local departure just after midnight belongs to the previous UTC day in both |
 | `fares/flixbus.py` live FlixBus API when `travel_date` is set | always the PLN/km fallback (`price_verified: false`) | unofficial API, no CORS/ToS guarantee; golden vectors cover the fallback path |
 
 ## Transitous client (for the UI)
@@ -81,7 +83,7 @@ See the checklist in `mobile-research/plan-pwa-apk-2026-11-15.md` (section 4). P
 `fares/` (all 22 carrier calculators, dispatch, discount profile validation, BahnCard suggestions,
 age defaults, eligibility texts, foreigner warnings), `common/currency`, `routing/model`,
 `routing/transfers`, `routing/scoring` (itinerary aggregation and all 11 recommendation categories),
-`attractions/` (catalogue, city detection, working-note filter, localized texts, best price per profile, city-card calculator), `routing/motis_client` parsing + a Transitous client with a request budget (new).
+`attractions/` (catalogue, city detection, working-note filter, localized texts, best price per profile, city-card calculator), `routing/motis_client` parsing + a Transitous client with a request budget, `fares/international_pkp` and `routing/pricing` (leg pricing: city/regional/long-distance tariffs by geography, PL/DE border detection, NRW, SPI range; flights excluded).
 
 Known, accepted difference: CPython >= 3.12 sums floats with compensation while JavaScript adds
 left to right. The scoring golden scenarios skip the (synthetic) cases where this changes a

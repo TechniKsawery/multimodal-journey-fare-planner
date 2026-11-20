@@ -94,3 +94,25 @@ export function compareIsoDates(a: string, b: string): number {
   const y = parseIsoDate(b);
   return x.year - y.year || x.month - y.month || x.day - y.day;
 }
+
+// JS `\b` is ASCII-only even with the u flag; Python's `\w` is Unicode-aware. These lookarounds are the
+// Unicode word boundaries (start / end of a run of letters, digits and underscore).
+export const WB_START = "(?<![\\p{L}\\p{N}_])";
+export const WB_END = "(?![\\p{L}\\p{N}_])";
+
+export const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** Python `any(re.search(rf"(?<!\w){re.escape(k)}(?!\w)", text) for k in keywords)`: whole-word match. */
+export function matchesAnyWord(text: string, keywords: readonly string[]): boolean {
+  return keywords.some((k) => wordRegex(k).test(text));
+}
+
+const WORD_REGEX_CACHE = new Map<string, RegExp>();
+function wordRegex(keyword: string): RegExp {
+  let re = WORD_REGEX_CACHE.get(keyword);
+  if (!re) {
+    re = new RegExp(`${WB_START}${escapeRegExp(keyword)}${WB_END}`, "u");
+    WORD_REGEX_CACHE.set(keyword, re);
+  }
+  return re;
+}
