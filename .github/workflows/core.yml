@@ -32,6 +32,7 @@ jobs:
           python tools/golden/generate_fares.py
           python tools/golden/generate_misc.py
           python tools/golden/generate_scoring.py
+          python tools/golden/generate_attractions.py
           git diff --exit-code -- core/golden
 
       - name: Install core

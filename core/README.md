@@ -17,7 +17,7 @@ and this package must reproduce it.
 Regenerate only when the Python logic or `data/**` changes on purpose:
 
 ```bash
-python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py
+python tools/golden/generate_fares.py   # also generate_misc.py, generate_scoring.py, generate_attractions.py
 ```
 
 ## Conventions
@@ -44,7 +44,8 @@ python tools/golden/generate_fares.py   # also generate_misc.py, generate_scorin
 See the checklist in `mobile-research/plan-pwa-apk-2026-11-15.md` (section 4). Ported so far:
 `fares/` (all 22 carrier calculators, dispatch, discount profile validation, BahnCard suggestions,
 age defaults, eligibility texts, foreigner warnings), `common/currency`, `routing/model`,
-`routing/transfers`, `routing/scoring` (itinerary aggregation and all 11 recommendation categories).
+`routing/transfers`, `routing/scoring` (itinerary aggregation and all 11 recommendation categories),
+`attractions/` (catalogue, city detection, working-note filter, localized texts, best price per profile, city-card calculator).
 
 Known, accepted difference: CPython >= 3.12 sums floats with compensation while JavaScript adds
 left to right. The scoring golden scenarios skip the (synthetic) cases where this changes a
