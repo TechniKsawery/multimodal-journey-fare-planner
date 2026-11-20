@@ -75,7 +75,16 @@ export function ResultCard({ it, t, lang }: { it: Itinerary; t: Dict; lang: Lang
           </span>
         </div>
         <div class="price">
-          <span class="big">{it.noPrice ? t.noPrice : `${it.partial ? `${t.partial}: ` : ''}${total}`}</span>
+          {it.noPrice ? (
+            <span class="big">{t.noPrice}</span>
+          ) : it.partial ? (
+            <>
+              <span class="partial-cover">{t.partialCover(it.pricedLegs ?? 0, it.totalLegs ?? 0)}</span>
+              <span class="muted">{total}</span>
+            </>
+          ) : (
+            <span class="big">{total}</span>
+          )}
           {it.regularPln && (
             <span class="muted">
               {t.instead} <s>{fmtMoney(it.regularPln, 'PLN', lang)}</s>

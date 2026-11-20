@@ -19,6 +19,9 @@ import { haversineKm } from "./geo";
 
 const RAIL_MODES = new Set(["HIGHSPEED_RAIL", "LONG_DISTANCE", "NIGHT_RAIL", "REGIONAL_FAST_RAIL", "REGIONAL_RAIL", "RAIL"]);
 
+/** UI warning threshold for a short transfer (minutes). */
+export const SHORT_TRANSFER_UI_MIN = 10;
+
 const isoDate = (s: string): Date => new Date(s);
 
 /** Port of routing/motis_client.itinerary_to_legs: walking at both ends stays a leg, in-between walks only flag the transfer. */
@@ -150,7 +153,7 @@ function plainItinerary(it: TItinerary, index: number): Itinerary | null {
     transfers.push({ place: transit[k].to.name, minutes: gap, risk: "ok" });
   }
   const dur = Math.round((Date.parse(transit[transit.length - 1].endTime) - Date.parse(transit[0].startTime)) / 60000);
-  return { id: `p${index}-${it.startTime}`, legs, transfers, totalPln: 0, durationMin: dur, status: "unconfirmed", partial: true, noPrice: true };
+  return { id: `p${index}-${it.startTime}`, legs, transfers, totalPln: 0, durationMin: dur, status: "unconfirmed", partial: true, noPrice: true, pricedLegs: 0, totalLegs: legs.length };
 }
 
 /** Prices every itinerary for the given profile and ranks it with core/. Pure: same input, same output. */
@@ -215,11 +218,16 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
       const a = nonWalk[k].leg;
       const n = nonWalk[k + 1].leg;
       const coreIdx = b.coreLegs.indexOf(a);
-      const risky = b.core.transfer_warnings.some((w) => w.after_leg_index === coreIdx);
+      const flagged = b.core.transfer_warnings.some((w) => w.after_leg_index === coreIdx);
+      // Gaps are differences of absolute instants, so time zones cannot skew them. core/ flags
+      // anything under its conservative 20/30 min estimates (used for the "safest" tag), but
+      // nearly every real itinerary has such a transfer, so the UI only warns below
+      // SHORT_TRANSFER_UI_MIN and otherwise just shows the minutes.
+      const minutes = Math.round((n.depart.getTime() - a.arrive.getTime()) / 60000);
       transfers.push({
         place: a.destination_name,
-        minutes: Math.round((n.depart.getTime() - a.arrive.getTime()) / 60000),
-        risk: risky ? "tight" : "ok",
+        minutes,
+        risk: flagged && minutes < SHORT_TRANSFER_UI_MIN ? "tight" : "ok",
       });
     }
     const first = nonWalk[0].leg;
@@ -237,6 +245,8 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
       status,
       partial: priceStatus(b.core) !== "pelna" || uiLegs.some((l) => l.status === "unconfirmed"),
       noPrice: !known,
+      pricedLegs: uiLegs.filter((l) => l.price !== undefined).length,
+      totalLegs: uiLegs.length,
     };
   }
 }

@@ -45,6 +45,9 @@ export interface Itinerary {
   partial?: boolean;
   /** true = żaden odcinek nie ma znanej ceny (nie pokazujemy sumy 0) */
   noPrice?: boolean;
+  /** ile odcinków ma znaną cenę / ile jest wszystkich (bez dojść pieszo) */
+  pricedLegs?: number;
+  totalLegs?: number;
 }
 
 export interface Profile {

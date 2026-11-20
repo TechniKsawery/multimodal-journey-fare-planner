@@ -80,6 +80,9 @@ describe("buildResults", () => {
     expect(r.status).toBe("unconfirmed");
     expect(r.transfers).toHaveLength(2);
     expect(r.transfers[0].minutes).toBe(20);
+    expect(r.transfers[0].risk).toBe("ok"); // 20 min: below core's 30 min walk estimate, but not warned in the UI
+    expect(r.pricedLegs).toBe(1);
+    expect(r.totalLegs).toBe(3);
     expect(r.legs[0].depart).toBe("07:10"); // 06:10Z shown in Europe/Warsaw
   });
 
