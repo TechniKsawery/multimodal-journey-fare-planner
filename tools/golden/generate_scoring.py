@@ -4,6 +4,7 @@ pick_recommendations, cheaper_unverified, price_ranking_note) on seeded syntheti
 Output: core/golden/scoring.json. Regenerate:  python tools/golden/generate_scoring.py
 """
 
+import math
 import random
 from datetime import UTC, datetime, timedelta, timezone
 from functools import reduce
@@ -162,16 +163,19 @@ def itinerary_json(it: Itinerary) -> dict:
 
 
 def naive_sum(values, start=0):
-    """Left-to-right float addition. CPython >= 3.12 compensates sum() of floats, 3.11 does not;
-    scenarios where that changes a rounded total are skipped so the golden file does not depend on it.
-    """
+    """Left-to-right float addition (what the TypeScript port does). CPython >= 3.12 compensates
+    sum() of floats, 3.11 does not, so the expected values are always computed with this one."""
     return reduce(add, values, start)
 
 
-def build_naive(name, legs):
+def exact_sum(values, start=0):
+    return math.fsum([start, *values])
+
+
+def build_with(sum_fn, name, legs):
     import routing.scoring as scoring_module
 
-    scoring_module.sum = naive_sum  # shadows the builtin inside routing.scoring only
+    scoring_module.sum = sum_fn  # shadows the builtin inside routing.scoring only
     try:
         return build_itinerary(name, legs)
     finally:
@@ -184,12 +188,13 @@ def main() -> None:
     while len(scenarios) < 220:
         base = datetime(2026, 12, 1, 6, 0, tzinfo=rng.choice(TZS))
         variants_in = [make_variant(rng, base) for _ in range(rng.randint(1, 6))]
-        its = [build_itinerary(f"v{k}", v) for k, v in enumerate(variants_in)]
-        naive = [build_naive(f"v{k}", v) for k, v in enumerate(variants_in)]
+        its = [build_with(naive_sum, f"v{k}", v) for k, v in enumerate(variants_in)]
+        exact = [build_with(exact_sum, f"v{k}", v) for k, v in enumerate(variants_in)]
+        # Skip (synthetic) scenarios where float summation order changes a rounded total.
         if any(
             (a.total_price_pln, a.total_price_pln_high)
             != (b.total_price_pln, b.total_price_pln_high)
-            for a, b in zip(its, naive, strict=True)
+            for a, b in zip(its, exact, strict=True)
         ):
             continue
         out = {
