@@ -70,7 +70,7 @@ export function ResultCard({ it, t, lang }: { it: Itinerary; t: Dict; lang: Lang
             {first.depart} → {last.arrive}
           </span>
           <span class="muted">
-            {fmtDuration(it.durationMin)} · {t.transfersN(it.transfers.length)}
+            {fmtDuration(it.durationMin, lang)} · {t.transfersN(it.transfers.length)}
             {tight && <span class="warn-inline"> · ⚠ {t.tight}</span>}
           </span>
         </div>

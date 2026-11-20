@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { dict, type Lang } from './i18n';
+import { dict, detectLang, isLang, LANGS, LANG_NAMES, type Lang } from './i18n';
 import { load, save } from './storage';
 import type { Profile } from './types';
 import { ResultCard } from './components/ResultCard';
@@ -38,7 +38,10 @@ function errorKey(e: unknown): ErrKey {
 }
 
 export function App() {
-  const [lang, setLang] = useState<Lang>(() => load<Lang>('lang', 'pl'));
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = load<string>('lang', '');
+    return isLang(saved) ? saved : detectLang(typeof navigator === 'undefined' ? [] : navigator.languages);
+  });
   const [theme, setTheme] = useState<Theme>(() => load<Theme>('theme', 'auto'));
   const [profile, setProfile] = useState<Profile>(() => load('profile', defaultProfile));
   const [query, setQuery] = useState<Query>({
@@ -64,6 +67,8 @@ export function App() {
 
   useEffect(() => {
     document.documentElement.lang = lang;
+    document.title = dict[lang].pageTitle;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', dict[lang].pageDescription);
     save('lang', lang);
   }, [lang]);
   useEffect(() => {
@@ -171,8 +176,11 @@ export function App() {
           <label class="compact">
             <span class="sr">{t.lang}</span>
             <select value={lang} onChange={(e) => setLang(e.currentTarget.value as Lang)}>
-              <option value="pl">PL</option>
-              <option value="en">EN</option>
+              {LANGS.map((l) => (
+                <option key={l} value={l} lang={l}>
+                  {LANG_NAMES[l]}
+                </option>
+              ))}
             </select>
           </label>
           <label class="compact">
