@@ -1,0 +1,33 @@
+{
+  "_zrodlo": "VBB, strona produktu Einzelfahrausweis (tabele 'Ticketpreise Brandenburg a. d. H., Cottbus, Frankfurt (Oder)' i 'Ticketpreise Potsdam'; 'Alle Angaben in Euro und ohne Gewähr'): https://www.vbb.de/tickets/einzelfahrausweise/einzelfahrausweis/ . Treść strony odczytana w przeglądarce 2026-11-20. Tabela 'gültig ab 01.01.2027' z tej samej strony.",
+  "_uwaga": "Bilety jednorazowe w tarifach miast Brandenburg a. d. Havel, Cottbus, Frankfurt (Oder) i Potsdam (tylko w obrębie miasta, nie pociągi regionalne RE/RB między miastami). Ten plik NIE zawiera VBB-Regional-Tarifstufen (Berlin–Frankfurt (Oder) RE1 itp.): ich cennika nie ma na stronie produktu ani w 'Tarif kurz und bündig'; tabela jest w brošurze taryfowej VBB (Anlage 4, s. 145 wg spisu treści), której tekst nie był dostępny. Dla Berlina wartości 2026 są już w bvg_berlin.json; tu tylko zmiana od 2027.",
+  "waluta": "EUR",
+  "nazwa_przewoznika": "VBB (tarify miast Brandenburgii)",
+  "typ_ceny": "oficjalna_taryfa",
+  "data_weryfikacji": "2026-11-20",
+  "zrodlo_url": "https://www.vbb.de/tickets/einzelfahrausweise/einzelfahrausweis/",
+  "wiek_ulgowy": {"zakres_wieku": [6, 14], "cytat": "Kinder von 6 bis einschließlich 14 Jahren erhalten ermäßigte Fahrausweise."},
+  "miasta": {
+    "brandenburg_cottbus_frankfurt_oder": {
+      "wazny_min": 60,
+      "obowiazuje_do": "2026-12-31",
+      "AB": {"normalny": 2.7, "ulgowy": 1.8},
+      "ABC": {"normalny": 3.5, "ulgowy": 2.5},
+      "od_2027_01_01": {"AB": {"normalny": 2.7, "ulgowy": 1.8}, "ABC": {"normalny": 3.6, "ulgowy": 2.6}}
+    },
+    "potsdam": {
+      "wazny_min": 60,
+      "obowiazuje_do": "2026-12-31",
+      "AB": {"normalny": 3.0, "ulgowy": 2.1},
+      "ABC": {"normalny": 3.7, "ulgowy": 2.6},
+      "od_2027_01_01": {"AB": {"normalny": 3.1, "ulgowy": 2.2}, "ABC": {"normalny": 3.8, "ulgowy": 2.7}}
+    }
+  },
+  "berlin_od_2027_01_01": {
+    "wazny_min": 120,
+    "AB": {"normalny": 4.0, "ulgowy": 2.5},
+    "ABC": {"normalny": 5.2, "ulgowy": 3.6},
+    "_uwaga": "ta sama tabela VBB 'Ticketpreise Berlin (gültig ab 01.01.2027)'. Obecny ABC 2026 = 5,00 / 3,50 (bvg_berlin.json)."
+  },
+  "weryfikacja": {"status": "odczytane ze strony operatora (VBB) 2026-11-20", "data": "2026-11-20", "url": "https://www.vbb.de/tickets/einzelfahrausweise/einzelfahrausweis/"}
+}
