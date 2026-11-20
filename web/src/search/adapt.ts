@@ -130,16 +130,48 @@ export function isValidItinerary(it: unknown): it is TItinerary {
   );
 }
 
+/** Connection without any price (used when pricing fails): legs and times only, everything unconfirmed. */
+function plainItinerary(it: TItinerary, index: number): Itinerary | null {
+  const transit = it.legs.filter((l) => l.mode !== "WALK");
+  if (transit.length === 0) return null;
+  const legs: Leg[] = transit.map((raw) => ({
+    mode: RAIL_MODES.has(raw.mode) ? "rail" : raw.mode === "BUS" || raw.mode === "COACH" ? "bus" : "local",
+    carrier: [raw.agencyName, raw.routeShortName].filter(Boolean).join(" ") || String(raw.mode),
+    from: raw.from.name,
+    to: raw.to.name,
+    depart: clock(raw.startTime, raw.from.tz),
+    arrive: clock(raw.endTime, raw.to.tz),
+    status: "unconfirmed",
+    reason: "calcError",
+  }));
+  const transfers: Transfer[] = [];
+  for (let k = 0; k + 1 < transit.length; k++) {
+    const gap = Math.round((Date.parse(transit[k + 1].startTime) - Date.parse(transit[k].endTime)) / 60000);
+    transfers.push({ place: transit[k].to.name, minutes: gap, risk: "ok" });
+  }
+  const dur = Math.round((Date.parse(transit[transit.length - 1].endTime) - Date.parse(transit[0].startTime)) / 60000);
+  return { id: `p${index}-${it.startTime}`, legs, transfers, totalPln: 0, durationMin: dur, status: "unconfirmed", partial: true, noPrice: true };
+}
+
 /** Prices every itinerary for the given profile and ranks it with core/. Pure: same input, same output. */
 export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
   const raw = input.filter(isValidItinerary);
   const discounts = toDiscountProfile(profile);
-  const built = raw.map((it, index) => {
-    const coreLegs = toCoreLegs(it);
-    const priced = coreLegs.map((leg) => priceLeg(leg, discounts));
-    const core = buildItinerary(`v${index}`, priced);
-    const transit = it.legs.filter((l) => l.mode !== "WALK");
-    return { index, it, coreLegs, priced, core, transit };
+  const fallbacks: Itinerary[] = [];
+  const built = raw.flatMap((it, index) => {
+    try {
+      const coreLegs = toCoreLegs(it);
+      const priced = coreLegs.map((leg) => priceLeg(leg, discounts));
+      const core = buildItinerary(`v${index}`, priced);
+      const transit = it.legs.filter((l) => l.mode !== "WALK");
+      return [{ index, it, coreLegs, priced, core, transit }];
+    } catch (e) {
+      // A pricing problem must never hide the connection itself: show it without a price.
+      console.error("pricing failed for itinerary", index, e);
+      const p = plainItinerary(it, index);
+      if (p) fallbacks.push(p);
+      return [];
+    }
   });
 
   const usable = built.filter((b) => b.transit.length > 0 && !isInfeasible(b.core));
@@ -160,7 +192,18 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
     }
   }
 
-  return usable.map((b) => {
+  const priced = usable.flatMap((b) => {
+    try {
+      return [toUi(b)];
+    } catch (e) {
+      console.error("mapping failed for itinerary", b.index, e);
+      const p = plainItinerary(b.it, b.index);
+      return p ? [p] : [];
+    }
+  });
+  return [...priced, ...fallbacks];
+
+  function toUi(b: (typeof usable)[number]): Itinerary {
     const nonWalk = b.priced.filter((pl) => pl.leg.mode !== LegMode.WALK);
     const uiLegs = nonWalk.map((pl, k) => toUiLeg(b.transit[k], pl));
     const transfers: Transfer[] = [];
@@ -191,5 +234,5 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
       partial: priceStatus(b.core) !== "pelna" || uiLegs.some((l) => l.status === "unconfirmed"),
       noPrice: !known,
     };
-  });
+  }
 }

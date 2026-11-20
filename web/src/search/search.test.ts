@@ -102,3 +102,23 @@ describe("buildResults", () => {
     expect(res.some((r) => r.tag === "fastest")).toBe(true);
   });
 });
+
+describe("robustness against odd real-world data", () => {
+  it("handles missing tz/agency, extra keys and a walk-only itinerary without throwing", () => {
+    const odd = {
+      startTime: "2026-11-23T06:10:00+01:00",
+      endTime: "2026-11-23T09:40:00+01:00",
+      duration: 1,
+      transfers: 0,
+      extra: { x: 1 },
+      legs: [
+        { mode: "WALK", from: { name: "START", lat: 51.2, lon: 22.5 }, to: { name: "Lublin", lat: 51.2, lon: 22.5, stopId: "a" }, startTime: "2026-11-23T06:10:00+01:00", endTime: "2026-11-23T06:15:00+01:00", duration: 1, distance: 300 },
+        { mode: "LONG_DISTANCE", from: { name: "Lublin", lat: 51.23, lon: 22.57 }, to: { name: "Berlin Hbf", lat: 52.52, lon: 13.37 }, startTime: "2026-11-23T06:20:00+01:00", endTime: "2026-11-23T09:40:00+01:00", duration: 1, agencyName: null, routeShortName: null, tripId: "t" },
+      ],
+    };
+    const walkOnly = { ...odd, legs: [odd.legs[0]] };
+    const res = buildResults([odd, walkOnly, 5, undefined], student);
+    expect(res).toHaveLength(1);
+    expect(res[0].legs[0].status).toBe("unconfirmed");
+  });
+});

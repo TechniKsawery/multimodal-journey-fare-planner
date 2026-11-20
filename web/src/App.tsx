@@ -42,6 +42,7 @@ export function App() {
   const [raw, setRaw] = useState<unknown[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ErrKey | null>(null);
+  const [detail, setDetail] = useState('');
   const [left, setLeft] = useState(() => client.budget.remaining());
   const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
@@ -75,6 +76,8 @@ export function App() {
     abort.current = ctrl;
     setBusy(true);
     setError(null);
+    setDetail('');
+    document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     try {
       const when = new Date(`${query.date}T${query.time}`);
       if (Number.isNaN(when.getTime())) throw new RangeError('time');
@@ -89,10 +92,13 @@ export function App() {
       setQuery((q) => ({ ...q, from: { text: from.name, match: from }, to: { text: to.name, match: to } }));
       const r = await client.plan({ from: placeArg(from), to: placeArg(to), time: when.toISOString() }, ctrl.signal);
       if (ctrl.signal.aborted) return;
+      console.info('[search] itineraries from Transitous:', r.itineraries.length);
       setRaw(r.itineraries.slice(0, 20));
     } catch (e) {
       if ((e as Error)?.name === 'AbortError') return;
+      console.error('[search] failed', e);
       setRaw(null);
+      setDetail(e instanceof Error ? `${e.name}: ${e.message}` : String(e));
       setError(e instanceof RangeError ? (e.message === 'time' ? 'errTime' : 'errPlace') : errorKey(e));
     } finally {
       if (abort.current === ctrl) setBusy(false);
@@ -101,7 +107,12 @@ export function App() {
   }
 
   const results = useMemo(() => {
-    const list = raw ? buildResults(raw, profile) : [];
+    let list: ReturnType<typeof buildResults> = [];
+    try {
+      list = raw ? buildResults(raw, profile) : [];
+    } catch (e) {
+      console.error('buildResults failed', e);
+    }
     // Warianty bez pełnej ceny nie mogą wygrywać rankingu ceny: idą na koniec.
     list.sort((a, b) => {
       if (sort === 'price') {
@@ -169,7 +180,7 @@ export function App() {
         <section id="results" class="results" aria-live="polite">
           {error && (
             <p class="error" role="alert">
-              {t[error]}
+              {t[error]} <small class="muted">({detail})</small>
             </p>
           )}
           {!raw ? (
