@@ -50,3 +50,23 @@ def dump(path: Path, data) -> None:
         + "\n",
         encoding="utf-8",
     )
+
+
+def product_cases(axes: dict):
+    """All combinations of the axes (ordered dict name -> values); the last axis varies fastest.
+    The TypeScript tests enumerate in exactly this order."""
+    import itertools
+
+    names = list(axes)
+    for combo in itertools.product(*(axes[n] for n in names)):
+        yield dict(zip(names, combo, strict=True))
+
+
+def outcome(fn, *args, **kwargs) -> dict:
+    """{"ok": result} or {"error": message} — the shape the TypeScript tests reproduce."""
+    try:
+        return {"ok": fn(*args, **kwargs)}
+    except ValueError as e:
+        return {"error": str(e)}
+    except Exception:  # noqa: BLE001 - anything else is just "not a ValueError" for the port
+        return {"error": "<non-ValueError>"}

@@ -82,3 +82,15 @@ export function fileOrderKeys(obj: object): string[] {
   const isIndex = (k: string) => /^(0|[1-9]\d*)$/.test(k);
   return [...keys.filter((k) => !isIndex(k)), ...keys.filter(isIndex)];
 }
+
+/** Python `round(x)` (no digits): half to even, returns an integer. */
+export function roundInt(x: number): number {
+  return Number(formatFixed(x, 0));
+}
+
+/** Compare two ISO dates (YYYY-MM-DD) like Python `date` objects: negative, 0 or positive. */
+export function compareIsoDates(a: string, b: string): number {
+  const x = parseIsoDate(a);
+  const y = parseIsoDate(b);
+  return x.year - y.year || x.month - y.month || x.day - y.day;
+}

@@ -30,6 +30,8 @@ jobs:
       - name: Golden vectors are in sync with the Python oracle
         run: |
           python tools/golden/generate_fares.py
+          python tools/golden/generate_misc.py
+          python tools/golden/generate_scoring.py
           git diff --exit-code -- core/golden
 
       - name: Install core
