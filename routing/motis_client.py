@@ -25,6 +25,9 @@ TRANSFER_BUFFER_MINUTES = (
 MAIN_QUERY_ITINERARIES = (
     30  # ~6 s na zapytanie; domyślne ~5 wyników gubiło proste trasy (np. przez Berlin)
 )
+# Tryby MOTIS 2 (Transitous) bez słowa "RAIL" w nazwie, a będące koleją: LONG_DISTANCE to IC/EC.
+# Wcześniej traktowane jak autobus (BUS) -> odcinek IC/EC tracił taryfę PKP/DB.
+RAIL_MODE_NAMES = ("TRAIN", "LONG_DISTANCE")
 MAX_WALK_SECONDS = 3600  # do godziny pieszo do/z pierwszego/ostatniego przystanku
 
 
@@ -424,7 +427,7 @@ def itinerary_to_legs(itinerary: dict) -> list[Leg]:
             continue
 
         mode = (
-            LegMode.RAIL if "RAIL" in raw["mode"] or raw["mode"] == "TRAIN" else LegMode.BUS
+            LegMode.RAIL if "RAIL" in raw["mode"] or raw["mode"] in RAIL_MODE_NAMES else LegMode.BUS
         )  # tramwaj/metro/autobus = transport lokalny; SUBURBAN (SKM, S-Bahn) też trafia do BUS,
         # ale wycenia go osobna ścieżka (pricing.is_suburban_leg), nie ryczałt autobusowy
         has_prev_transit = any(l.mode is not LegMode.WALK for l in legs)
