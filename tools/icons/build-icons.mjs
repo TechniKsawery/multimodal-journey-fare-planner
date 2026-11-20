@@ -42,6 +42,17 @@ const around = (list, r, cr, gs, sw, fill, color, start = -90) => list.map((k, i
   const x = Math.round(256 + r * Math.cos(a)), y = Math.round(256 + r * Math.sin(a))
   return coin(x, y, cr, fill) + glyph(k, x, y, gs, color, sw)
 }).join('')
+// Trasa-wąż z monetami jako przystankami: start (bursztynowa kropka), 4 monety, pinezka celu.
+const pin = ([x, y], fill, hole) => `<g transform="translate(${x} ${y}) scale(.7)"><path d="M0 0c0 0 -58 -52 -58 -98a58 58 0 0 1 116 0c0 46 -58 98 -58 98z" fill="${fill}"/><circle cx="0" cy="-98" r="22" fill="${hole}"/></g>`
+const STOPS = [['eur', 190, 388], ['gbp', 278, 388], ['pln', 260, 294], ['usd', 262, 200]]
+const journey = (style) => `
+  <path d="M136 388H336A47 47 0 0 0 336 294H204A47 47 0 0 1 204 200H356" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="136" cy="388" r="26" fill="${AMBER}"/>
+  ${STOPS.map(([k, x, y]) => {
+    const z = k === 'pln', st = style(z)
+    return coin(x, y, 38, st.fill) + (z && st.ring ? ring(x, y, 31, 6, st.ring) : '') + glyph(k, x, y, z ? 0.44 : 0.4, st.glyph, 20)
+  }).join('')}
+  ${pin([356, 200], '#fff', BLUE)}`
 const VARIANTS = {
   // B1: duża moneta zł z czerwonym pierścieniem, obok mniejsze € i $
   B1: {
@@ -95,6 +106,21 @@ const VARIANTS = {
   ${orbit(150)}
   ${around(['eur', 'usd', 'gbp', 'jpy', 'inr'], 150, 36, 0.36, 20, AMBER, BLUE_DARK)}
   ${coin(256, 256, 92)}${ring(256, 256, 79, 13, RED)}${glyph('pln', 256, 256, 0.8, BLUE, 17)}`,
+  },
+  // E1: trasa z monetami-przystankami, zł tej samej wielkości z czerwonym pierścieniem
+  E1: {
+    name: 'Podróż: białe monety, zł z czerwonym pierścieniem',
+    fg: journey((z) => ({ fill: '#fff', ring: RED, glyph: BLUE })),
+  },
+  // E2: jak E1, ale moneta zł jest czerwona (reszta biała)
+  E2: {
+    name: 'Podróż: czerwona moneta zł',
+    fg: journey((z) => (z ? { fill: RED, glyph: '#fff' } : { fill: '#fff', glyph: BLUE })),
+  },
+  // E3: złote monety, zł biało-czerwone
+  E3: {
+    name: 'Podróż: złote monety, zł biało-czerwone',
+    fg: journey((z) => (z ? { fill: '#fff', ring: RED, glyph: BLUE } : { fill: AMBER, glyph: BLUE_DARK })),
   },
   // A: trasa z punktem startu i pinezką celu
   A: {
@@ -180,7 +206,7 @@ async function main() {
 
   // Podglądy wszystkich wariantów: jasne i ciemne tło, kształt zaokrąglony i okrągły, rozmiary 128/48/24.
   const cell = (svg, bgc, round, s) => `<div style="background:${bgc};padding:14px;display:flex;align-items:center;justify-content:center"><div style="width:${s}px;height:${s}px;${round ? 'border-radius:50%;overflow:hidden' : ''}">${svg.replace('<svg ', `<svg width="${s}" height="${s}" `)}</div></div>`
-  const rows = Object.entries(VARIANTS).filter(([k]) => k.startsWith('D')).map(([k, vv]) => {
+  const rows = Object.entries(VARIANTS).filter(([k]) => k.startsWith('E')).map(([k, vv]) => {
     const any = svgAny(vv), mask = svgMaskable(vv)
     const cells = ['#f6f7f9', '#0f1216'].map((c) => [cell(any, c, false, 128), cell(mask, c, true, 128), cell(any, c, false, 48), cell(any, c, false, 24)].join('')).join('')
     return `<div style="font:600 18px system-ui;padding:8px 12px;grid-column:1/-1">Wariant ${k}: ${vv.name}${k === pick ? ' (domyślny)' : ''}</div>${cells}`
