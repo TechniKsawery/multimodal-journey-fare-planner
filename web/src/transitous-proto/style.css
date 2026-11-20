@@ -18,3 +18,5 @@ button.lang { background: transparent; color: inherit; border: 1px solid #8886; 
 .error { color: #c0392b; }
 .note { background: #f5b70033; padding: .5rem; border-radius: .5rem; font-size: .9rem; }
 footer { margin-top: 2rem; font-size: .8rem; opacity: .8; }
+
+.beta { background: #b45309; color: #fff; text-align: center; font-weight: 700; font-size: .8rem; padding: 4px; letter-spacing: .1em; }

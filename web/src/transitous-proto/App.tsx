@@ -122,6 +122,7 @@ export function App() {
 
   return (
     <main>
+      <div class="beta" role="note">BETA</div>
       <header>
         <h1>{tr("title")}</h1>
         <button class="lang" onClick={() => setLang(lang === "en" ? "pl" : "en")}>

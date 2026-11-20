@@ -22,7 +22,7 @@ const messages = {
     attribution: "Routing: Transitous · Map data © OpenStreetMap contributors (ODbL)",
     sources: "Data sources",
     contact: "Contact / issues",
-    disclaimer: "Free, non-commercial open-source project. Not affiliated with any carrier.",
+    disclaimer: "BETA. Free, non-commercial open-source project. Not affiliated with any carrier. Connection data may be incomplete or outdated; always check with the operator.",
   },
   pl: {
     title: "Multimodalna wyszukiwarka połączeń",
@@ -43,7 +43,7 @@ const messages = {
     attribution: "Routing: Transitous · Dane map © współtwórcy OpenStreetMap (ODbL)",
     sources: "Źródła danych",
     contact: "Kontakt / zgłoszenia",
-    disclaimer: "Darmowy, niekomercyjny projekt open-source. Niepowiązany z żadnym przewoźnikiem.",
+    disclaimer: "BETA. Darmowy, niekomercyjny projekt open-source. Niepowiązany z żadnym przewoźnikiem. Dane o połączeniach mogą być niekompletne lub nieaktualne; zawsze sprawdź u przewoźnika.",
   },
 } as const;
 
