@@ -1,0 +1,20 @@
+{
+  "_zrodlo": "VVO (Verkehrsverbund Oberelbe), strona 'Fahrpreise auf einen Blick', tabela Einzelfahrschein, 'Fares valid since 1 April 2026' / 'As at: 1 April 2026': https://old.vvo-online.de/en/tariff-tickets/tickets/fahrpreise-auf-einen-blick-118.cshtml . Kwoty Dresden 3,60 EUR i pozostałe strefy 3,30 EUR potwierdza też komunikat prasowy VVO z 24.03.2026: https://old.vvo-online.de/doc/pm/260324_PI_Tarif.pdf . Odczyt 2026-11-20.",
+  "_uwaga": "Cennik biletów jednorazowych VVO wg LICZBY STREF (1 strefa poza Dreznem, strefa Drezno, 2 strefy, 3 strefy, cały obszar VVO). Brak mapowania przystanek->strefa w repo i brak go w pobranych źródłach, więc kod nie powinien przypisywać relacji do konkretnej liczby stref bez dodania takiego mapowania (ryzyko zgadywania). Obszar ZVON (Görlitz) nadal ma OSOBNĄ taryfę (zvon_gorlitz.json: tylko Europastadt Görlitz–Zgorzelec). Połączenie Görlitz–Drezno nie jest w tych źródłach wycenione. Wg komunikatu VVO z 04.12.2025 VVO i ZVON łączą się (od 1.01.2026 w ZVVO), ale 'vorerst bleiben der VVO-Tarif und der ZVON-Tarif in ihrer bekannten Form bestehen'; wspólna taryfa bez daty.",
+  "waluta": "EUR",
+  "nazwa_przewoznika": "VVO (Verkehrsverbund Oberelbe / Ostsachsen)",
+  "typ_ceny": "oficjalna_taryfa",
+  "as_of": "2026-04-01",
+  "data_weryfikacji": "2026-11-20",
+  "zrodlo_url": "https://old.vvo-online.de/en/tariff-tickets/tickets/fahrpreise-auf-einen-blick-118.cshtml",
+  "ulgowy_uwaga": "ulgowy dotyczy uczniów do 15. urodzin (przypis strony)",
+  "einzelfahrschein": [
+    {"strefy": "1 strefa (poza Dreznem)", "wazny_max_min": 60, "normalny": 3.3, "ulgowy": 2.1},
+    {"strefy": "strefa Drezno", "wazny_max_min": 60, "normalny": 3.6, "ulgowy": 2.2},
+    {"strefy": "2 strefy", "wazny_max_min": 90, "normalny": 6.3, "ulgowy": 4.2},
+    {"strefy": "3 strefy", "wazny_max_min": 120, "normalny": 9.5, "ulgowy": 6.2},
+    {"strefy": "cały obszar VVO", "wazny_max_min": 240, "normalny": 12.6, "ulgowy": 8.4}
+  ],
+  "kurzstrecke": {"normalny": 2.1, "uwaga": "rozliczana tylko w aplikacji FAIRTIQ; papierowa 4er-Karte 8,40 EUR"},
+  "weryfikacja": {"status": "odczytane ze strony operatora (VVO) 2026-11-20", "data": "2026-11-20", "url": "https://old.vvo-online.de/en/tariff-tickets/tickets/fahrpreise-auf-einen-blick-118.cshtml"}
+}

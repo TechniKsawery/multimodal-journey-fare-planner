@@ -1,0 +1,570 @@
+{
+  "_zrodlo": "VBB-Tarif, broszura taryfowa 'Stand: 11. August 2026' (46. wydanie, Redaktionsschluss 03.08.2026), Beilage Teil E 'Fahrpreisübersicht Anschlusstarif' (s. 123 i nast.), 'Gültig ab 1. Januar 2026': https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere%20ab%2011.%20August%202026.pdf . Tekst PDF dostarczył Ksavi 2026-11-20 (z chmury PDF nie dał się wczytać w całości); kwoty przepisane programowo z tego tekstu.",
+  "_uwaga": "Taryfa łączona (Anschlusstarif) VBB dla pociągów DB/POLREGIO na odcinkach do Polski: bilet jednorazowy (Einzelfahrausweis) 2. klasa, normalny i ulgowy, od stacji VBB do stacji w Polsce. NIE jest to cennik Regional-Tarifstufen VBB dla przejazdów krajowych (Berlin–Frankfurt (Oder) bez wyjścia do Polski): tej tabeli (Anlage 4, Bartarif) w tekście nie ma. Przypisanie bloków do celu Zielona Góra/Radnica wynika z kodów taryfowych (MZ/MD), bo w wyodrębnionym tekście nagłówki stoją niekiedy za tabelą; oba cele mają identyczne ceny, więc ewentualna zamiana nazw nie zmienia kwot. Pominięto tabele Cottbus/Guben–Zielona Góra i Kostrzyn (NEB) oraz bilety okresowe. Ceny VBB zmieniają się 1.01.2027 (patrz vbb_brandenburg_stadte.json), czy Anschlusstarif też, źródło nie mówi.",
+  "waluta": "EUR",
+  "klasa": 2,
+  "nazwa_przewoznika": "VBB Anschlusstarif (DB, POLREGIO, NEB)",
+  "typ_ceny": "oficjalna_taryfa",
+  "as_of": "2026-01-01",
+  "data_weryfikacji": "2026-11-20",
+  "zrodlo_url": "https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere%20ab%2011.%20August%202026.pdf",
+  "relacje_do_polski": {
+    "Szczecin": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MG",
+        "einzelfahrausweis_normalny": 18.2,
+        "einzelfahrausweis_ulgowy": 13.8
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MG",
+        "einzelfahrausweis_normalny": 18.2,
+        "einzelfahrausweis_ulgowy": 13.8
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MG",
+        "einzelfahrausweis_normalny": 18.2,
+        "einzelfahrausweis_ulgowy": 13.8
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MF",
+        "einzelfahrausweis_normalny": 16.8,
+        "einzelfahrausweis_ulgowy": 12.2
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MF",
+        "einzelfahrausweis_normalny": 16.8,
+        "einzelfahrausweis_ulgowy": 12.2
+      },
+      {
+        "stacja_vbb": "Bernau (b Berlin)",
+        "tarifstufe": "ME",
+        "einzelfahrausweis_normalny": 15.0,
+        "einzelfahrausweis_ulgowy": 11.6
+      },
+      {
+        "stacja_vbb": "Eberswalde Hbf",
+        "tarifstufe": "MB",
+        "einzelfahrausweis_normalny": 15.0,
+        "einzelfahrausweis_ulgowy": 11.6
+      },
+      {
+        "stacja_vbb": "Britz",
+        "tarifstufe": "MB",
+        "einzelfahrausweis_normalny": 15.0,
+        "einzelfahrausweis_ulgowy": 11.6
+      },
+      {
+        "stacja_vbb": "Chorin",
+        "tarifstufe": "MA",
+        "einzelfahrausweis_normalny": 15.0,
+        "einzelfahrausweis_ulgowy": 11.6
+      },
+      {
+        "stacja_vbb": "Angermünde",
+        "tarifstufe": "M9",
+        "einzelfahrausweis_normalny": 13.5,
+        "einzelfahrausweis_ulgowy": 10.5
+      },
+      {
+        "stacja_vbb": "Passow (Uckermark)",
+        "tarifstufe": "M7",
+        "einzelfahrausweis_normalny": 9.7,
+        "einzelfahrausweis_ulgowy": 7.6
+      },
+      {
+        "stacja_vbb": "Schönow (Angerm)",
+        "tarifstufe": "M6",
+        "einzelfahrausweis_normalny": 8.8,
+        "einzelfahrausweis_ulgowy": 6.8
+      },
+      {
+        "stacja_vbb": "Casekow",
+        "tarifstufe": "M5",
+        "einzelfahrausweis_normalny": 7.4,
+        "einzelfahrausweis_ulgowy": 5.8
+      },
+      {
+        "stacja_vbb": "Petershagen (Uckerm)",
+        "tarifstufe": "M5",
+        "einzelfahrausweis_normalny": 7.4,
+        "einzelfahrausweis_ulgowy": 5.8
+      },
+      {
+        "stacja_vbb": "Tantow",
+        "tarifstufe": "M3",
+        "einzelfahrausweis_normalny": 4.4,
+        "einzelfahrausweis_ulgowy": 3.5
+      }
+    ],
+    "Zielona Góra": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MZ8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MZ8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MZ8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MZ7",
+        "einzelfahrausweis_normalny": 20.3,
+        "einzelfahrausweis_ulgowy": 15.3
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MZ7",
+        "einzelfahrausweis_normalny": 20.3,
+        "einzelfahrausweis_ulgowy": 15.3
+      },
+      {
+        "stacja_vbb": "Erkner",
+        "tarifstufe": "MZ6",
+        "einzelfahrausweis_normalny": 18.0,
+        "einzelfahrausweis_ulgowy": 13.6
+      },
+      {
+        "stacja_vbb": "Fangschleuse",
+        "tarifstufe": "MZ6",
+        "einzelfahrausweis_normalny": 18.0,
+        "einzelfahrausweis_ulgowy": 13.6
+      },
+      {
+        "stacja_vbb": "Hangelsberg",
+        "tarifstufe": "MZ5",
+        "einzelfahrausweis_normalny": 16.0,
+        "einzelfahrausweis_ulgowy": 12.0
+      },
+      {
+        "stacja_vbb": "Fürstenwalde",
+        "tarifstufe": "MZ4",
+        "einzelfahrausweis_normalny": 14.3,
+        "einzelfahrausweis_ulgowy": 10.7
+      },
+      {
+        "stacja_vbb": "Berkenbrück",
+        "tarifstufe": "MZ4",
+        "einzelfahrausweis_normalny": 14.3,
+        "einzelfahrausweis_ulgowy": 10.7
+      },
+      {
+        "stacja_vbb": "Briesen (Mark)",
+        "tarifstufe": "MZ3",
+        "einzelfahrausweis_normalny": 12.7,
+        "einzelfahrausweis_ulgowy": 9.5
+      },
+      {
+        "stacja_vbb": "Jacobsdorf (Mark)",
+        "tarifstufe": "MZ2",
+        "einzelfahrausweis_normalny": 9.8,
+        "einzelfahrausweis_ulgowy": 7.2
+      },
+      {
+        "stacja_vbb": "Pillgram",
+        "tarifstufe": "MZ2",
+        "einzelfahrausweis_normalny": 9.8,
+        "einzelfahrausweis_ulgowy": 7.2
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) B",
+        "tarifstufe": "MZ1",
+        "einzelfahrausweis_normalny": 9.2,
+        "einzelfahrausweis_ulgowy": 6.7
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) A",
+        "tarifstufe": "MZ1",
+        "einzelfahrausweis_normalny": 9.2,
+        "einzelfahrausweis_ulgowy": 6.7
+      }
+    ],
+    "Radnica": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MD8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MD8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MD8",
+        "einzelfahrausweis_normalny": 22.4,
+        "einzelfahrausweis_ulgowy": 16.9
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MD7",
+        "einzelfahrausweis_normalny": 20.3,
+        "einzelfahrausweis_ulgowy": 15.3
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MD7",
+        "einzelfahrausweis_normalny": 20.3,
+        "einzelfahrausweis_ulgowy": 15.3
+      },
+      {
+        "stacja_vbb": "Erkner",
+        "tarifstufe": "MD6",
+        "einzelfahrausweis_normalny": 18.0,
+        "einzelfahrausweis_ulgowy": 13.6
+      },
+      {
+        "stacja_vbb": "Fangschleuse",
+        "tarifstufe": "MD6",
+        "einzelfahrausweis_normalny": 18.0,
+        "einzelfahrausweis_ulgowy": 13.6
+      },
+      {
+        "stacja_vbb": "Hangelsberg",
+        "tarifstufe": "MD5",
+        "einzelfahrausweis_normalny": 16.0,
+        "einzelfahrausweis_ulgowy": 12.0
+      },
+      {
+        "stacja_vbb": "Fürstenwalde",
+        "tarifstufe": "MD4",
+        "einzelfahrausweis_normalny": 14.3,
+        "einzelfahrausweis_ulgowy": 10.7
+      },
+      {
+        "stacja_vbb": "Berkenbrück",
+        "tarifstufe": "MD4",
+        "einzelfahrausweis_normalny": 14.3,
+        "einzelfahrausweis_ulgowy": 10.7
+      },
+      {
+        "stacja_vbb": "Briesen (Mark)",
+        "tarifstufe": "MD3",
+        "einzelfahrausweis_normalny": 12.7,
+        "einzelfahrausweis_ulgowy": 9.5
+      },
+      {
+        "stacja_vbb": "Jacobsdorf (Mark)",
+        "tarifstufe": "MD2",
+        "einzelfahrausweis_normalny": 9.8,
+        "einzelfahrausweis_ulgowy": 7.2
+      },
+      {
+        "stacja_vbb": "Pillgram",
+        "tarifstufe": "MD2",
+        "einzelfahrausweis_normalny": 9.8,
+        "einzelfahrausweis_ulgowy": 7.2
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) B",
+        "tarifstufe": "MD1",
+        "einzelfahrausweis_normalny": 9.2,
+        "einzelfahrausweis_ulgowy": 6.7
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) A",
+        "tarifstufe": "MD1",
+        "einzelfahrausweis_normalny": 9.2,
+        "einzelfahrausweis_ulgowy": 6.7
+      }
+    ],
+    "Rzepin": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MR8",
+        "einzelfahrausweis_normalny": 18.8,
+        "einzelfahrausweis_ulgowy": 14.2
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MR8",
+        "einzelfahrausweis_normalny": 18.8,
+        "einzelfahrausweis_ulgowy": 14.2
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MR8",
+        "einzelfahrausweis_normalny": 18.8,
+        "einzelfahrausweis_ulgowy": 14.2
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MR7",
+        "einzelfahrausweis_normalny": 16.5,
+        "einzelfahrausweis_ulgowy": 12.5
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MR7",
+        "einzelfahrausweis_normalny": 16.5,
+        "einzelfahrausweis_ulgowy": 12.5
+      },
+      {
+        "stacja_vbb": "Erkner",
+        "tarifstufe": "MR6",
+        "einzelfahrausweis_normalny": 14.4,
+        "einzelfahrausweis_ulgowy": 10.9
+      },
+      {
+        "stacja_vbb": "Fangschleuse",
+        "tarifstufe": "MR6",
+        "einzelfahrausweis_normalny": 14.4,
+        "einzelfahrausweis_ulgowy": 10.9
+      },
+      {
+        "stacja_vbb": "Hangelsberg",
+        "tarifstufe": "MR5",
+        "einzelfahrausweis_normalny": 12.4,
+        "einzelfahrausweis_ulgowy": 9.3
+      },
+      {
+        "stacja_vbb": "Fürstenwalde",
+        "tarifstufe": "MR4",
+        "einzelfahrausweis_normalny": 10.7,
+        "einzelfahrausweis_ulgowy": 8.0
+      },
+      {
+        "stacja_vbb": "Berkenbrück",
+        "tarifstufe": "MR4",
+        "einzelfahrausweis_normalny": 10.7,
+        "einzelfahrausweis_ulgowy": 8.0
+      },
+      {
+        "stacja_vbb": "Briesen (Mark)",
+        "tarifstufe": "MR3",
+        "einzelfahrausweis_normalny": 8.9,
+        "einzelfahrausweis_ulgowy": 6.7
+      },
+      {
+        "stacja_vbb": "Jacobsdorf (Mark)",
+        "tarifstufe": "MR2",
+        "einzelfahrausweis_normalny": 6.1,
+        "einzelfahrausweis_ulgowy": 4.5
+      },
+      {
+        "stacja_vbb": "Pillgram",
+        "tarifstufe": "MR2",
+        "einzelfahrausweis_normalny": 6.1,
+        "einzelfahrausweis_ulgowy": 4.5
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) B",
+        "tarifstufe": "MR1",
+        "einzelfahrausweis_normalny": 5.5,
+        "einzelfahrausweis_ulgowy": 3.9
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) A",
+        "tarifstufe": "MR1",
+        "einzelfahrausweis_normalny": 5.5,
+        "einzelfahrausweis_ulgowy": 3.9
+      }
+    ],
+    "Kunowice": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MK8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MK8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MK8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MK7",
+        "einzelfahrausweis_normalny": 15.7,
+        "einzelfahrausweis_ulgowy": 11.9
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MK7",
+        "einzelfahrausweis_normalny": 15.7,
+        "einzelfahrausweis_ulgowy": 11.9
+      },
+      {
+        "stacja_vbb": "Erkner",
+        "tarifstufe": "MK6",
+        "einzelfahrausweis_normalny": 13.4,
+        "einzelfahrausweis_ulgowy": 10.2
+      },
+      {
+        "stacja_vbb": "Fangschleuse",
+        "tarifstufe": "MK6",
+        "einzelfahrausweis_normalny": 13.4,
+        "einzelfahrausweis_ulgowy": 10.2
+      },
+      {
+        "stacja_vbb": "Hangelsberg",
+        "tarifstufe": "MK5",
+        "einzelfahrausweis_normalny": 11.4,
+        "einzelfahrausweis_ulgowy": 8.6
+      },
+      {
+        "stacja_vbb": "Fürstenwalde",
+        "tarifstufe": "MK4",
+        "einzelfahrausweis_normalny": 9.7,
+        "einzelfahrausweis_ulgowy": 7.3
+      },
+      {
+        "stacja_vbb": "Berkenbrück",
+        "tarifstufe": "MK4",
+        "einzelfahrausweis_normalny": 9.7,
+        "einzelfahrausweis_ulgowy": 7.3
+      },
+      {
+        "stacja_vbb": "Briesen (Mark)",
+        "tarifstufe": "MK3",
+        "einzelfahrausweis_normalny": 7.9,
+        "einzelfahrausweis_ulgowy": 6.0
+      },
+      {
+        "stacja_vbb": "Jacobsdorf (Mark)",
+        "tarifstufe": "MK2",
+        "einzelfahrausweis_normalny": 5.1,
+        "einzelfahrausweis_ulgowy": 3.8
+      },
+      {
+        "stacja_vbb": "Pillgram",
+        "tarifstufe": "MK2",
+        "einzelfahrausweis_normalny": 5.1,
+        "einzelfahrausweis_ulgowy": 3.8
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) B",
+        "tarifstufe": "MK1",
+        "einzelfahrausweis_normalny": 4.5,
+        "einzelfahrausweis_ulgowy": 3.3
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) A",
+        "tarifstufe": "MK1",
+        "einzelfahrausweis_normalny": 4.5,
+        "einzelfahrausweis_ulgowy": 3.3
+      }
+    ],
+    "Słubice": [
+      {
+        "stacja_vbb": "Potsdam A",
+        "tarifstufe": "MS8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "Potsdam B",
+        "tarifstufe": "MS8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "BER FLH (Schönefeld)",
+        "tarifstufe": "MS8",
+        "einzelfahrausweis_normalny": 17.8,
+        "einzelfahrausweis_ulgowy": 13.5
+      },
+      {
+        "stacja_vbb": "Berlin A",
+        "tarifstufe": "MS7",
+        "einzelfahrausweis_normalny": 15.5,
+        "einzelfahrausweis_ulgowy": 11.8
+      },
+      {
+        "stacja_vbb": "Berlin B",
+        "tarifstufe": "MS7",
+        "einzelfahrausweis_normalny": 15.5,
+        "einzelfahrausweis_ulgowy": 11.8
+      },
+      {
+        "stacja_vbb": "Erkner",
+        "tarifstufe": "MS6",
+        "einzelfahrausweis_normalny": 13.4,
+        "einzelfahrausweis_ulgowy": 10.2
+      },
+      {
+        "stacja_vbb": "Fangschleuse",
+        "tarifstufe": "MS6",
+        "einzelfahrausweis_normalny": 13.4,
+        "einzelfahrausweis_ulgowy": 10.2
+      },
+      {
+        "stacja_vbb": "Hangelsberg",
+        "tarifstufe": "MS5",
+        "einzelfahrausweis_normalny": 11.4,
+        "einzelfahrausweis_ulgowy": 8.6
+      },
+      {
+        "stacja_vbb": "Fürstenwalde",
+        "tarifstufe": "MS4",
+        "einzelfahrausweis_normalny": 9.7,
+        "einzelfahrausweis_ulgowy": 7.3
+      },
+      {
+        "stacja_vbb": "Berkenbrück",
+        "tarifstufe": "MS4",
+        "einzelfahrausweis_normalny": 9.7,
+        "einzelfahrausweis_ulgowy": 7.3
+      },
+      {
+        "stacja_vbb": "Briesen (Mark)",
+        "tarifstufe": "MS3",
+        "einzelfahrausweis_normalny": 7.9,
+        "einzelfahrausweis_ulgowy": 6.0
+      },
+      {
+        "stacja_vbb": "Jacobsdorf (Mark)",
+        "tarifstufe": "MS2",
+        "einzelfahrausweis_normalny": 5.1,
+        "einzelfahrausweis_ulgowy": 3.8
+      },
+      {
+        "stacja_vbb": "Pillgram",
+        "tarifstufe": "MS2",
+        "einzelfahrausweis_normalny": 5.1,
+        "einzelfahrausweis_ulgowy": 3.8
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) B",
+        "tarifstufe": "MS1",
+        "einzelfahrausweis_normalny": 4.3,
+        "einzelfahrausweis_ulgowy": 3.1
+      },
+      {
+        "stacja_vbb": "Frankfurt (O.) A",
+        "tarifstufe": "MS1",
+        "einzelfahrausweis_normalny": 4.3,
+        "einzelfahrausweis_ulgowy": 3.1
+      }
+    ]
+  },
+  "weryfikacja": {
+    "status": "odczytane z oficjalnej broszury VBB (tekst dostarczony przez właściciela projektu), 2026-11-20",
+    "data": "2026-11-20",
+    "url": "https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere%20ab%2011.%20August%202026.pdf"
+  }
+}
