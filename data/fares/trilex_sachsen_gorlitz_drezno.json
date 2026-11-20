@@ -1,0 +1,38 @@
+{
+  "_zrodlo": "trilex (Die Länderbahn GmbH DLB), strona biletów: https://www.laenderbahn.com/trilex/tickets/ (odczyt 2026-11-20; strona nie podaje daty 'Stand', tabele cen rozdzielone na 'bis 12.12.2026' i 'ab 13.12.2026'). Zasady taryfowe na styku VVO/ZVON: https://www.zvon.de/de/verbunduebergreifende-fahrten/zwischen-zvon-und-vvo oraz https://www.vvo-online.de/en/tariff-tickets/tariff/fahrten-in-den-zvon-5626.cshtml (odczyt 2026-11-20). Ceny Regio120/Regio120plus 23,10 / 30,70 EUR potwierdza też strona VVO ('14.12.25').",
+  "_uwaga": "Trasa Görlitz–Drezno (RE1/RB60 przez Bischofswerda i Arnsdorf) leży na styku ZVON i VVO. Wg ZVON 'Keine Ausgabe von verbundüberschreitenden Einzelfahrscheinen und Tageskarten'; obowiązuje trilex-Tarif, bilety DB lub Deutschlandticket. Dlatego wyszukiwarka VVO pokazuje 'Keine Preisauskunft'. Strona trilex podaje dla pojedynczego przejazdu jedynie 'Normalpreis' liczony 'streckenbezogen' (bez kwoty dla Görlitz–Drezno), więc CENY POJEDYNCZEGO PRZEJAZDU NIE MA. Zapisane są tylko stałe ceny biletów dziennych dla 1 osoby; kalkulator może je pokazać wyłącznie jako 'szacunek' (cena dnia, nie ceny jednego przejazdu). Brak potwierdzenia na stronie, czy Görlitz–Drezno mieści się w limicie 120 km Regio120 (strona nie nazywa trasy). Odcinek Zgorzelec–Görlitz (granica) i pociągi KD D10 Zgorzelec–Drezno nie są tu wycenione.",
+  "waluta": "EUR",
+  "klasa": 2,
+  "nazwa_przewoznika": "trilex (DLB) / bilety regionalne w Saksonii",
+  "typ_ceny": "szacunek",
+  "data_weryfikacji": "2026-11-20",
+  "zrodlo_url": "https://www.laenderbahn.com/trilex/tickets/",
+  "bilety_dzienne_1_osoba": {
+    "trilex_tagesticket": {
+      "zasieg": "Gilt in allen Nahverkehrszügen auf den Strecken: Dresden Hbf - Bischofswerda - Görlitz Zgorzelec",
+      "wazny": "w dni robocze od 09:00 do 03:00 następnego dnia; sob., niedz. i święta w Saksonii od 00:00 do 03:00",
+      "cena_do_2026_12_12": 33.0,
+      "cena_od_2026_12_13": 35.0
+    },
+    "regio120": {
+      "zasieg": "do 120 km, pociągi DLB tylko w Saksonii i Turyngii",
+      "cena_do_2026_12_12": 23.1,
+      "cena_od_2026_12_13": 24.5
+    },
+    "regio120plus": {
+      "zasieg": "od 121 km",
+      "cena_do_2026_12_12": 30.7,
+      "cena_od_2026_12_13": 32.5
+    },
+    "sachsen_ticket": {
+      "zasieg": "wszystkie pociągi regionalne i komunikacja w VVO, VVV, VMS, ZVON, MDV, marego i VMT; Saksonia, Saksonia-Anhalt, Turyngia",
+      "cena_do_2026_12_12": 35.0,
+      "cena_od_2026_12_13": 37.0
+    }
+  },
+  "normalpreis_pojedynczy": {
+    "opis": "'Preis wird streckenbezogen ermittelt', bez kwoty dla Görlitz–Drezno na stronie; rabaty BahnCard 25 -> 25%, BahnCard 50 -> 50%, dzieci 6-14 lat 50%",
+    "kwota": null
+  },
+  "weryfikacja": {"status": "odczytane ze stron operatorów (trilex, ZVON, VVO) 2026-11-20", "data": "2026-11-20", "url": "https://www.laenderbahn.com/trilex/tickets/"}
+}
