@@ -16,7 +16,11 @@ const todayLocal = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
-type ErrKey = 'errBudget' | 'errBusy' | 'errNetwork' | 'errGeneric' | 'errPlace' | 'errTime';
+const nowHHMM = () => {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+};
+type ErrKey = 'errPast' | 'errBudget' | 'errBusy' | 'errNetwork' | 'errGeneric' | 'errPlace' | 'errTime';
 
 function errorKey(e: unknown): ErrKey {
   if (e instanceof BudgetExceededError) return 'errBudget';
@@ -37,12 +41,13 @@ export function App() {
     from: { text: '', match: null },
     to: { text: '', match: null },
     date: todayLocal(),
-    time: '08:00',
+    time: nowHHMM(),
   });
   const [raw, setRaw] = useState<unknown[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ErrKey | null>(null);
   const [detail, setDetail] = useState('');
+  const [sent, setSent] = useState('');
   const [left, setLeft] = useState(() => client.budget.remaining());
   const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
@@ -70,7 +75,15 @@ export function App() {
   }, [theme]);
   useEffect(() => save('profile', profile), [profile]);
 
-  async function runSearch() {
+  function tryTomorrow() {
+    const d = new Date(`${query.date}T12:00`);
+    d.setDate(d.getDate() + 1);
+    const date = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    setQuery({ ...query, date, time: '06:00' });
+    window.setTimeout(() => void runSearch({ date, time: '06:00' }), 0);
+  }
+
+  async function runSearch(override?: { date: string; time: string }) {
     abort.current?.abort();
     const ctrl = new AbortController();
     abort.current = ctrl;
@@ -79,8 +92,9 @@ export function App() {
     setDetail('');
     document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     try {
-      const when = new Date(`${query.date}T${query.time}`);
+      const when = new Date(`${override?.date ?? query.date}T${override?.time ?? query.time}`);
       if (Number.isNaN(when.getTime())) throw new RangeError('time');
+      if (when.getTime() < Date.now() - 5 * 60_000) throw new RangeError('past');
       // Nie wybrano podpowiedzi? Bierzemy pierwszy wynik geokodowania wpisanego tekstu.
       const resolve = async (p: Query['from']): Promise<GeocodeMatch | null> => {
         if (p.match) return p.match;
@@ -94,12 +108,16 @@ export function App() {
       if (ctrl.signal.aborted) return;
       console.info('[search] itineraries from Transitous:', r.itineraries.length);
       setRaw(r.itineraries.slice(0, 20));
+      setSent(`${from.name} → ${to.name}, ${query.date} ${query.time}`);
+      if (r.itineraries.length === 0) console.warn('[search] empty itineraries for', placeArg(from), placeArg(to), when.toISOString());
     } catch (e) {
       if ((e as Error)?.name === 'AbortError') return;
       console.error('[search] failed', e);
       setRaw(null);
       setDetail(e instanceof Error ? `${e.name}: ${e.message}` : String(e));
-      setError(e instanceof RangeError ? (e.message === 'time' ? 'errTime' : 'errPlace') : errorKey(e));
+      setError(
+        e instanceof RangeError ? (e.message === 'time' ? 'errTime' : e.message === 'past' ? 'errPast' : 'errPlace') : errorKey(e),
+      );
     } finally {
       if (abort.current === ctrl) setBusy(false);
       setLeft(client.budget.remaining());
@@ -168,7 +186,7 @@ export function App() {
             profile={profile}
             onQuery={setQuery}
             onProfile={setProfile}
-            onSearch={runSearch}
+            onSearch={() => void runSearch()}
             lang={lang}
             client={client}
             busy={busy}
@@ -186,7 +204,15 @@ export function App() {
           {!raw ? (
             !error && <p class="muted">{busy ? t.searching : t.empty}</p>
           ) : results.length === 0 ? (
-            <p class="muted">{t.noResults}</p>
+            <div class="muted">
+              <p>{t.noResults}</p>
+              <p class="small-note">
+                {t.queryUsed}: {sent} ({t.fromApi(raw.length)})
+              </p>
+              <button type="button" class="link-btn" onClick={tryTomorrow}>
+                {t.tryTomorrow}
+              </button>
+            </div>
           ) : (
             <>
               <div class="results-head">

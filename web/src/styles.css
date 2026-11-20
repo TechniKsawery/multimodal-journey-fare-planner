@@ -105,11 +105,10 @@ input:not([type='radio']), select {
   padding: var(--gap); display: grid; gap: 12px;
 }
 .route { display: grid; gap: 8px; position: relative; }
-.swap { position: absolute; right: 8px; top: 50%; transform: translateY(-30%); }
-.route input { padding-right: 52px; }
+.swap { justify-self: end; margin: -4px 0; position: relative; z-index: 1; }
 .icon-btn {
-  min-width: 40px; min-height: 40px; border-radius: 50%; border: 1px solid var(--border);
-  background: var(--bg); cursor: pointer;
+  min-width: 48px; min-height: 48px; border-radius: 50%; border: 2px solid var(--accent);
+  background: var(--surface); color: var(--accent); font-size: 1.4rem; line-height: 1; cursor: pointer;
 }
 .primary {
   min-height: 48px; border: 0; border-radius: 10px; cursor: pointer;
@@ -207,3 +206,5 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 .error { background: var(--warn-bg); color: var(--warn-fg); padding: 10px 12px; border-radius: 10px; margin: 0 0 12px; }
 .small-note { font-size: 0.8rem; margin: 8px 0; }
 .primary:disabled { opacity: 0.6; cursor: progress; }
+
+.link-btn { background: none; border: 0; padding: 12px 0; min-height: 44px; color: var(--accent); text-decoration: underline; cursor: pointer; }

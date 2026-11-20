@@ -89,8 +89,10 @@ describe("buildResults", () => {
     expect(b).toBeLessThan(a);
   });
 
-  it("drops physically impossible transfers and malformed entries", () => {
-    expect(buildResults([impossible], none)).toHaveLength(0);
+  it("keeps a too-short transfer visible (warned, untagged) and drops malformed entries", () => {
+    const [imp] = buildResults([impossible], none);
+    expect(imp.transfers[0].risk).toBe("tight");
+    expect(imp.tag).toBeUndefined();
     expect(buildResults([null, {}, { legs: [], startTime: "x" }, { startTime: "x", legs: [{ mode: "RAIL" }] }], none)).toHaveLength(0);
     expect(isValidItinerary(mixed)).toBe(true);
   });

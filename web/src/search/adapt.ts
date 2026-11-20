@@ -174,11 +174,15 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
     }
   });
 
-  const usable = built.filter((b) => b.transit.length > 0 && !isInfeasible(b.core));
+  // Connections come from the routing engine, so a transfer our own (stricter) minimum calls
+  // infeasible is shown with a warning instead of hiding the connection; such ones never get a tag.
+  const usable = built.filter((b) => b.transit.length > 0);
   let tags = new Map<CoreItinerary, "cheapest" | "fastest" | "safest">();
   if (usable.length > 0) {
     try {
-      const rec = pickRecommendations(usable.map((b) => b.core));
+      const feasible = usable.filter((b) => !isInfeasible(b.core)).map((b) => b.core);
+      if (feasible.length === 0) throw new Error("no feasible itinerary");
+      const rec = pickRecommendations(feasible);
       const set = (k: string, tag: "cheapest" | "fastest" | "safest") => {
         const c = rec[k];
         if (c && !tags.has(c)) tags.set(c, tag);
