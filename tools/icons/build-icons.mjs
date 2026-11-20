@@ -2,6 +2,7 @@
 // zewnętrznych zasobów, bez skryptów w SVG). Uruchomienie:
 //   node tools/icons/build-icons.mjs [A|B|C]      (wymaga pakietu `playwright`)
 // Bez argumentu bierze wariant domyślny (DEFAULT). Zapisuje:
+//   (warianty: A, C = pierwsza tura, B1-B3 = trasa i waluty ze złotym wyróżnionym)
 //   web/public/{icon.svg,icon-maskable.svg,icon-192.png,icon-512.png,icon-maskable-512.png,
 //               apple-touch-icon.png,favicon.svg,favicon-32.png}
 //   mobile/android/app/src/main/res/mipmap-*/ic_launcher*.png
@@ -16,11 +17,53 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const BLUE = '#1f6feb'
 const BLUE_DARK = '#1857bd'
 const AMBER = '#ffc83d'
-const DEFAULT = 'A'
+const DEFAULT = 'B2'
 
 // Elementy rysowane w układzie 512x512, mieszczą się w kole o promieniu ~190 od środka
 // (strefa bezpieczna ikon maskable to koło o promieniu 40% szerokości, czyli ~205).
+const RED = '#dc143c'
+// Symbole walut narysowane liniami (bez czcionek), układ ok. 100 jednostek wysokości, środek w (0,0).
+const GLYPH = {
+  eur: 'M32 -30A38 38 0 1 0 32 30M-44 -9H20M-44 9H20',
+  usd: 'M24 -27C12 -42 -26 -38 -22 -15C-18 6 24 0 24 21C24 44 -14 46 -26 28M0 -52V52',
+  gbp: 'M26 -31C14 -50 -24 -44 -24 -13V26M-24 26C-24 38 -36 44 -42 46H30M-40 4H12',
+  pln: 'M-56 -14H-18L-56 36H-18M20 -48V34M4 12L38 -14',
+}
+const glyph = (k, x, y, s, color, sw) =>
+  `<g transform="translate(${x} ${y}) scale(${s})" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"><path d="${GLYPH[k]}"/></g>`
+const coin = (x, y, r, fill = '#fff') => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}"/>`
+const ring = (x, y, r, w, color) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${color}" stroke-width="${w}"/>`
+
 const VARIANTS = {
+  // B1: duża moneta zł z czerwonym pierścieniem, obok mniejsze € i $
+  B1: {
+    name: 'Trasa i cena: zł w centrum, obok € i $',
+    fg: `
+  <path d="M150 352H246V270" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="150" cy="352" r="34" fill="${AMBER}"/>
+  ${coin(304, 196, 100)}${ring(304, 196, 88, 12, RED)}${glyph('pln', 304, 196, 0.78, BLUE, 17)}
+  ${coin(168, 196, 34)}${glyph('eur', 168, 196, 0.4, BLUE, 20)}
+  ${coin(206, 280, 30, '#fff')}${glyph('usd', 206, 280, 0.34, BLUE, 22)}`,
+  },
+  // B2: trasa przez monety € i $ do dużej monety zł
+  B2: {
+    name: 'Trasa i cena: € → $ → zł',
+    fg: `
+  <path d="M150 350H226a62 62 0 0 0 62-62V240" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  ${coin(150, 350, 40, AMBER)}${glyph('eur', 150, 350, 0.46, BLUE_DARK, 18)}
+  ${coin(232, 350, 40, '#fff')}${glyph('usd', 232, 350, 0.4, BLUE, 20)}
+  ${coin(300, 190, 100)}${ring(300, 190, 88, 12, RED)}${glyph('pln', 300, 190, 0.78, BLUE, 17)}`,
+  },
+  // B3: wachlarz monet: zł z przodu (biało-czerwone), € i £ z tyłu
+  B3: {
+    name: 'Trasa i cena: wachlarz € £ i zł',
+    fg: `
+  <path d="M150 352H210" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="150" cy="352" r="34" fill="${AMBER}"/>
+  ${coin(206, 160, 58, AMBER)}${glyph('eur', 206, 160, 0.56, BLUE_DARK, 15)}
+  ${coin(372, 190, 58, '#e7efff')}${glyph('gbp', 372, 190, 0.52, BLUE, 16)}
+  ${coin(290, 262, 96)}${ring(290, 262, 84, 12, RED)}${glyph('pln', 290, 262, 0.74, BLUE, 17)}`,
+  },
   // A: trasa z punktem startu i pinezką celu
   A: {
     name: 'Trasa i pinezka',
@@ -105,7 +148,7 @@ async function main() {
 
   // Podglądy wszystkich wariantów: jasne i ciemne tło, kształt zaokrąglony i okrągły, rozmiary 128/48/24.
   const cell = (svg, bgc, round, s) => `<div style="background:${bgc};padding:14px;display:flex;align-items:center;justify-content:center"><div style="width:${s}px;height:${s}px;${round ? 'border-radius:50%;overflow:hidden' : ''}">${svg.replace('<svg ', `<svg width="${s}" height="${s}" `)}</div></div>`
-  const rows = Object.entries(VARIANTS).map(([k, vv]) => {
+  const rows = Object.entries(VARIANTS).filter(([k]) => k.startsWith('B') && k.length > 1).map(([k, vv]) => {
     const any = svgAny(vv), mask = svgMaskable(vv)
     const cells = ['#f6f7f9', '#0f1216'].map((c) => [cell(any, c, false, 128), cell(mask, c, true, 128), cell(any, c, false, 48), cell(any, c, false, 24)].join('')).join('')
     return `<div style="font:600 18px system-ui;padding:8px 12px;grid-column:1/-1">Wariant ${k}: ${vv.name}${k === pick ? ' (domyślny)' : ''}</div>${cells}`
