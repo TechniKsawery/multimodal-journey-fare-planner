@@ -142,6 +142,7 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
                 <option value="none">{t.bc_none}</option>
                 <option value="25">BahnCard 25</option>
                 <option value="50">BahnCard 50</option>
+                <option value="100">BahnCard 100</option>
               </select>
             </label>
           </div>

@@ -103,3 +103,11 @@ describe("robustness against odd real-world data", () => {
     expect(["estimate", "unconfirmed"]).toContain(res[0].legs[0].status);
   });
 });
+
+describe("BahnCard 100", () => {
+  it("makes a domestic DB leg free (core multiplier 0.0) and is passed to core as '100'", () => {
+    expect(toDiscountProfile({ ...none, bahncard: "100" }).bahncard).toBe("100");
+    const [r] = buildResults([iceDomestic], { ...none, bahncard: "100" });
+    expect(r.legs[0].price).toBe(0);
+  });
+});
