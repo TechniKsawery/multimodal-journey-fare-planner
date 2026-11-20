@@ -52,7 +52,7 @@ const journey = (style) => `
     const z = k === 'pln', st = style(z)
     return coin(x, y, 38, st.fill) + (z && st.ring ? ring(x, y, 34, 9, st.ring) : '') + glyph(k, x, y, z ? 0.44 : 0.4, st.glyph, 20)
   }).join('')}
-  ${pin([356, 200], '#fff', BLUE)}`
+  ${pin([356, 200], RED, '#fff')}`
 const VARIANTS = {
   // B1: duża moneta zł z czerwonym pierścieniem, obok mniejsze € i $
   B1: {
