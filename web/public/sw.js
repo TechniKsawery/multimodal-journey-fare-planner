@@ -1,7 +1,7 @@
 // Minimal app-shell service worker. Caches ONLY same-origin GET responses (the static build).
 // Cross-origin requests (Transitous API, anything else) are never intercepted or stored, so no
 // routing queries, locations or user data end up in a cache.
-const CACHE = 'shell-v1';
+const CACHE = 'shell-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 
