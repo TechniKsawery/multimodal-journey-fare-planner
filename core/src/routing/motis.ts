@@ -8,6 +8,8 @@ export type Raw = Record<string, any>;
 
 export const TRANSFER_BUFFER_MINUTES = 10; // additionalTransferTime: search with slack instead of "just-in-time" transfers
 export const MAIN_QUERY_ITINERARIES = 30; // the oracle's value; the Transitous client defaults to far fewer (see budget)
+/** MOTIS 2 (Transitous) modes without "RAIL" in the name that are still trains: LONG_DISTANCE is IC/EC (it used to be priced as a bus). */
+export const RAIL_MODE_NAMES: readonly string[] = ["TRAIN", "LONG_DISTANCE"];
 export const MAX_WALK_SECONDS = 3600; // up to an hour on foot to/from the first/last stop
 
 /** Python `datetime.fromisoformat(value.replace("Z", "+00:00"))` as an instant. */
@@ -197,7 +199,7 @@ export function itineraryToLegs(itinerary: Raw): Leg[] {
       return;
     }
 
-    const mode = String(raw["mode"]).includes("RAIL") || raw["mode"] === "TRAIN" ? LegMode.RAIL : LegMode.BUS;
+    const mode = String(raw["mode"]).includes("RAIL") || RAIL_MODE_NAMES.includes(raw["mode"] as string) ? LegMode.RAIL : LegMode.BUS;
     const hasPrevTransit = legs.some((l) => l.mode !== LegMode.WALK);
     const extra: Record<string, unknown> = {
       motis_mode: raw["mode"],
