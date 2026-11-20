@@ -46,9 +46,9 @@ The ticket price from the API is not the real trip cost. We add three separate, 
 - `airport_access_cost`—access to the departure airport.
 - `destination_transfer_cost`—transfer from the arrival airport to the destination city.
 
-You can provide your own `ExtrasProfile` in `FlightSegment.extras`. If you do not, the module uses the placeholder table `flights/data/extras_placeholder.json` (several example PL→NRW routes)—**these figures are also examples**, not real tariffs. For an unknown route, it returns a zero profile with a note so that costs can be added manually.
+You can provide your own `ExtrasProfile` in `FlightSegment.extras`. If you do not, the module uses the placeholder table `data/flights/extras_placeholder.json` (several example PL→NRW routes)—**these figures are also examples**, not real tariffs. For an unknown route, it returns a zero profile with a note so that costs can be added manually.
 
-### Real airline baggage tariffs (`flights/data/baggage_by_airline.json`)
+### Real airline baggage tariffs (`data/flights/baggage_by_airline.json`)
 
 `flights.extras.get_baggage_by_airline(IATA_code)` returns (amount, currency, source description) for carriers whose real public checked-baggage tariff we verified (not a placeholder): **Ryanair (FR)**, **Wizz Air (W6)**, **LOT (LO)**, **Eurowings (EW)**, **Lufthansa (LH)**—IATA codes as returned by Travelpayouts in the `airline` field. For an unknown carrier it returns `None`.
 
@@ -56,7 +56,7 @@ This set is intentional: they are actual carriers from Lublin Airport (LUZ)—Ry
 
 **Important:** low-cost baggage fees are **dynamic** (depending on route, purchase timing, and season)—the table amount is the **lower bound** of the published range (see `zakres` and `zrodlo` in the JSON), not a guaranteed price for a particular flight. It is therefore still `PriceType.ESTIMATE`. The routing engine (`routing/`) uses this function to refine the baggage estimate when the airline is known from the Travelpayouts ticket—see `routing/README.md`.
 
-### Cabin baggage (`flights/data/cabin_baggage.json`, `flights/cabin_baggage.py`)
+### Cabin baggage (`data/flights/cabin_baggage.json`, `flights/cabin_baggage.py`)
 
 `get_cabin_baggage(IATA_code)` returns one of three explicit states: **included**, **paid** (a fee as an amount or range in the carrier's ORIGINAL currency—without conversion using a placeholder rate), or **unknown** (missing carrier/entry, an entry without `price_verified`, or a fare-dependent rule that cannot be inferred from the cached price). The result is placed in `breakdown["bagaz_podreczny"]` for the flight segment and shown in the UI (`app.py`) and `demo.py`. The cabin-baggage fee is NOT added to the ticket price or total price.
 

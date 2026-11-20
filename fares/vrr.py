@@ -2,7 +2,7 @@
 cena = Grundpreis + cena_za_km x odległość w linii prostej, z sufitem cenowym.
 
 Dane pochodzą z oficjalnej "Preistabelle ab 01.06.2026" VRR — patrz pole "_zrodlo"
-w fares/data/vrr_eezy.json oraz README.md w tym katalogu. Sufit cenowy jest uproszczony
+w data/fares/vrr_eezy.json oraz README.md w tym katalogu. Sufit cenowy jest uproszczony
 (patrz "_uwaga" w tym samym pliku) — nie mamy mapowania relacja -> strefa cenowa (A/B/C).
 """
 
@@ -53,7 +53,7 @@ def estimate(segment: Segment) -> PriceEstimate:
             "Taryfa eezy.nrw (oficjalna, Stand 01.06.2026): Grundpreis + cena za km linii "
             "prostej, ograniczona sufitem ceny EinzelTicket dla najwyższej strefy sieciowej "
             "(Preisstufe C) — rzeczywisty sufit dla krótszych relacji może być niższy "
-            "(Preisstufe A/B), patrz fares/data/vrr_eezy.json."
+            "(Preisstufe A/B), patrz data/fares/vrr_eezy.json."
             + (
                 f" Zastosowano Kindertarif: {_TABLE['kindertarif_rabat_procent']}% rabatu "
                 "(dzieci 6-14 lat, oficjalny, wliczając sufit cenowy)."

@@ -3,7 +3,7 @@ odcinek kolejowy przekraczający granicę) — SZTYWNE kategorie cenowe zależne
 Sparpreis Europa), NIE tabela pasm liniowa od km jak krajowe kalkulatory `fares/pkp.py` i
 `fares/db.py`. BahnCard oficjalnie obniża tylko niemiecki odcinek trasy — nie mamy podziału
 PL/DE w danych, więc to uproszczone. Patrz `_uwaga`/`_uwaga_bahncard` w
-fares/data/international_pl_de.json dla pełnych zastrzeżeń i źródeł.
+data/fares/international_pl_de.json dla pełnych zastrzeżeń i źródeł.
 
 Wiek pasażera (`segment.discounts.age`) wybiera jedną z czterech kategorii, w tej kolejności
 pierwszeństwa (zob. `_uwaga_dziecko` w danych dla pełnych cytatów z bahn.de):

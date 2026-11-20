@@ -3,7 +3,7 @@ taryfa czasowa strefy 1+2 — dobiera najkrótszy bilet, którego czas ważnośc
 czas jazdy odcinka.
 
 Dane pochodzą z oficjalnego cennika ZDiTM Lublin / LUBIKA, zweryfikowanego 2026-10-14 (źródło,
-data i zasady ulg: fares/data/ztm_lublin.json oraz README.md w tym katalogu).
+data i zasady ulg: data/fares/ztm_lublin.json oraz README.md w tym katalogu).
 
 Przejazd bezpłatny wynika z flagi `ztm_lublin_bezplatny` ALBO z samego wieku (`DiscountProfile.age`):
 65+ oraz dzieci do 30.09 roku, w którym kończą 7 lat. Z wieku 7-14 lat ZAKŁADAMY dodatkowo status

@@ -1,6 +1,6 @@
 """Cena odcinka ŁKA w Strefie A (granice Łodzi): własne bilety czasowe ŁKA 20/40/80 min.
 
-Dane: fares/data/lka_lodz.json (wg Gemini, niezweryfikowane niezależnie, 2026-10-12). Bilety
+Dane: data/fares/lka_lodz.json (wg Gemini, niezweryfikowane niezależnie, 2026-10-12). Bilety
 strefowe ŁKA obowiązują też w pojazdach MPK Łódź, a w ŁKA w Strefie A honorowane są bilety MPK
 Łódź — cennika MPK Łódź w repo nie ma, więc wyceniamy biletem ŁKA. Wybór biletu jak w
 fares/ztm_warszawa.py: najkrótszy, którego ważność pokrywa czas jazdy. Ulgi (ulgowy 50%) i bilety

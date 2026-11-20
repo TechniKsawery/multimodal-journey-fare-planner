@@ -124,12 +124,24 @@ Fare records include `zrodlo_url`, `data_weryfikacji` and `price_verified`. A va
 
 An end-to-end clean-machine verification was completed on 2026-11-12 on Windows/Python 3.13, including tests, data validation, OSM merging, MOTIS import, API queries and Streamlit search. The exact data snapshot is not permanent; current feeds must be downloaded again.
 
+## Repository layout (work in progress)
+
+| Path | Purpose |
+|---|---|
+| `data/` | curated JSON tables + JSON Schemas ([CC BY 4.0](data/LICENSE)) |
+| `web/` | PWA (Preact + Vite + TypeScript); `transitous-proto.html` is the routing prototype |
+| `mobile/` | Android shell (Capacitor) around the same bundle |
+| `fares/`, `routing/`, `flights/`, `attractions/`, `places/`, `i18n/`, `api/`, `app.py` | Python reference implementation (to be ported to TypeScript, then kept as a test oracle) |
+
+The migration plan (free PWA + APK, routing via the public Transitous API) is tracked in the pull requests.
+
 ## Legal and licensing notes
 
 - This is an independent project and is not affiliated with PKP Intercity, Deutsche Bahn, FlixBus, VRR, HVV, MVV, VRS, ZTM or any attraction operator.
 - Prices, discounts and timetables are estimates and may be wrong or outdated. This software does not sell or reserve tickets.
 - OpenStreetMap data requires attribution under the [ODbL](https://www.openstreetmap.org/copyright). GTFS providers retain their own licences; see [`DATA_SOURCES.md`](DATA_SOURCES.md).
-- The original project code and documentation are available under the [PolyForm Noncommercial License 1.0.0](LICENSE). Noncommercial users may use, modify and share the project if they preserve the licence and the required author notice. Commercial use requires separate written permission from the copyright holder. See [`NOTICE`](NOTICE) for attribution details.
+- The source code and documentation are licensed under the [Apache License 2.0](LICENSE). The project's own curated data tables (`data/`: fares, discounts, attractions, city cards, place aliases) are licensed under [CC BY 4.0](data/LICENSE); attribute "Multimodal Fare Planner, TechniKsawery" and the cited primary sources. Third-party feeds and sources keep their own terms. See [`NOTICE`](NOTICE) and [`DATA_SOURCES.md`](DATA_SOURCES.md).
+- **Non-commercial project declaration.** This is a free, non-commercial, open-source portfolio project: no ads, no paid tiers, no affiliate links. This is a statement of the project's intent and a condition of using the public [Transitous](https://transitous.org/api/) routing API, **not** a restriction in the code licence. Anyone who forks the code for commercial use must not rely on Transitous and must arrange their own routing data and licences (see [`DATA_SOURCES.md`](DATA_SOURCES.md)).
 - Optional unofficial carrier interfaces are disabled by default and should be used only for personal testing where permitted.
 - Code, tests, translations and part of the research were created with substantial assistance from AI tools. AI-generated research was treated as unverified until checked against primary sources.
 

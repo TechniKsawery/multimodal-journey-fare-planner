@@ -1,5 +1,5 @@
 """Okresowo sprawdza, czy zmieniły się strony/PDF-y źródłowe cenników
-używane w fares/data/*.json (pole "_zrodlo"/"_zrodlo_*"), i SYGNALIZUJE różnicę względem
+używane w data/fares/*.json (pole "_zrodlo"/"_zrodlo_*"), i SYGNALIZUJE różnicę względem
 poprzedniego stanu — NIE interpretuje automatycznie co się zmieniło, tylko flaguje
 "sprawdź ręcznie" (patrz pamięć projektu: automatyczna interpretacja zmian cenników musi
 iść przez człowieka).
@@ -7,7 +7,7 @@ iść przez człowieka).
 Działa na zasadzie migawek (snapshotów): dla każdego źródła liczy sha256 treści (dla stron
 HTML — po normalizacji, patrz _normalize_for_hash — nie surowych bajtów, żeby nie łapać
 szumu typu nonce/cache-busting w <script>; PDF-y hashowane bez zmian; normalizacja zostawia tylko tekst widoczny dla użytkownika) i zapisuje je w
-fares/data/.snapshots/<plik>__<url-slug>.json. Przy następnym uruchomieniu
+data/fares/.snapshots/<plik>__<url-slug>.json. Przy następnym uruchomieniu
 porównuje nowy hash ze starym. Snapshoty są commitowane do repo, więc stan przechowuje
 się między uruchomieniami (patrz .github/workflows/watch_fare_sources.yml — GitHub Actions,
 NIE sesja Claude Code, bo kontener sesji ma zablokowany dostęp do większości tych hostów
@@ -36,7 +36,7 @@ from urllib.parse import urlsplit
 
 import requests
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "fares" / "data"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "fares"
 SNAPSHOT_DIR = DATA_DIR / ".snapshots"
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -257,7 +257,7 @@ class CheckResult:
 
 
 def discover_sources() -> list[Source]:
-    """Wyciąga wszystkie URL-e z pól zaczynających się od "_zrodlo" w fares/data/*.json."""
+    """Wyciąga wszystkie URL-e z pól zaczynających się od "_zrodlo" w data/fares/*.json."""
     sources = []
     for path in sorted(DATA_DIR.glob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -385,7 +385,7 @@ def main() -> int:
 
     sources = discover_sources()
     if not sources:
-        print("Brak źródeł z polem _zrodlo w fares/data/*.json — nic do sprawdzenia.")
+        print("Brak źródeł z polem _zrodlo w data/fares/*.json — nic do sprawdzenia.")
         return 0
 
     results = [check_source(s) for s in sources]

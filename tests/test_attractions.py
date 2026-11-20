@@ -699,7 +699,7 @@ def test_karty_nie_maja_domyslnego_rabatu_calej_karty():
     import attractions
 
     raw = json.loads(
-        (Path(attractions.__file__).parent / "data" / "city_cards.json").read_text(encoding="utf-8")
+        (Path(attractions.__file__).resolve().parent.parent / "data" / "attractions" / "city_cards.json").read_text(encoding="utf-8")
     )
     for card in raw["karty"]:
         assert "default_discount_percent" not in card, card["id"]
@@ -776,7 +776,7 @@ def test_komunikat_waluty_nie_mowi_o_placeholderze():
 
 def test_kazda_atrakcja_ma_opis_i_notatke_w_kazdym_jezyku_interfejsu():
     """Opisy atrakcji nie mogą zostawać po polsku po zmianie języka: każdy język ma komplet tłumaczeń
-    (attractions/data/translations/<kod>.json), a nowa atrakcja bez tłumaczenia wywala ten test."""
+    (data/attractions/translations/<kod>.json), a nowa atrakcja bez tłumaczenia wywala ten test."""
     from attractions import localized_description, price_from_note
     from i18n import LANGUAGES
 
@@ -1036,7 +1036,7 @@ def test_ekran_oznacza_niepotwierdzone_ceny_w_kazdym_jezyku_flaga(monkeypatch):
 
 def _fake_geocode(text, limit=5):
     """Atrapa geokodera: znane miasto dostaje swoje współrzędne (inaczej wynik poza promieniem 25 km od
-    miasta z places/aliases.json byłby odrzucony jak wieś o tej samej nazwie), reszta punkt pod Krakowem."""
+    miasta z data/places/aliases.json byłby odrzucony jak wieś o tej samej nazwie), reszta punkt pod Krakowem."""
     from places.aliases import find_city
 
     city = find_city(text)

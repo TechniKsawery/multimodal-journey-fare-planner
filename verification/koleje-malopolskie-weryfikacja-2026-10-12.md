@@ -56,7 +56,7 @@ Dolnośląskie / Koleje Śląskie, SKM, ŁKA – bez zmian. Testy pilnują, że 
 ## Co zrobić przed uznaniem za potwierdzone
 
 1. Otworzyć w przeglądarce PDF taryfy (Tabela nr 1, s. 66) i porównać 30 pasm z
-   `fares/data/koleje_malopolskie.json`; odczytać z okładki datę wejścia w życie.
+   `data/fares/koleje_malopolskie.json`; odczytać z okładki datę wejścia w życie.
 2. Wyjaśnić 28,50 zł dla Kraków Główny - Jasło (rozkład K71) względem Tabeli nr 1.
 3. Dla każdego sprawdzonego pasma zmienić `potwierdzone.status` na inny niż „wg Gemini,
    niezweryfikowane niezależnie” (np. „potwierdzone w PDF TP-KMŁ”) i uzupełnić `obowiazuje_od`.

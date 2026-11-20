@@ -1,0 +1,6 @@
+{
+  "appId": "io.github.techniksawery.fareplanner",
+  "appName": "Fare Planner",
+  "webDir": "../web/dist",
+  "android": { "allowMixedContent": false }
+}

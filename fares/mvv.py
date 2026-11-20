@@ -2,7 +2,7 @@
 (najniższa strefa, centrum Monachium).
 
 Dane pochodzą z oficjalnego cennika MVV (ceny od 01.01.2026), zweryfikowanego w przeglądarce
-— patrz pole "_zrodlo" w fares/data/mvv.json oraz README.md w tym katalogu. Taryfa MVV jest
+— patrz pole "_zrodlo" w data/fares/mvv.json oraz README.md w tym katalogu. Taryfa MVV jest
 strefowa (Zone M + strefy 1-12), a nie mamy mapowania przystanek->strefa, więc kalkulator
 zawsze liczy Zone M — to NIEDOSZACOWUJE realną cenę dla relacji wychodzących poza Zone M.
 
@@ -62,7 +62,7 @@ def estimate(segment: Segment) -> PriceEstimate:
         },
         notes=(
             "Taryfa MVV (ceny od 01.01.2026): Einzelkarte Zone M. Kindertarif 6-14 lat (dzieci "
-            "do 6 lat jeżdżą bezpłatnie, poza zakresem tego pola — patrz fares/data/mvv.json). "
+            "do 6 lat jeżdżą bezpłatnie, poza zakresem tego pola — patrz data/fares/mvv.json). "
             "Brak mapowania przystanek->strefa — relacje wychodzące poza Zone M (strefy 1-12) "
             "są w rzeczywistości droższe niż ten wynik."
         ),

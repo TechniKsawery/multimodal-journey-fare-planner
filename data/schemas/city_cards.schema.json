@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "City cards (data/attractions/city_cards.json)",
+  "type": "object",
+  "required": ["karty"],
+  "properties": {
+    "karty": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "city", "name", "existence_verified", "variants"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "city": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "existence_verified": { "type": "boolean" },
+          "existence_source_url": { "type": ["string", "null"], "pattern": "^https?://" },
+          "existence_verified_date": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "variants": { "type": "array" }
+        },
+        "if": { "properties": { "existence_verified": { "const": true } } },
+        "then": { "required": ["existence_source_url", "existence_verified_date"] }
+      }
+    }
+  }
+}

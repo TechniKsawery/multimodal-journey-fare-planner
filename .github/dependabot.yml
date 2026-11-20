@@ -22,3 +22,15 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
+  - package-ecosystem: "npm"
+    directory: "/mobile"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14

@@ -1,6 +1,6 @@
 """Bilet graniczny Polska-Niemcy na odcinku Zasieki - Forst: stała cena 5,00 zł, w jedną stronę.
 
-Dane: fares/data/bilet_graniczny_zasieki_forst.json (regulamin PDF: cena str. 1 §2 ust. 1, brak ulg
+Dane: data/fares/bilet_graniczny_zasieki_forst.json (regulamin PDF: cena str. 1 §2 ust. 1, brak ulg
 ustawowych §5 ust. 2, od 2024-10-01; odczyt 2026-10-13). Źródła: PDF regulaminu i strona KD
 (oferty przygraniczne), URL-e w JSON. Bilet jest DODATKIEM do biletu krajowego KD do Zasieki
 (strona KD: "oprócz biletu krajowego do Zasieki"). Bilet ważny na KD Zasieki - Zasieki(Gr) i

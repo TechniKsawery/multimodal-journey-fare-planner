@@ -3,9 +3,10 @@ Polski | English: [English version](CONTRIBUTING.md)
 # Jak wnosić zmiany
 
 Projekt przyjmuje poprawki i ulepszenia od społeczności. Zmiany powinny być
-zgodne z [PolyForm Noncommercial License 1.0.0](LICENSE). Autorzy zachowują
-prawa autorskie do swoich oryginalnych wkładów, a ich autorstwo powinno być
-widoczne w historii GitHub oraz w opisie pull requesta.
+być przesyłane na licencji [Apache 2.0](LICENSE) (kod i dokumentacja) albo
+[CC BY 4.0](data/LICENSE) (pliki w `data/`). Autorzy zachowują prawa autorskie
+do swoich oryginalnych wkładów, a ich autorstwo powinno być widoczne w historii
+GitHub oraz w opisie pull requesta.
 
 Przed przesłaniem pull requesta upewnij się, że masz prawo udostępnić zmianę
 oraz że nie zawiera ona kluczy API, danych prywatnych ani materiałów objętych

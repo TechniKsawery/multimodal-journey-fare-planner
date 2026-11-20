@@ -1,10 +1,19 @@
 Multimodal Fare Planner
+Copyright 2026 TechniKsawery
 
-Created and maintained by TechniKsawery.
+The source code and documentation in this repository are licensed under the
+Apache License, Version 2.0 (see LICENSE).
 
-The original project code and documentation are licensed under the PolyForm
-Noncommercial License 1.0.0. Contributors retain copyright in their own
-original contributions. See LICENSE for the complete terms.
+The project's own curated data tables in the data/ directory are licensed
+under the Creative Commons Attribution 4.0 International licence (see
+data/LICENSE). Attribution: "Multimodal Fare Planner, TechniKsawery",
+with the primary sources cited in each file (zrodlo_url, data_weryfikacji).
+
+Versions of this project published before 2026-11-20 were distributed under
+the PolyForm Noncommercial License 1.0.0. Copies obtained under that licence
+remain under its terms; the copyright holder relicensed all later versions.
 
 Third-party data, feeds, libraries, maps and other materials remain under their
 own licences and terms. See DATA_SOURCES.md and the relevant project notices.
+Routing data in the web app comes from Transitous (https://transitous.org/sources/);
+map data (c) OpenStreetMap contributors (ODbL).

@@ -71,7 +71,7 @@ def _fallback_estimate(segment: Segment, reason: str) -> PriceEstimate:
         },
         notes=(
             f"{reason} Fallback: {pln_per_km} PLN/km x {segment.distance_km:.0f} km "
-            "(bardzo zgrubny szacunek, patrz fares/data/flixbus_fallback.json)."
+            "(bardzo zgrubny szacunek, patrz data/fares/flixbus_fallback.json)."
         ),
     )
 

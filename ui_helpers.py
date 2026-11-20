@@ -497,7 +497,7 @@ def place_candidates(text: str) -> list[dict]:
     (dworce i miasta na górze, najlepiej pasujące do tekstu pierwsze), bez powtórzeń. Literówki,
     brakujące ogonki i nazwy miast w innych językach ("lodz", "Warzsawa", "Krakau", "Cologne")
     poprawia correct_place_text: geokoder dostaje wtedy oba zapisy, a ranking liczy dopasowanie do
-    każdego z nich. Gdy cały tekst to miasto z places/aliases.json, zostają tylko wyniki w promieniu
+    każdego z nich. Gdy cały tekst to miasto z data/places/aliases.json, zostają tylko wyniki w promieniu
     CITY_RADIUS_KM od jego współrzędnych (najbliższe pierwsze): wieś o tej samej nazwie ("Toruń" pod
     Zamościem) nie jest wtedy ani pierwszą opcją, ani żadną. Pusta lista = nic nie znaleziono; błędy
     geokodera (MotisError) idą wyżej."""

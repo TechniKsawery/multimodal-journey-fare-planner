@@ -20,7 +20,7 @@ from attractions import (
 from attractions.service import evaluate_city_card_variant
 from fares._data_loading import load
 
-DATA = Path(attractions.__file__).parent / "data"
+DATA = Path(attractions.__file__).resolve().parent.parent / "data" / "attractions"
 ZRODLO = DiscountSource("https://example.test/partnerzy", "2026-10-12")
 
 

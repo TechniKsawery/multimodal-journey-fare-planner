@@ -12,7 +12,7 @@ _NAJDLUZSZY = _BILETY[-1]
 def _wybierz_bilet(duration_min: float, strefa: str | None = None) -> dict:
     """Najkrótszy wystarczający bilet wg czasu jazdy. Dla odcinka ze strefy C (strefa="ABC",
     np. lotnisko BER) tylko bilet ABC — AB i Kurzstrecke dobierane po samym czasie jazdy nie
-    sprawdzają strefy, a AB nie obowiązuje poza Berlinem (fares/data/bvg_berlin.json::_uwaga)."""
+    sprawdzają strefy, a AB nie obowiązuje poza Berlinem (data/fares/bvg_berlin.json::_uwaga)."""
     if strefa == "ABC":
         return next(b for b in _BILETY if b["strefa"] == "ABC")
     for bilet in _BILETY:

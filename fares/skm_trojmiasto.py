@@ -1,6 +1,6 @@
 """Cena biletu jednorazowego PKP SKM w Trójmieście wg tabeli odległościowej Taryfy Pomorskiej.
 
-Dane: fares/data/skm_trojmiasto.json (21 pasm, cennik C-PKP SKM obowiązujący od 1.03.2026, bilet
+Dane: data/fares/skm_trojmiasto.json (21 pasm, cennik C-PKP SKM obowiązujący od 1.03.2026, bilet
 normalny oraz ulgi 37/49/51%). Źródło i status są przy KAŻDYM paśmie: "wg Gemini, niezweryfikowane
 niezależnie" (domeny przewoźników są z chmury zablokowane, raport Gemini z 2026-10-12).
 

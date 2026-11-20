@@ -38,7 +38,7 @@ Sygnał niespójności raportu: VBB (tabela Berlin–Szczecin) podaje 15,90 EUR 
 ## Do zrobienia po otwarciu domen (lub ręcznym odczycie PDF-ów)
 
 1. Odczytać tabelę nr 1 w aktualnym cenniku POLREGIO (Załącznik 2 od 1.03.2026) i wpisać
-   `potwierdzone` per pasmo w `fares/data/polregio_taryfa_podstawowa.json`; poprawić kwoty,
+   `potwierdzone` per pasmo w `data/fares/polregio_taryfa_podstawowa.json`; poprawić kwoty,
    jeśli różnią się od raportu.
 2. Ustalić, w których województwach POLREGIO nie stosuje Taryfy Podstawowej.
 3. SKM Trójmiasto i KM: odczytać tabele z oficjalnych PDF-ów i dodać osobne kalkulatory.

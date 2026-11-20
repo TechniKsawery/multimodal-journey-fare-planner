@@ -1,0 +1,36 @@
+name: Web
+
+# Frontend (web/) and shared JSON data checks. Runs on every pull request to main.
+# Node comes preinstalled on ubuntu-latest runners, so no extra third-party action is needed.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Validate data against JSON Schemas (data/schemas)
+        run: npm run validate-data
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build

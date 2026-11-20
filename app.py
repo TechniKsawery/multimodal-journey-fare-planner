@@ -66,7 +66,7 @@ from ui_helpers import (
 )
 from ui_style import inject_style
 
-with open("fares/data/pkp_intercity.json", encoding="utf-8") as fh:
+with open("data/fares/pkp_intercity.json", encoding="utf-8") as fh:
     PKP_ULGI = list(json.load(fh)["ulgi_procent"])
 
 # set_page_config musi być pierwszym poleceniem st.*, więc tytuł karty czyta język z poprzedniego

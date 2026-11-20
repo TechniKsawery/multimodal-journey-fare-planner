@@ -618,7 +618,7 @@ def test_lka_bez_czasu_jazdy_to_blad_kalkulatora():
 
 def test_pliki_danych_sa_poprawnym_json_z_url_zrodla():
     for nazwa in ("skm_trojmiasto.json", "lka_lodz.json"):
-        tekst = (Path(__file__).parent.parent / "fares" / "data" / nazwa).read_text(
+        tekst = (Path(__file__).parent.parent / "data" / "fares" / nazwa).read_text(
             encoding="utf-8"
         )
         dane = json.loads(tekst)

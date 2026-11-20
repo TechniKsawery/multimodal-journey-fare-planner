@@ -1,6 +1,6 @@
 """Cena odcinka komunikacji miejskiej ZVON w Görlitz–Zgorzelec: EuropastadtTarif, Einzelfahrt.
 
-Dane: fares/data/zvon_gorlitz.json (zvon.de/de/grenzueberschreitende-fahrten/europastadttarif,
+Dane: data/fares/zvon_gorlitz.json (zvon.de/de/grenzueberschreitende-fahrten/europastadttarif,
 odczyt Ksaviego 2026-10-13). Bilet ermäßigt (1,50 EUR) przysługuje TYLKO uczniom do 15. urodzin,
 więc wybieramy go po wieku z `DiscountProfile.age` (age < 15); studenci i starsi uczniowie płacą
 cenę normalną, a brak wieku = cena normalna (górna granica). Wiek nie dowodzi statusu ucznia, więc

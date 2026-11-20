@@ -6,8 +6,8 @@ Podstawa: kod i dane w repozytorium oraz pliki `verification/`. Każda kwota ma 
 Multimodalna wyszukiwarka połączeń PL + DE (np. Lublin → Gelsenkirchen): routing kolejowy (MOTIS na danych GTFS/OSM), do każdego odcinka szacunek ceny z oznaczeniem "oficjalna taryfa" lub "szacunek", plus atrakcje z cenami, karty miejskie i sugestia kart/BahnCard.
 
 ## Pokrycie
-- Atrakcje: 82 w 10 miastach (Berlin 6, Gelsenkirchen 6, Hamburg 6, Kolonia 15, Kraków 5, Lublin 4, Monachium 18, Poznań 7, Warszawa 9, Wrocław 6), dane w `attractions/data/attractions.json`.
-- Moduły taryf (`fares/data/`): PKP Intercity, DB Flexpreis, BahnCard, Deutschlandticket, FlixBus (fallback), PKP IC PL-DE oraz DB PL-DE, komunikacja miejska: ZTM Lublin, ZTM Warszawa, ZTM Poznań, MPK Kraków, MPK Wrocław, BVG Berlin, HVV, MVV, VRR, VRS Kolonia.
+- Atrakcje: 82 w 10 miastach (Berlin 6, Gelsenkirchen 6, Hamburg 6, Kolonia 15, Kraków 5, Lublin 4, Monachium 18, Poznań 7, Warszawa 9, Wrocław 6), dane w `data/attractions/attractions.json`.
+- Moduły taryf (`data/fares/`): PKP Intercity, DB Flexpreis, BahnCard, Deutschlandticket, FlixBus (fallback), PKP IC PL-DE oraz DB PL-DE, komunikacja miejska: ZTM Lublin, ZTM Warszawa, ZTM Poznań, MPK Kraków, MPK Wrocław, BVG Berlin, HVV, MVV, VRR, VRS Kolonia.
 - Karty miejskie: Berlin WelcomeCard, RUHR.TOPCARD, Kraków City Pass, Hamburg Card, München CityTourCard, Köln Card, Warsaw Pass, Poznań City Card.
 
 ## Zweryfikowane kwoty (odczyt w przeglądarce 2026-10-11)

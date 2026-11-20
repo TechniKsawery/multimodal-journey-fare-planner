@@ -1,4 +1,4 @@
-"""Nazwy miast w językach interfejsu (PL, EN, DE, ES, FR, NL) z pliku places/aliases.json.
+"""Nazwy miast w językach interfejsu (PL, EN, DE, ES, FR, NL) z pliku data/places/aliases.json.
 
 Do czego służą:
 - szukanie: wpisanie dowolnej nazwy miasta ("Krakau", "Cologne", "Monachium", "Koeln") daje to samo
@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-DATA_PATH = Path(__file__).with_name("aliases.json")
+DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "places" / "aliases.json"
 LANGUAGES = ("pl", "en", "de", "es", "fr", "nl")
 
 # Promień wokół współrzędnych miasta z pliku: wynik geokodera dalej niż tyle nie jest tym miastem (inna wieś o tej

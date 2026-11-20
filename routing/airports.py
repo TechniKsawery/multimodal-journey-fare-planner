@@ -1,7 +1,7 @@
 """Dynamiczny dobór hubów lot<->kolej: lotniska w pobliżu miasta startu i celu zamiast
 sztywnej listy z demo_route.py.
 
-Tabela routing/data/airports.json to lotniska PL+DE (współrzędne z OpenFlights/OurAirports);
+Tabela data/routing/airports.json to lotniska PL+DE (współrzędne z OpenFlights/OurAirports);
 NIE mówi, czy z danego lotniska latają jakiekolwiek rejsy. Lot bezpośredni między parą lotnisk
 jest potwierdzany dopiero na żywo w Travelpayouts (wpis z 0 przesiadek) — bez tego pary nie
 dodajemy, żeby nie sugerować nieistniejącego połączenia (patrz demo_route.py, UWAGA o LUZ-DTM).
@@ -23,7 +23,7 @@ from .demo_route import (
 )
 from .variants import HubConfig
 
-_AIRPORTS = json.loads((Path(__file__).parent / "data" / "airports.json").read_text("utf-8"))
+_AIRPORTS = json.loads((Path(__file__).resolve().parent.parent / "data" / "routing" / "airports.json").read_text("utf-8"))
 
 AIRPORT_RADIUS_KM = 200.0  # lotnisko startowe/docelowe do tylu km od miasta
 MAX_PAIRS = 16  # tyle najmniej objazdowych par lotnisk sprawdzamy w Travelpayouts (równolegle)

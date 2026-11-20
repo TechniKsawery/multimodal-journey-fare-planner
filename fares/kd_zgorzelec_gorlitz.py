@@ -1,6 +1,6 @@
 """Pociąg Kolei Dolnośląskich na odcinku granicznym Zgorzelec - Görlitz: przejazd bezpłatny (0 zł).
 
-Dane: fares/data/kd_zgorzelec_gorlitz.json (wg Gemini, niezweryfikowane niezależnie, 2026-10-13).
+Dane: data/fares/kd_zgorzelec_gorlitz.json (wg Gemini, niezweryfikowane niezależnie, 2026-10-13).
 Wpis dotyczy wyłącznie pociągu KD między tymi dwiema stacjami; autobus zastępczy i komunikacja
 miejska (ZVON EuropastadtTarif) są poza nim.
 

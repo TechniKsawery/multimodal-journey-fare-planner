@@ -425,7 +425,7 @@ def test_price_rail_leg_krajowy_pkp_dziala_jak_wczesniej():
 # ROZSTRZYGNIĘCIE 2026-10-09 (user, po pytaniu koordynatora): silnik ma liczyć OBIE oferty na
 # bilet PL-DE — pulę DB (Super Sparpreis Europa, powyżej) i własną ofertę PKP Intercity (cennik
 # regularny "Oferta Polska-Niemcy", od 19.08.2026) — i pokazywać TAŃSZĄ jako cenę główną, drugą
-# jako alternatywę. Patrz fares/data/international_pl_de_pkp.json dla źródeł.
+# jako alternatywę. Patrz data/fares/international_pl_de_pkp.json dla źródeł.
 
 
 def test_relacja_warszawa_berlin_rozpoznana_cena_69():
@@ -570,7 +570,7 @@ def test_price_rail_leg_relacja_spoza_tabeli_pkp_pokazuje_tylko_db():
 
 # --- PKP Super Promo International: przedział cen (cennik od 19.08.2026) -----------------------
 # Wartości przepisane z oryginalny PDF PKP IC (link w źródłach)
-# (relacja Berlin, 2. klasa, poziomy I-V). Dane: fares/data/pkp_spi_pl_de.json.
+# (relacja Berlin, 2. klasa, poziomy I-V). Dane: data/fares/pkp_spi_pl_de.json.
 
 from fares.international_pkp import spi_range  # noqa: E402
 from routing.currency import PLACEHOLDER_RATES_TO_PLN  # noqa: E402
@@ -643,7 +643,7 @@ def test_dane_spi_maja_kompletna_strukture():
     import pathlib
 
     root = pathlib.Path(__file__).resolve().parent.parent
-    dane = json.loads((root / "fares/data/pkp_spi_pl_de.json").read_text(encoding="utf-8"))
+    dane = json.loads((root / "data/fares/pkp_spi_pl_de.json").read_text(encoding="utf-8"))
     assert dane["_zrodlo_url"].startswith("https://www.intercity.pl/")
     assert dane["_data_odczytu"]
     assert len(dane["pociagi"]) == 13

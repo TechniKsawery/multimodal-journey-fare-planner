@@ -2,7 +2,7 @@
 
 Wcześniej SUBURBAN -> LegMode.BUS -> price_bus_leg -> LOCAL_BUS_FLAT_PLN (4,00 PLN) nawet za
 ~70 km pociągu (SKM Szczecin -> Angermünde, test na żywo PR #97). Teraz:
-- S-Bahn Berlin w kole BVG nadal dostaje bilet BVG (fares/data/bvg_berlin.json),
+- S-Bahn Berlin w kole BVG nadal dostaje bilet BVG (data/fares/bvg_berlin.json),
 - SUBURBAN w NRW nadal dostaje eezy.nrw,
 - pozostałe SUBURBAN (SKM Szczecin/Trójmiasto, S-Bahn poza znanymi taryfami) dostają
   niepotwierdzony szacunek PLN/km (NIE ryczałt autobusowy) i nie wygrywają "Najtańszej".

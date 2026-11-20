@@ -762,11 +762,11 @@ def test_eligibility_info_miasta_z_bezplatnym_maja_zrodlo():
 
     for carrier, (miasto, bezplatne, _ulgowe, zrodlo) in ELIGIBILITY.items():
         assert bezplatne and zrodlo.startswith("https://"), miasto
-    # Poznań: uczniowie TYLKO ulgowo (potwierdzone w fares/data/ztm_poznan.json)
+    # Poznań: uczniowie TYLKO ulgowo (potwierdzone w data/fares/ztm_poznan.json)
     assert not any("uczniowie" in t for t in ELIGIBILITY[__import__("fares.model").model.Carrier.ZTM_POZNAN][1])
 
 
-# --- Dzieci poniżej 6 lat jadą bezpłatnie: HVV/MVV/VRS (źródła w fares/data/*.json) -------------
+# --- Dzieci poniżej 6 lat jadą bezpłatnie: HVV/MVV/VRS (źródła w data/fares/*.json) -------------
 
 @pytest.mark.parametrize("carrier,dziecko_flag", [
     (Carrier.HVV, "hvv_dziecko"), (Carrier.MVV, "mvv_dziecko"), (Carrier.VRS_KOLN, "vrs_koln_dziecko"),

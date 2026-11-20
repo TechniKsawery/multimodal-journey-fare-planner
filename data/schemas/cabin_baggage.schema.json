@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cabin baggage (data/flights/cabin_baggage.json)",
+  "description": "Absolute rule: a verified entry carries a source URL and a verification date.",
+  "type": "object",
+  "required": ["przewoznicy"],
+  "properties": {
+    "przewoznicy": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["nazwa", "price_verified"],
+        "properties": {
+          "price_verified": { "type": "boolean" },
+          "data_weryfikacji": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "zrodlo": { "type": ["string", "null"], "pattern": "^https?://" }
+        },
+        "if": { "properties": { "price_verified": { "const": true } } },
+        "then": { "required": ["data_weryfikacji", "zrodlo"] }
+      }
+    }
+  }
+}

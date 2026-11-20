@@ -1,6 +1,6 @@
 """Szacowanie ceny segmentu DB: Flexpreis (górna granica) x mnożnik BahnCard oraz ulgi wiekowe.
 
-Tabela pasm odległości w fares/data/db_flexpreis.json to nadal SZACUNEK — DB nie publikuje
+Tabela pasm odległości w data/fares/db_flexpreis.json to nadal SZACUNEK — DB nie publikuje
 oficjalnej tabeli cena-za-km (Flexpreis zależy dynamicznie od trasy/daty w systemie DB).
 Mnożniki BahnCard 25/50 oraz BahnCard 100 (0,0) są potwierdzone oficjalnie na bahn.de
 (bahn.de/faq oraz bahn.de/angebot, zweryfikowano 2026-10-14).

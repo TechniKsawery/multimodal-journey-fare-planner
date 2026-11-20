@@ -568,7 +568,7 @@ def test_price_flight_leg_woła_flights(monkeypatch):
 
 
 def test_price_flight_leg_doklada_tylko_bagaz_bez_dojazdu_i_transferu(monkeypatch):
-    """WAW-DTM ma w flights/data/extras_placeholder.json wpis z bagaz+dojazd_na_lotnisko+
+    """WAW-DTM ma w data/flights/extras_placeholder.json wpis z bagaz+dojazd_na_lotnisko+
     transfer_z_lotniska — routing ma doliczyć TYLKO bagaz, bo dojazd/transfer są już osobnymi
     odcinkami kolejowymi w wariancie mieszanym (patrz build_rail_flight_rail_variant)."""
     leg = make_leg(
@@ -715,7 +715,7 @@ def test_currency_nieobslugiwana_waluta_ma_czytelny_komunikat():
 
 
 def test_price_flight_leg_nadpisuje_bagaz_realnym_cennikiem_linii(monkeypatch):
-    """Gdy bilet wraca z linią znaną w flights/data/baggage_by_airline.json (tu: Ryanair, FR),
+    """Gdy bilet wraca z linią znaną w data/flights/baggage_by_airline.json (tu: Ryanair, FR),
     routing ma nadpisać placeholderowy bagaż z tabeli relacji realną ceną tej linii."""
     leg = make_leg(
         LegMode.FLIGHT,

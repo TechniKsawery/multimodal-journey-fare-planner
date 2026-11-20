@@ -23,7 +23,7 @@ GENERIC_FALLBACK_PLN_PER_KM = 0.35
 DEFAULT_BAGGAGE_ESTIMATE_PLN = 150.0
 """Szacunkowy koszt pierwszego bagażu rejestrowanego W ZŁOTYCH (dla lotu w innej walucie
 przeliczany kursem placeholderowym), gdy relacja nie ma wpisu w
-flights/data/extras_placeholder.json — typowa cena bagażu rejestrowanego do ok. 20 kg u
+data/flights/extras_placeholder.json — typowa cena bagażu rejestrowanego do ok. 20 kg u
 tanich linii (Ryanair/Wizz Air) na trasach PL-DE, SZACUNEK, nie oficjalny cennik."""
 
 
@@ -121,7 +121,7 @@ _is_zvon_europastadt_leg), a nie każdego autobusu w kole (np. zastępczy trilex
 
 BER_AIRPORT_AREA = (52.3644, 13.5108, 2.5)
 """Lotnisko BER: (lat, lon) stacji Flughafen BER (Terminal 1-2) i promień w km. BER leży poza
-granicą Berlina, w strefie C taryfy VBB (fares/data/bvg_berlin.json::_uwaga: "ABC (z lotniskiem
+granicą Berlina, w strefie C taryfy VBB (data/fares/bvg_berlin.json::_uwaga: "ABC (z lotniskiem
 BER)"), ale w kole BVG_BERLIN z CITY_TARIFF_AREAS — bez tego rozróżnienia odcinek BER ->
 centrum dostawał bilet AB (4,00 EUR, który na BER nie obowiązuje) zamiast ABC (5,00 EUR).
 Promień celowo mały (granica Berlina jest ok. 3-4 km na północ), więc pozostałe przystanki
@@ -696,7 +696,7 @@ def _km_wkd_without_ztm_tickets(leg: Leg) -> PricedLeg:
 
 PKP_PREMIUM_CATEGORIES = ("EIC", "EIP")
 """Kategorie PKP Intercity, których ceny w oficjalnym cenniku są ustalane per relacja, a nie wg
-pasm odległości TLK/IC z fares/data/pkp_intercity.json (patrz fares/README.md)."""
+pasm odległości TLK/IC z data/fares/pkp_intercity.json (patrz fares/README.md)."""
 
 
 def is_pkp_premium_train(leg: Leg) -> bool:
@@ -733,7 +733,7 @@ def _with_pkp_alternative(segment: Segment, db_result: PriceEstimate) -> PriceEs
     (droższą) dołączoną w breakdown["alternatywna_oferta"] — pasażer może kupić bilet w
     KTÓRYMKOLWIEK z dwóch kanałów sprzedaży (PKP albo DB) na ten sam pociąg, więc pomijanie
     tańszej z dwóch ofert zawyżałoby "ile faktycznie zapłacisz". Gdy relacja nie jest rozpoznana
-    w tabeli PKP (fares/data/international_pl_de_pkp.json), zwraca db_result bez zmian."""
+    w tabeli PKP (data/fares/international_pl_de_pkp.json), zwraca db_result bez zmian."""
     pkp_result = estimate_pkp_offer(segment)
     if pkp_result is None:
         return db_result
@@ -973,7 +973,7 @@ def price_rail_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg:
     notes = result.notes
     breakdown = result.breakdown
     if carrier is Carrier.PKP_INTERCITY and is_pkp_premium_train(leg):
-        # Cennik w fares/data/pkp_intercity.json to pasma TLK/IC; EIC/EIP mają ceny per relacja
+        # Cennik w data/fares/pkp_intercity.json to pasma TLK/IC; EIC/EIP mają ceny per relacja
         # (fares/README.md), których nie mamy. Kwota z pasm TLK/IC zostaje jako orientacyjny
         # szacunek, ale NIE jako oficjalna taryfa tego pociągu (błąd S2 z audytu).
         price_type = PriceType.ESTIMATE.value
@@ -1138,13 +1138,13 @@ def price_suburban_leg(leg: Leg) -> PricedLeg:
     jawnie niepotwierdzony szacunek PLN/km (_fallback_priced_leg), z dopiskiem w notes i
     breakdown["tryb_motis"]="SUBURBAN". Wołane z price_bus_leg dopiero PO sprawdzeniu taryf
     miejskich (np. S-Bahn Berlin w kole BVG dostaje bilet BVG) i eezy.nrw (S-Bahn w NRW).
-    Ceny SKM Szczecin/Trójmiasto i innych kolei podmiejskich nie ma w fares/data/* — bez
+    Ceny SKM Szczecin/Trójmiasto i innych kolei podmiejskich nie ma w data/fares/* — bez
     zweryfikowanego źródła nie podajemy kwoty jako pewnej."""
     priced = _fallback_priced_leg(
         leg,
         f"Kolej podmiejska (MOTIS: {SUBURBAN_MOTIS_MODE}) '{leg.carrier_name}' poza obszarami z "
         "potwierdzoną taryfą (taryfy miejskie z CITY_TARIFF_AREAS, eezy.nrw w NRW) — brak "
-        "zweryfikowanej stawki w fares/data/*; to nie autobus, więc bez ryczałtu autobusowego.",
+        "zweryfikowanej stawki w data/fares/*; to nie autobus, więc bez ryczałtu autobusowego.",
     )
     priced.breakdown["tryb_motis"] = SUBURBAN_MOTIS_MODE
     return priced
@@ -1156,7 +1156,7 @@ def price_gorlitz_area_unconfirmed_leg(leg: Leg) -> PricedLeg:
     zastępcza komunikacja trilex/DLB, linia miejska pod nazwą spółki zamiast marki ZVON).
     Wcześniej wpadał w ryczałt LOCAL_BUS_FLAT_PLN (4,00 PLN) i wyglądał jak cena; nie mamy
     źródła taryfy dla tego operatora, a EuropastadtTarif obowiązuje tylko na liniach ZVON /
-    Stadtverkehr (fares/data/zvon_gorlitz.json) i nie rozstrzygamy z samej nazwy agencji, czy
+    Stadtverkehr (data/fares/zvon_gorlitz.json) i nie rozstrzygamy z samej nazwy agencji, czy
     obejmuje też ten odcinek. Zamiast zgadywać kwotę: amount=0.0 jako brak ceny, jawny znacznik
     breakdown["cena_nieznana"]=True i price_verified=False (wariant nie wygrywa rankingu cenowego,
     UI/demo piszą "cena nieznana", a odcinek nie jest wliczony w sumę)."""

@@ -1,0 +1,20 @@
+:root { color-scheme: light dark; --accent: #0b5fff; font-family: system-ui, sans-serif; }
+body { margin: 0; }
+main { max-width: 40rem; margin: 0 auto; padding: 1rem; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+h1 { font-size: 1.4rem; margin: 0; }
+form { display: grid; gap: .75rem; }
+.field { display: grid; gap: .25rem; position: relative; }
+input { font: inherit; padding: .6rem; border: 1px solid #8886; border-radius: .5rem; }
+button { font: inherit; padding: .6rem 1rem; border: 0; border-radius: .5rem; background: var(--accent); color: #fff; cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+button.lang { background: transparent; color: inherit; border: 1px solid #8886; }
+.options { list-style: none; margin: 0; padding: 0; border: 1px solid #8886; border-radius: .5rem; background: Canvas; position: absolute; top: 100%; left: 0; right: 0; z-index: 2; }
+.options button { width: 100%; text-align: left; background: transparent; color: inherit; border-radius: 0; display: grid; }
+.options small { opacity: .7; }
+.results { padding: 0; list-style: none; display: grid; gap: .75rem; }
+.results li { border: 1px solid #8886; border-radius: .5rem; padding: .75rem; }
+.leg { display: inline-block; margin: .25rem .5rem 0 0; padding: .1rem .5rem; border-radius: 1rem; background: #8882; font-size: .85rem; }
+.error { color: #c0392b; }
+.note { background: #f5b70033; padding: .5rem; border-radius: .5rem; font-size: .9rem; }
+footer { margin-top: 2rem; font-size: .8rem; opacity: .8; }

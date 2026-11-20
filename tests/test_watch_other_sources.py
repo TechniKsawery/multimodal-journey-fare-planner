@@ -196,7 +196,7 @@ def test_main_exit_codes(isolated_attractions_dir, isolated_gtfs_snapshot_dir, m
 
 def test_real_attractions_data_has_discoverable_sources():
     """Sanity check na prawdziwych danych repo, jak w test_fetch_fare_sources.py — gwarantuje,
-    że zmiana formatu attractions/data/*.json nie wyłączy cichutko tego watchera."""
+    że zmiana formatu data/attractions/*.json nie wyłączy cichutko tego watchera."""
     sources = wos.discover_attraction_sources()
     assert len(sources) >= 5
     categories = {s.category for s in sources}

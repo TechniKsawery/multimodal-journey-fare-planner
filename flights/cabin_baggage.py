@@ -1,6 +1,6 @@
 """Bagaż PODRĘCZNY wg przewoźnika: trzy jawne stany, bez zgadywania i bez przeliczania walut.
 
-Dane: flights/data/cabin_baggage.json. Stan wynika wyłącznie z pól pliku:
+Dane: data/flights/cabin_baggage.json. Stan wynika wyłącznie z pól pliku:
 - WLICZONY  — duży bagaż podręczny jest w cenie bazowego biletu,
 - PLATNY    — w cenie bazowej tylko mały bagaż pod fotel; dopłata podana w ORYGINALNEJ walucie
               przewoźnika (kwota albo widełki) — NIE przeliczamy jej po placeholderowym kursie,

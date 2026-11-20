@@ -1,6 +1,6 @@
 """Degresywna tabela Taryfy Podstawowej POLREGIO/KD/KŚ zamiast sztywnego 0,35 zł/km.
 
-Wszystkie 30 pasm w fares/data/polregio_taryfa_podstawowa.json zostało potwierdzone przez Gemini
+Wszystkie 30 pasm w data/fares/polregio_taryfa_podstawowa.json zostało potwierdzone przez Gemini
 w TPR POLREGIO od 1.09.2026 (źródło i data przy każdym paśmie). Potwierdzona jest KWOTA pasma;
 odległość z MOTIS to linia prosta, więc wynik ma price_verified=True, ale price_type "szacunek"
 z opisem przybliżenia, dopóki Segment.distance_along_track nie jest True (km po torach).

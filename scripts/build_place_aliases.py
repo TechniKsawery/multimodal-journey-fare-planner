@@ -1,4 +1,4 @@
-"""Sprawdza (i uzupełnia) places/aliases.json względem Wikidata.
+"""Sprawdza (i uzupełnia) data/places/aliases.json względem Wikidata.
 
     python scripts/build_place_aliases.py --check   # tylko raport, plik bez zmian
     python scripts/build_place_aliases.py --write   # dopisuje QID, brakujące nazwy i oznacza miasta

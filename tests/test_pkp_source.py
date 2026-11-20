@@ -1,5 +1,5 @@
 """Pasma TLK/IC PKP Intercity niosą adres źródła (cennik, tabela ulg); datę weryfikacji - dopiero gdy
-ktoś ją wpisze do fares/data/pkp_intercity.json (dziś jej w repo nie ma, więc nie jest zgadywana).
+ktoś ją wpisze do data/fares/pkp_intercity.json (dziś jej w repo nie ma, więc nie jest zgadywana).
 Kwoty bez zmian."""
 
 from datetime import UTC, datetime

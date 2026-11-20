@@ -326,7 +326,7 @@ def main() -> None:
         "--pkp-ulga",
         choices=sorted(PKP_ULGI_KODY),
         default=None,
-        help="kod ulgi ustawowej PKP Intercity (fares/data/pkp_intercity.json); nadpisuje ulgę "
+        help="kod ulgi ustawowej PKP Intercity (data/fares/pkp_intercity.json); nadpisuje ulgę "
         "wyprowadzoną z --age/--student. Bez niego: z wieku (dziecko/młodzież), a --student "
         "dla dorosłego do 26 lat daje ulgę studencką 51%%",
     )

@@ -258,7 +258,7 @@ def test_check_source_wykrywa_realna_zmiane_w_tekscie_poza_script(isolated_data_
 
 def test_real_fares_data_has_discoverable_sources():
     """Sanity check na prawdziwych danych repo — gwarantuje, że przyszłe zmiany formatu
-    fares/data/*.json (np. zmiana nazwy pola _zrodlo) nie wyłączą cichutko całego pipeline'u.
+    data/fares/*.json (np. zmiana nazwy pola _zrodlo) nie wyłączą cichutko całego pipeline'u.
     """
     sources = ffs.discover_sources()
     assert len(sources) >= 5

@@ -3,9 +3,10 @@ English | Polski: [wersja polska](CONTRIBUTING.pl.md)
 # Contributing
 
 The project welcomes fixes and improvements from the community. Changes must
-comply with the [PolyForm Noncommercial License 1.0.0](LICENSE). Authors retain
-copyright in their original contributions, and their authorship should be
-visible in the GitHub history and pull request description.
+be submitted under the [Apache License 2.0](LICENSE) (code and documentation) or
+[CC BY 4.0](data/LICENSE) (files under `data/`). Authors retain copyright in
+their original contributions, and their authorship should be visible in the
+GitHub history and pull request description.
 
 Before submitting a pull request, make sure that you have the right to share
 the change and that it contains no API keys, private data, or materials under

@@ -114,7 +114,7 @@ def collect_union(
 
 
 def audit_attractions(refs: list[str] | None):
-    merged = collect_union(refs, "attractions/data/attractions.json", "atrakcje")
+    merged = collect_union(refs, "data/attractions/attractions.json", "atrakcje")
     by_city: dict[str, dict] = {}
     for a in merged.values():
         c = a.get("city", "?")
@@ -129,7 +129,7 @@ def audit_attractions(refs: list[str] | None):
 
 def audit_city_cards(refs: list[str] | None):
     merged = collect_union(
-        refs, "attractions/data/city_cards.json", "karty", list_fields={"variants": "id"}
+        refs, "data/attractions/city_cards.json", "karty", list_fields={"variants": "id"}
     )
     by_city: dict[str, dict] = {}
     for card in merged.values():
@@ -160,7 +160,7 @@ def audit_city_cards(refs: list[str] | None):
 
 
 def audit_fares(refs: list[str] | None):
-    """fares/data/*.json nie ma jednego wspolnego pliku listujacego miasta -
+    """data/fares/*.json nie ma jednego wspolnego pliku listujacego miasta -
     kazdy plik to osobny przewoznik/system. Liczymy obecnosc pola `_zrodlo`
     (link+kontekst weryfikacji) per plik, per ref, i bierzemy sume plikow
     jakie w ogole istnieja w ktoryms z refow (unia po nazwie pliku)."""
@@ -168,17 +168,17 @@ def audit_fares(refs: list[str] | None):
     files: dict[str, dict] = {}
     for ref in ref_list:
         if ref is None:
-            paths = [p.name for p in (REPO_ROOT / "fares/data").glob("*.json")]
+            paths = [p.name for p in (REPO_ROOT / "data/fares").glob("*.json")]
         else:
             out = subprocess.run(
-                ["git", "ls-tree", "-r", "--name-only", ref, "--", "fares/data"],
+                ["git", "ls-tree", "-r", "--name-only", ref, "--", "data/fares"],
                 cwd=REPO_ROOT,
                 capture_output=True,
                 text=True,
             ).stdout
             paths = [Path(p).name for p in out.splitlines() if p.endswith(".json")]
         for name in paths:
-            data = load_json_from_ref(ref, f"fares/data/{name}")
+            data = load_json_from_ref(ref, f"data/fares/{name}")
             if data is None:
                 continue
             entry = files.setdefault(name, {"has_source": False})
@@ -224,7 +224,7 @@ def print_report(label: str, refs: list[str] | None):
         tvpv += b["variants_price_verified"]
     print(f"{'RAZEM':<15}{tc:>6}{pct(tev, tc):>18}{tvt:>16}{pct(tvpv, tvt):>26}")
 
-    print(f"\nTaryfy transportu (fares/data/*.json): {len(fares_files)} plikow")
+    print(f"\nTaryfy transportu (data/fares/*.json): {len(fares_files)} plikow")
     sourced = sum(1 for f in fares_files.values() if f["has_source"])
     for name, f in sorted(fares_files.items()):
         print(f"  {name:<35} _zrodlo obecne: {f['has_source']}")

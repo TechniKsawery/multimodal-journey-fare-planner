@@ -82,7 +82,7 @@ korytarze: `tests/test_via_hub_detour.py`.
 ## Dynamiczny dobór lotnisk (huby lot<->kolej)
 
 Huby nie są stałą listą par: `routing/airports.py::discover_hubs` dobiera je dla każdego zapytania.
-1. Lotniska z `routing/data/airports.json` (PL+DE, współrzędne) w promieniu 200 km od startu i celu.
+1. Lotniska z `data/routing/airports.json` (PL+DE, współrzędne) w promieniu 200 km od startu i celu.
 2. Odrzucane są pary będące objazdem: lotnisko przylotu musi być bliżej celu niż wylotu, a droga
    start->wylot->przylot->cel w linii prostej <= 1,5 x bezpośrednia.
 3. Do 16 najlepszych par sprawdzamy w Travelpayouts (`prices_for_dates`, `direct=true`, data, potem
@@ -131,7 +131,7 @@ z lotniska (patrz `flights/README.md`) — to poprawne, gdy ktoś wycenia lot sa
 tym silnikiem. W wariancie mieszanym (kolej + lot + kolej) dojazd na lotnisko i transfer z
 lotniska do miasta docelowego są już osobnymi, realnie wycenionymi odcinkami kolejowymi
 (`build_rail_flight_rail_variant` w `variants.py`) — doliczenie ich drugi raz z placeholderowej
-tabeli `flights/data/extras_placeholder.json` podwójnie liczyłoby ten sam koszt.
+tabeli `data/flights/extras_placeholder.json` podwójnie liczyłoby ten sam koszt.
 
 Dlatego `pricing.price_flight_leg()` woła `flights.estimate_price()` z własnym
 `ExtrasProfile`, w którym `airport_access_cost`/`destination_transfer_cost` są wyzerowane, a
@@ -144,7 +144,7 @@ w `demo.py`/`app.py` dla odcinków lotu.
 kod linii obsługującej najtańszy bilet (`result.breakdown["linia"]`, np. `"FR"` dla Ryanaira) —
 za wcześnie, żeby użyć go przy budowaniu `ExtrasProfile` powyżej. Dlatego `price_flight_leg()`
 po otrzymaniu wyniku sprawdza `flights.extras.get_baggage_by_airline(linia)`: jeśli przewoźnik
-jest w tabeli realnych cenników (`flights/data/baggage_by_airline.json` — obecnie Ryanair, Wizz
+jest w tabeli realnych cenników (`data/flights/baggage_by_airline.json` — obecnie Ryanair, Wizz
 Air, LOT, Eurowings), NADPISUJE placeholderowy/domyślny bagaż tą realną kwotą (przeliczoną do
 waluty segmentu przez `routing/currency.py:convert`) i dopisuje źródło do
 `breakdown["bagaz_zrodlo"]` oraz do notatki. Dla nieznanego przewoźnika zostaje bagaż z tabeli
@@ -264,7 +264,7 @@ Kolej podmiejska — tryb MOTIS `SUBURBAN` (SKM, S-Bahn): `motis_client.itinerar
 na `LegMode.BUS` (jak każdy tryb spoza RAIL/TRAIN), ale to POCIĄG, więc `price_bus_leg()` wycenia go
 tak (`is_suburban_leg()`, `leg.extra["motis_mode"] == "SUBURBAN"`):
 1. taryfa miejska, gdy oba końce leżą w kole z `CITY_TARIFF_AREAS` — np. S-Bahn Berlin w kole BVG
-   dostaje bilet BVG AB/ABC z `fares/data/bvg_berlin.json` (bez zmian),
+   dostaje bilet BVG AB/ABC z `data/fares/bvg_berlin.json` (bez zmian),
 2. eezy.nrw, gdy oba końce leżą w NRW (bez zmian),
 3. w przeciwnym razie `price_suburban_leg()`: **nie** ryczałt autobusowy, tylko jawnie
    niepotwierdzony szacunek `GENERIC_FALLBACK_PLN_PER_KM` x km (`price_type="szacunek"`,
@@ -273,7 +273,7 @@ tak (`is_suburban_leg()`, `leg.extra["motis_mode"] == "SUBURBAN"`):
    Angermünde, ok. 70 km), SKM Trójmiasto poza `SKM_TROJMIASTO_AREA` (np. Wejherowo) i S-Bahnów
    poza znanymi taryfami. SKM w Trójmieście i Warszawie oraz ŁKA w Łodzi mają osobne taryfy
    (wyżej, `price_bus_leg()` woła je PRZED taryfami miejskimi).
-Cen SKM i pozostałych kolei podmiejskich spoza powyższych taryf NIE ma w `fares/data/*` — kwota
+Cen SKM i pozostałych kolei podmiejskich spoza powyższych taryf NIE ma w `data/fares/*` — kwota
 PLN/km jest orientacyjna, a odcinek nie wygrywa rankingu „Najtańsza” z wariantem o potwierdzonej
 cenie (`Itinerary.price_verified`, `scoring.pick_recommendations`). Znane ograniczenia: SUBURBAN
 nadal ma `LegMode.BUS` (w UI „autobus”), a S-Bahn Berlin poza kołem 20 km (np. Potsdam) nie ma
@@ -282,7 +282,7 @@ mapy stref VBB, więc też jest niepotwierdzony. Testy: `tests/test_suburban_pri
 Berlin (BVG/VBB): koło `CITY_TARIFF_AREAS[BVG_BERLIN]` (20 km) obejmuje też lotnisko BER, które
 leży w strefie C. Odcinek, który zaczyna się lub kończy na BER (`BER_AIRPORT_AREA`, 2,5 km wokół
 stacji Flughafen BER; bez współrzędnych — nazwa „Flughafen BER”), dostaje bilet ABC (5,00 EUR), a
-nie AB (4,00 EUR, na BER nieważny). Obie kwoty pochodzą z `fares/data/bvg_berlin.json` (VBB, ceny
+nie AB (4,00 EUR, na BER nieważny). Obie kwoty pochodzą z `data/fares/bvg_berlin.json` (VBB, ceny
 od 1.01.2026). Ograniczenie: inne przystanki strefy C w tym kole (np. Schönefeld, Teltow,
 Hennigsdorf) nadal dostają AB — bez mapy stref VBB nie rozstrzygamy tego geograficznie.
 
