@@ -192,3 +192,18 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 .hint { flex-basis: 100%; margin: 0; font-size: 0.8rem; }
 
 .foot { max-width: 1080px; margin: 0 auto; padding: 8px var(--gap) 32px; font-size: 0.8rem; opacity: 0.85; }
+
+/* Autouzupełnianie miejsc */
+.place { position: relative; }
+.options {
+  position: absolute; left: 0; right: 0; top: 100%; z-index: 6; margin: 4px 0 0; padding: 4px; list-style: none;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); max-height: 320px; overflow-y: auto;
+}
+.options li { padding: 8px 10px; min-height: 44px; border-radius: 8px; cursor: pointer; display: grid; align-content: center; }
+.options li.active, .options li:hover { background: var(--accent); color: var(--accent-text); }
+.options li small { opacity: 0.8; }
+.hint { margin: 4px 0 0; font-size: 0.8rem; }
+.error { background: var(--warn-bg); color: var(--warn-fg); padding: 10px 12px; border-radius: 10px; margin: 0 0 12px; }
+.small-note { font-size: 0.8rem; margin: 8px 0; }
+.primary:disabled { opacity: 0.6; cursor: progress; }

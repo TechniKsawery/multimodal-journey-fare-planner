@@ -79,3 +79,32 @@ describe("TransitousClient", () => {
     await expect(c.plan({ from: "a", to: "b", time: "t" })).rejects.toMatchObject({ status: 429 });
   });
 });
+
+describe("geocode", () => {
+  it("has its own budget, caches and ignores malformed rows", async () => {
+    let calls = 0;
+    const body = [{ type: "STOP", name: "Lublin Główny", lat: 51.2, lon: 22.5 }, { name: "bad" }, null];
+    const c = new TransitousClient({
+      fetchImpl: (async () => (calls++, new Response(JSON.stringify(body)))) as typeof fetch,
+      budget: new QueryBudget(5, null),
+      geocodeBudget: new QueryBudget(1, null),
+    });
+    expect(await c.geocode("lubl", "pl")).toHaveLength(1);
+    expect(await c.geocode("lubl", "pl")).toHaveLength(1); // cached, not counted
+    expect(calls).toBe(1);
+    await expect(c.geocode("berlin", "pl")).rejects.toBeInstanceOf(BudgetExceededError);
+    expect(c.budget.used()).toBe(0);
+  });
+  it("turns a network failure and a non-array body into TransitousError", async () => {
+    const down = new TransitousClient({
+      fetchImpl: (async () => { throw new TypeError("Failed to fetch"); }) as typeof fetch,
+      geocodeBudget: new QueryBudget(5, null),
+    });
+    await expect(down.geocode("x1", "pl")).rejects.toMatchObject({ name: "TransitousError" });
+    const odd = new TransitousClient({
+      fetchImpl: (async () => new Response('{"a":1}')) as typeof fetch,
+      geocodeBudget: new QueryBudget(5, null),
+    });
+    await expect(odd.geocode("x2", "pl")).rejects.toMatchObject({ name: "TransitousError" });
+  });
+});

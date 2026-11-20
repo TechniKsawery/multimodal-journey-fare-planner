@@ -3,7 +3,7 @@ import type { Itinerary, Leg } from '../types';
 import { fmtDuration, fmtMoney, type Dict, type Lang } from '../i18n';
 import { PriceBadge } from './PriceBadge';
 
-const MODE_ICON = { rail: '🚆', bus: '🚌', flight: '✈️', walk: '🚶' } as const;
+const MODE_ICON = { rail: '🚆', bus: '🚌', local: '🚋', flight: '✈️', walk: '🚶' } as const;
 
 function LegRow({ leg, t, lang }: { leg: Leg; t: Dict; lang: Lang }) {
   const price =
@@ -20,13 +20,14 @@ function LegRow({ leg, t, lang }: { leg: Leg; t: Dict; lang: Lang }) {
           {leg.from} → {leg.to}
         </div>
         <div class="muted">{leg.carrier}</div>
+        {leg.reason && <div class="note">{t[`reason_${leg.reason}` as keyof Dict] as string}</div>}
         {leg.note && <div class="note">{leg.note}</div>}
         {leg.status === 'unconfirmed' ? (
           <div class="source">{t.unconfirmed_hint}</div>
         ) : (
           <div class="source">
             {t.source}:{' '}
-            {leg.sourceUrl ? (
+            {leg.sourceUrl && /^https:\/\//.test(leg.sourceUrl) ? (
               <a href={leg.sourceUrl} target="_blank" rel="noopener noreferrer">
                 {leg.source}
               </a>
@@ -74,7 +75,7 @@ export function ResultCard({ it, t, lang }: { it: Itinerary; t: Dict; lang: Lang
           </span>
         </div>
         <div class="price">
-          <span class="big">{it.partial ? `${t.partial}: ` : ''}{total}</span>
+          <span class="big">{it.noPrice ? t.noPrice : `${it.partial ? `${t.partial}: ` : ''}${total}`}</span>
           {it.regularPln && (
             <span class="muted">
               {t.instead} <s>{fmtMoney(it.regularPln, 'PLN', lang)}</s>

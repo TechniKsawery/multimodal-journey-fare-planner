@@ -1,14 +1,20 @@
 import type { Profile } from '../types';
-import type { Dict } from '../i18n';
+import type { Dict, Lang } from '../i18n';
+import type { TransitousClient } from '../transitous';
+import { PlaceInput, type PlaceValue } from './PlaceInput';
 
 export interface Query {
-  from: string;
-  to: string;
+  from: PlaceValue;
+  to: PlaceValue;
   date: string;
+  time: string;
 }
 
 interface Props {
   t: Dict;
+  lang: Lang;
+  client: TransitousClient;
+  busy: boolean;
   query: Query;
   profile: Profile;
   onQuery: (q: Query) => void;
@@ -18,7 +24,7 @@ interface Props {
   onProfileOpen: (o: boolean) => void;
 }
 
-export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch, profileOpen, onProfileOpen }: Props) {
+export function SearchPanel({ t, lang, client, busy, query, profile, onQuery, onProfile, onSearch, profileOpen, onProfileOpen }: Props) {
   const set = <K extends keyof Query>(k: K, v: Query[K]) => onQuery({ ...query, [k]: v });
   const setP = <K extends keyof Profile>(k: K, v: Profile[K]) => onProfile({ ...profile, [k]: v });
   const summary = [
@@ -38,15 +44,15 @@ export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch, p
       }}
     >
       <div class="route">
-        <label>
-          <span>{t.from}</span>
-          <input
-            value={query.from}
-            onInput={(e) => set('from', e.currentTarget.value)}
-            autocomplete="off"
-            enterkeyhint="next"
-          />
-        </label>
+        <PlaceInput
+          label={t.from}
+          value={query.from}
+          onChange={(v) => set('from', v)}
+          client={client}
+          lang={lang}
+          t={t}
+          enterkeyhint="next"
+        />
         <button
           type="button"
           class="icon-btn swap"
@@ -55,21 +61,27 @@ export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch, p
         >
           ⇅
         </button>
-        <label>
-          <span>{t.to}</span>
-          <input
-            value={query.to}
-            onInput={(e) => set('to', e.currentTarget.value)}
-            autocomplete="off"
-            enterkeyhint="search"
-          />
-        </label>
+        <PlaceInput
+          label={t.to}
+          value={query.to}
+          onChange={(v) => set('to', v)}
+          client={client}
+          lang={lang}
+          t={t}
+          enterkeyhint="search"
+        />
       </div>
 
-      <label>
-        <span>{t.date}</span>
-        <input type="date" value={query.date} onInput={(e) => set('date', e.currentTarget.value)} />
-      </label>
+      <div class="row2">
+        <label>
+          <span>{t.date}</span>
+          <input type="date" required value={query.date} onInput={(e) => set('date', e.currentTarget.value)} />
+        </label>
+        <label>
+          <span>{t.time}</span>
+          <input type="time" required value={query.time} onInput={(e) => set('time', e.currentTarget.value)} />
+        </label>
+      </div>
 
       <details
         class="profile"
@@ -143,8 +155,8 @@ export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch, p
         </div>
       </details>
 
-      <button type="submit" class="primary">
-        {t.search}
+      <button type="submit" class="primary" disabled={busy}>
+        {busy ? t.searching : t.search}
       </button>
     </form>
   );

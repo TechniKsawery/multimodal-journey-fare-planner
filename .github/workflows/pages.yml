@@ -8,6 +8,7 @@ on:
     paths:
       - 'web/**'
       - 'data/**'
+      - 'core/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -55,7 +56,7 @@ jobs:
           fi
           # external hosts present in the bundle (http/https URLs), minus the allow-list
           bad=$(grep -rEIoh 'https?://[A-Za-z0-9.-]+' dist | sort -u \
-            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl)$' || true)
+            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl)$' || true)
           if [ -n "$bad" ]; then
             echo "::error::Unexpected external hosts in build output:"; echo "$bad"; exit 1
           fi
