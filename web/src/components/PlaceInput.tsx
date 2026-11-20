@@ -1,18 +1,17 @@
 import { useEffect, useId, useRef, useState } from 'preact/hooks';
-import { BudgetExceededError, type GeocodeMatch, type TransitousClient } from '../transitous';
-import type { Dict, Lang } from '../i18n';
+import { BudgetExceededError } from '../transitous';
+import { suggest, type GeocodeSuggestion } from '../search/service';
+import type { Dict } from '../i18n';
 
 export interface PlaceValue {
   text: string;
-  match: GeocodeMatch | null;
+  match: GeocodeSuggestion | null;
 }
 
 interface Props {
   label: string;
   value: PlaceValue;
   onChange: (v: PlaceValue) => void;
-  client: TransitousClient;
-  lang: Lang;
   t: Dict;
   enterkeyhint: 'next' | 'search';
 }
@@ -20,14 +19,15 @@ interface Props {
 const MIN_CHARS = 2;
 const DEBOUNCE_MS = 350;
 
-const describe = (m: GeocodeMatch): string =>
-  [m.type === 'STOP' ? '' : m.type, m.areas?.find((a) => a.default)?.name ?? m.areas?.[0]?.name, m.country]
+// most local administrative area first (highest OSM admin level), e.g. the city of a station
+const describe = (m: GeocodeSuggestion): string =>
+  [m.type === 'STOP' ? '' : m.type, [...(m.areas ?? [])].sort((a, b) => b.adminLevel - a.adminLevel)[0]?.name, m.country]
     .filter(Boolean)
     .join(' · ');
 
 /** Autouzupełnianie miejsc (Transitous /geocode): debounce, anulowanie, cache i budżet są w kliencie. */
-export function PlaceInput({ label, value, onChange, client, lang, t, enterkeyhint }: Props) {
-  const [options, setOptions] = useState<GeocodeMatch[]>([]);
+export function PlaceInput({ label, value, onChange, t, enterkeyhint }: Props) {
+  const [options, setOptions] = useState<GeocodeSuggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const [hint, setHint] = useState<string | null>(null);
@@ -44,8 +44,7 @@ export function PlaceInput({ label, value, onChange, client, lang, t, enterkeyhi
     }
     const ctrl = new AbortController();
     timer.current = window.setTimeout(() => {
-      client
-        .geocode(trimmed, lang, ctrl.signal)
+      suggest(trimmed, ctrl.signal)
         .then((r) => {
           setOptions(r.slice(0, 7));
           setActive(-1);
@@ -62,9 +61,9 @@ export function PlaceInput({ label, value, onChange, client, lang, t, enterkeyhi
       ctrl.abort();
       window.clearTimeout(timer.current);
     };
-  }, [trimmed, value.match, lang]);
+  }, [trimmed, value.match]);
 
-  const pick = (m: GeocodeMatch) => {
+  const pick = (m: GeocodeSuggestion) => {
     setOptions([]);
     setOpen(false);
     onChange({ text: m.name, match: m });
@@ -114,7 +113,7 @@ export function PlaceInput({ label, value, onChange, client, lang, t, enterkeyhi
         <ul class="options" id={listId} role="listbox" aria-label={label}>
           {options.map((o, i) => (
             <li
-              key={`${o.id ?? ''}${o.lat}${o.lon}${i}`}
+              key={`${o.lat}${o.lon}${i}`}
               id={`${listId}-${i}`}
               role="option"
               aria-selected={i === active}

@@ -5,7 +5,10 @@ import type { Profile } from './types';
 import { ResultCard } from './components/ResultCard';
 import { ActiveSettings } from './components/ActiveSettings';
 import { SearchPanel, type Query } from './components/SearchPanel';
-import { BudgetExceededError, TransitousClient, TransitousError, placeArg, type GeocodeMatch } from './transitous';
+import { BudgetExceededError } from './transitous';
+import { BudgetExceededError as PerSearchBudgetError } from '../../core/src/routing/errors';
+import { MotisError } from '../../core/src/routing/errors';
+import { planBudget, searchRoutes, suggest, type GeocodeSuggestion } from './search/service';
 import { buildResults } from './search/adapt';
 
 type Theme = 'auto' | 'light' | 'dark';
@@ -24,10 +27,12 @@ type ErrKey = 'errPast' | 'errBudget' | 'errBusy' | 'errNetwork' | 'errGeneric' 
 
 function errorKey(e: unknown): ErrKey {
   if (e instanceof BudgetExceededError) return 'errBudget';
-  if (e instanceof TransitousError) {
-    if (e.status === 429) return 'errBusy';
-    // brak statusu = fetch odrzucony (offline, CORS, blokada sieci)
-    return e.status === undefined && /contacting/.test(e.message) ? 'errNetwork' : 'errGeneric';
+  // the per-search budget is spent by retries: the service kept failing (429/5xx)
+  if (e instanceof PerSearchBudgetError) return 'errBusy';
+  if (e instanceof MotisError) {
+    const err = String(e.msg.params['error'] ?? '');
+    if (/\b429\b/.test(err)) return 'errBusy';
+    return e.msg.key === 'err.motis_request' || e.msg.key === 'err.motis_geocode' ? 'errNetwork' : 'errGeneric';
   }
   return 'errGeneric';
 }
@@ -36,7 +41,6 @@ export function App() {
   const [lang, setLang] = useState<Lang>(() => load<Lang>('lang', 'pl'));
   const [theme, setTheme] = useState<Theme>(() => load<Theme>('theme', 'auto'));
   const [profile, setProfile] = useState<Profile>(() => load('profile', defaultProfile));
-  const client = useMemo(() => new TransitousClient(), []);
   const [query, setQuery] = useState<Query>({
     from: { text: '', match: null },
     to: { text: '', match: null },
@@ -48,7 +52,7 @@ export function App() {
   const [error, setError] = useState<ErrKey | null>(null);
   const [detail, setDetail] = useState('');
   const [sent, setSent] = useState('');
-  const [left, setLeft] = useState(() => client.budget.remaining());
+  const [left, setLeft] = useState(() => planBudget.remaining());
   const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
   const [profileOpen, setProfileOpen] = useState(false);
@@ -96,31 +100,37 @@ export function App() {
       if (Number.isNaN(when.getTime())) throw new RangeError('time');
       if (when.getTime() < Date.now() - 5 * 60_000) throw new RangeError('past');
       // Nie wybrano podpowiedzi? Bierzemy pierwszy wynik geokodowania wpisanego tekstu.
-      const resolve = async (p: Query['from']): Promise<GeocodeMatch | null> => {
+      const resolve = async (p: Query['from']): Promise<GeocodeSuggestion | null> => {
         if (p.match) return p.match;
         if (p.text.trim().length < 2) return null;
-        return (await client.geocode(p.text, lang, ctrl.signal))[0] ?? null;
+        return (await suggest(p.text, ctrl.signal))[0] ?? null;
       };
       const [from, to] = [await resolve(query.from), await resolve(query.to)];
       if (!from || !to) throw new RangeError('place');
       setQuery((q) => ({ ...q, from: { text: from.name, match: from }, to: { text: to.name, match: to } }));
-      const r = await client.plan({ from: placeArg(from), to: placeArg(to), time: when.toISOString() }, ctrl.signal);
+      const itineraries = await searchRoutes(from, to, when.toISOString(), ctrl.signal);
       if (ctrl.signal.aborted) return;
-      console.info('[search] itineraries from Transitous:', r.itineraries.length);
-      setRaw(r.itineraries.slice(0, 20));
+      console.info('[search] itineraries from Transitous:', itineraries.length);
+      setRaw(itineraries);
       setSent(`${from.name} → ${to.name}, ${query.date} ${query.time}`);
-      if (r.itineraries.length === 0) console.warn('[search] empty itineraries for', placeArg(from), placeArg(to), when.toISOString());
+      if (itineraries.length === 0) console.warn('[search] empty itineraries for', from.lat, from.lon, to.lat, to.lon, when.toISOString());
     } catch (e) {
       if ((e as Error)?.name === 'AbortError') return;
       console.error('[search] failed', e);
       setRaw(null);
-      setDetail(e instanceof Error ? `${e.name}: ${e.message}` : String(e));
+      setDetail(
+        e instanceof MotisError
+          ? `${e.msg.key}: ${String(e.msg.params['error'] ?? e.msg.params['detail'] ?? '')}`
+          : e instanceof Error
+            ? `${e.name}: ${e.message}`
+            : String(e),
+      );
       setError(
         e instanceof RangeError ? (e.message === 'time' ? 'errTime' : e.message === 'past' ? 'errPast' : 'errPlace') : errorKey(e),
       );
     } finally {
       if (abort.current === ctrl) setBusy(false);
-      setLeft(client.budget.remaining());
+      setLeft(planBudget.remaining());
     }
   }
 
@@ -189,8 +199,6 @@ export function App() {
             onQuery={setQuery}
             onProfile={setProfile}
             onSearch={() => void runSearch()}
-            lang={lang}
-            client={client}
             busy={busy}
             profileOpen={profileOpen}
             onProfileOpen={setProfileOpen}
