@@ -1,7 +1,7 @@
 /** Status ceny: odpowiada zasadzie projektu "nigdy nie zgaduj cen". */
 export type PriceStatus = 'official' | 'estimate' | 'unconfirmed';
 
-export type Mode = 'rail' | 'bus' | 'flight' | 'walk';
+export type Mode = 'rail' | 'bus' | 'local' | 'flight' | 'walk';
 
 export interface Leg {
   mode: Mode;
@@ -19,6 +19,8 @@ export interface Leg {
   sourceUrl?: string;
   verified?: string; // YYYY-MM-DD
   note?: string;
+  /** klucz powodu braku/niepewności ceny (tekst w i18n); gdy brak, cena jest w pełni potwierdzona */
+  reason?: string;
 }
 
 export interface Transfer {
@@ -41,6 +43,8 @@ export interface Itinerary {
   status: PriceStatus;
   /** true = suma obejmuje tylko odcinki ze znaną ceną */
   partial?: boolean;
+  /** true = żaden odcinek nie ma znanej ceny (nie pokazujemy sumy 0) */
+  noPrice?: boolean;
 }
 
 export interface Profile {

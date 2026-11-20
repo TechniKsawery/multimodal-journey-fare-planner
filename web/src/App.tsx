@@ -1,24 +1,49 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
-import { sample } from './data';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { dict, type Lang } from './i18n';
 import { load, save } from './storage';
 import type { Profile } from './types';
 import { ResultCard } from './components/ResultCard';
 import { ActiveSettings } from './components/ActiveSettings';
 import { SearchPanel, type Query } from './components/SearchPanel';
+import { BudgetExceededError, TransitousClient, TransitousError, placeArg, type GeocodeMatch } from './transitous';
+import { buildResults } from './search/adapt';
 
 type Theme = 'auto' | 'light' | 'dark';
 type Sort = 'price' | 'time';
 
 const defaultProfile: Profile = { status: 'student', idCountry: 'pl', age: 21, bahncard: 'none' };
-const today = new Date().toISOString().slice(0, 10);
+const todayLocal = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+type ErrKey = 'errBudget' | 'errBusy' | 'errNetwork' | 'errGeneric' | 'errPlace' | 'errTime';
+
+function errorKey(e: unknown): ErrKey {
+  if (e instanceof BudgetExceededError) return 'errBudget';
+  if (e instanceof TransitousError) {
+    if (e.status === 429) return 'errBusy';
+    // brak statusu = fetch odrzucony (offline, CORS, blokada sieci)
+    return e.status === undefined && /contacting/.test(e.message) ? 'errNetwork' : 'errGeneric';
+  }
+  return 'errGeneric';
+}
 
 export function App() {
   const [lang, setLang] = useState<Lang>(() => load<Lang>('lang', 'pl'));
   const [theme, setTheme] = useState<Theme>(() => load<Theme>('theme', 'auto'));
   const [profile, setProfile] = useState<Profile>(() => load('profile', defaultProfile));
-  const [query, setQuery] = useState<Query>({ from: 'Poznań Główny', to: 'Berlin Alexanderplatz', date: today });
-  const [searched, setSearched] = useState(true);
+  const client = useMemo(() => new TransitousClient(), []);
+  const [query, setQuery] = useState<Query>({
+    from: { text: '', match: null },
+    to: { text: '', match: null },
+    date: todayLocal(),
+    time: '08:00',
+  });
+  const [raw, setRaw] = useState<unknown[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<ErrKey | null>(null);
+  const [left, setLeft] = useState(() => client.budget.remaining());
+  const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
   const [profileOpen, setProfileOpen] = useState(false);
   const t = dict[lang];
@@ -44,15 +69,50 @@ export function App() {
   }, [theme]);
   useEffect(() => save('profile', profile), [profile]);
 
+  async function runSearch() {
+    abort.current?.abort();
+    const ctrl = new AbortController();
+    abort.current = ctrl;
+    setBusy(true);
+    setError(null);
+    try {
+      const when = new Date(`${query.date}T${query.time}`);
+      if (Number.isNaN(when.getTime())) throw new RangeError('time');
+      // Nie wybrano podpowiedzi? Bierzemy pierwszy wynik geokodowania wpisanego tekstu.
+      const resolve = async (p: Query['from']): Promise<GeocodeMatch | null> => {
+        if (p.match) return p.match;
+        if (p.text.trim().length < 2) return null;
+        return (await client.geocode(p.text, lang, ctrl.signal))[0] ?? null;
+      };
+      const [from, to] = [await resolve(query.from), await resolve(query.to)];
+      if (!from || !to) throw new RangeError('place');
+      setQuery((q) => ({ ...q, from: { text: from.name, match: from }, to: { text: to.name, match: to } }));
+      const r = await client.plan({ from: placeArg(from), to: placeArg(to), time: when.toISOString() }, ctrl.signal);
+      if (ctrl.signal.aborted) return;
+      setRaw(r.itineraries.slice(0, 20));
+    } catch (e) {
+      if ((e as Error)?.name === 'AbortError') return;
+      setRaw(null);
+      setError(e instanceof RangeError ? (e.message === 'time' ? 'errTime' : 'errPlace') : errorKey(e));
+    } finally {
+      if (abort.current === ctrl) setBusy(false);
+      setLeft(client.budget.remaining());
+    }
+  }
+
   const results = useMemo(() => {
-    const list = [...sample];
-    // Warianty z sumą częściową (brak części cen) nie mogą wygrywać rankingu ceny: idą na koniec.
+    const list = raw ? buildResults(raw, profile) : [];
+    // Warianty bez pełnej ceny nie mogą wygrywać rankingu ceny: idą na koniec.
     list.sort((a, b) => {
-      if (sort === 'price' && !!a.partial !== !!b.partial) return a.partial ? 1 : -1;
-      return sort === 'price' ? a.totalPln - b.totalPln : a.durationMin - b.durationMin;
+      if (sort === 'price') {
+        if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
+        if (!!a.partial !== !!b.partial) return a.partial ? 1 : -1;
+        return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
+      }
+      return a.durationMin - b.durationMin;
     });
     return list;
-  }, [sort]);
+  }, [raw, profile, sort]);
 
   const showForeignWarn = profile.status !== 'none' && profile.idCountry === 'pl';
 
@@ -97,15 +157,25 @@ export function App() {
             profile={profile}
             onQuery={setQuery}
             onProfile={setProfile}
-            onSearch={() => setSearched(true)}
+            onSearch={runSearch}
+            lang={lang}
+            client={client}
+            busy={busy}
             profileOpen={profileOpen}
             onProfileOpen={setProfileOpen}
           />
         </aside>
 
         <section id="results" class="results" aria-live="polite">
-          {!searched ? (
-            <p class="muted">{t.empty}</p>
+          {error && (
+            <p class="error" role="alert">
+              {t[error]}
+            </p>
+          )}
+          {!raw ? (
+            !error && <p class="muted">{busy ? t.searching : t.empty}</p>
+          ) : results.length === 0 ? (
+            <p class="muted">{t.noResults}</p>
           ) : (
             <>
               <div class="results-head">
@@ -127,11 +197,13 @@ export function App() {
                   <b>{t.warnTitle}:</b> {t.warnText}
                 </p>
               )}
+              <p class="muted small-note">{t.priceNote}</p>
               {results.map((it) => (
                 <ResultCard key={it.id} it={it} t={t} lang={lang} />
               ))}
             </>
           )}
+          <p class="muted small-note">{t.budgetLeft(left)}</p>
         </section>
       </main>
 

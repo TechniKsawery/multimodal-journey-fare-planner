@@ -33,6 +33,8 @@ export interface Leg {
   distance?: number; // metres
   agencyName?: string;
   routeShortName?: string;
+  routeLongName?: string;
+  displayName?: string;
   headsign?: string;
   tripId?: string;
   legGeometry?: { points: string; precision: number; length: number };
@@ -65,6 +67,9 @@ export interface GeocodeMatch {
 
 /** Hard cap on /plan requests one client may send per UTC day (policy: stay far below 720 total). */
 export const DEFAULT_DAILY_PLAN_BUDGET = 40;
+/** Typing triggers many small /geocode calls; they get their own, larger, daily cap. */
+export const DEFAULT_DAILY_GEOCODE_BUDGET = 300;
+const CACHE_MAX_ENTRIES = 200;
 export const DEFAULT_CACHE_TTL_MS = 15 * 60 * 1000;
 
 export interface KeyValueStorage {
@@ -87,10 +92,11 @@ export class QueryBudget {
     private readonly limit: number = DEFAULT_DAILY_PLAN_BUDGET,
     private readonly storage: KeyValueStorage | null = safeStorage(),
     private readonly now: () => Date = () => new Date(),
+    private readonly name: string = "plan",
   ) {}
 
   private key(): string {
-    return `plan-budget:${this.now().toISOString().slice(0, 10)}`;
+    return `${this.name}-budget:${this.now().toISOString().slice(0, 10)}`;
   }
 
   used(): number {
@@ -173,24 +179,28 @@ export function placeArg(m: GeocodeMatch): string {
 export class TransitousClient {
   private cache = new Map<string, { at: number; value: unknown }>();
   readonly budget: QueryBudget;
+  readonly geocodeBudget: QueryBudget;
   constructor(
     private readonly opts: {
       base?: string;
       fetchImpl?: typeof fetch;
       budget?: QueryBudget;
+      geocodeBudget?: QueryBudget;
       cacheTtlMs?: number;
       now?: () => number;
     } = {},
   ) {
     this.budget = opts.budget ?? new QueryBudget();
+    this.geocodeBudget =
+      opts.geocodeBudget ?? new QueryBudget(DEFAULT_DAILY_GEOCODE_BUDGET, safeStorage(), () => new Date(), "geocode");
   }
 
-  private async getJson<T>(url: string, signal?: AbortSignal, counted = false): Promise<T> {
+  private async getJson<T>(url: string, signal?: AbortSignal, budget?: QueryBudget): Promise<T> {
     const now = (this.opts.now ?? Date.now)();
     const ttl = this.opts.cacheTtlMs ?? DEFAULT_CACHE_TTL_MS;
     const hit = this.cache.get(url);
     if (hit && now - hit.at < ttl) return hit.value as T;
-    if (counted && !this.budget.take()) throw new BudgetExceededError();
+    if (budget && !budget.take()) throw new BudgetExceededError();
     const f = this.opts.fetchImpl ?? fetch;
     let res: Response;
     try {
@@ -205,16 +215,29 @@ export class TransitousClient {
         res.status,
       );
     }
-    const value = (await res.json()) as T;
+    let value: T;
+    try {
+      value = (await res.json()) as T;
+    } catch {
+      throw new TransitousError("Routing service returned an unreadable response");
+    }
+    if (this.cache.size >= CACHE_MAX_ENTRIES) this.cache.delete(this.cache.keys().next().value as string);
     this.cache.set(url, { at: now, value });
     return value;
   }
 
-  geocode(text: string, language = "en", signal?: AbortSignal): Promise<GeocodeMatch[]> {
-    return this.getJson<GeocodeMatch[]>(buildGeocodeUrl(text, language, this.opts.base), signal);
+  async geocode(text: string, language = "en", signal?: AbortSignal): Promise<GeocodeMatch[]> {
+    const r = await this.getJson<unknown>(buildGeocodeUrl(text.trim(), language, this.opts.base), signal, this.geocodeBudget);
+    if (!Array.isArray(r)) throw new TransitousError("Unexpected geocode response");
+    return r.filter(
+      (m): m is GeocodeMatch =>
+        !!m && typeof m.name === "string" && Number.isFinite(m.lat) && Number.isFinite(m.lon),
+    );
   }
 
-  plan(q: PlanQuery, signal?: AbortSignal): Promise<PlanResponse> {
-    return this.getJson<PlanResponse>(buildPlanUrl(q, this.opts.base), signal, true);
+  async plan(q: PlanQuery, signal?: AbortSignal): Promise<PlanResponse> {
+    const r = await this.getJson<PlanResponse>(buildPlanUrl(q, this.opts.base), signal, this.budget);
+    if (!r || !Array.isArray(r.itineraries)) throw new TransitousError("Unexpected routing response");
+    return r;
   }
 }
