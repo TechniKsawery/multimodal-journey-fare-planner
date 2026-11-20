@@ -4,6 +4,7 @@ import { dict, type Lang } from './i18n';
 import { load, save } from './storage';
 import type { Profile } from './types';
 import { ResultCard } from './components/ResultCard';
+import { ActiveSettings } from './components/ActiveSettings';
 import { SearchPanel, type Query } from './components/SearchPanel';
 
 type Theme = 'auto' | 'light' | 'dark';
@@ -19,7 +20,12 @@ export function App() {
   const [query, setQuery] = useState<Query>({ from: 'Poznań Główny', to: 'Berlin Alexanderplatz', date: today });
   const [searched, setSearched] = useState(true);
   const [sort, setSort] = useState<Sort>('price');
+  const [profileOpen, setProfileOpen] = useState(false);
   const t = dict[lang];
+  const editProfile = () => {
+    setProfileOpen(true);
+    document.getElementById('profile')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -92,6 +98,8 @@ export function App() {
             onQuery={setQuery}
             onProfile={setProfile}
             onSearch={() => setSearched(true)}
+            profileOpen={profileOpen}
+            onProfileOpen={setProfileOpen}
           />
         </aside>
 
@@ -113,6 +121,7 @@ export function App() {
                   ))}
                 </div>
               </div>
+              <ActiveSettings t={t} profile={profile} onChange={editProfile} />
               {showForeignWarn && (
                 <p class="callout">
                   <b>{t.warnTitle}:</b> {t.warnText}

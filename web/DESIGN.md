@@ -19,3 +19,6 @@ i ostrzeżenie o legitymacji; resztę upraszczamy.
 
 ## Do zrobienia później
 Autouzupełnianie miejsc, tłumaczenia DE/ES/FR/NL (teraz PL/EN), sekcja „inny dzień", atrakcje i karty miejskie, manifest i Service Worker (zakres szkieletu PWA).
+
+## Co jest włączone (pasek nad wynikami)
+Nad listą wyników stoi pasek z aktywnymi ustawieniami: zielony chip `✓` = ulga/BahnCard liczone w cenach, szary przerywany `○` = wyłączone. Przycisk „Zmień w profilu" otwiera i przewija do profilu. Dzięki temu widać od razu, co wpływa na ceny, a co nie, i gdzie to zmienić.

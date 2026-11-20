@@ -14,9 +14,11 @@ interface Props {
   onQuery: (q: Query) => void;
   onProfile: (p: Profile) => void;
   onSearch: () => void;
+  profileOpen: boolean;
+  onProfileOpen: (o: boolean) => void;
 }
 
-export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch }: Props) {
+export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch, profileOpen, onProfileOpen }: Props) {
   const set = <K extends keyof Query>(k: K, v: Query[K]) => onQuery({ ...query, [k]: v });
   const setP = <K extends keyof Profile>(k: K, v: Profile[K]) => onProfile({ ...profile, [k]: v });
   const summary = [
@@ -69,7 +71,12 @@ export function SearchPanel({ t, query, profile, onQuery, onProfile, onSearch }:
         <input type="date" value={query.date} onInput={(e) => set('date', e.currentTarget.value)} />
       </label>
 
-      <details class="profile">
+      <details
+        class="profile"
+        id="profile"
+        open={profileOpen}
+        onToggle={(e) => onProfileOpen(e.currentTarget.open)}
+      >
         <summary>
           <span>{t.profileSummary}</span>
           <span class="muted">{summary}</span>

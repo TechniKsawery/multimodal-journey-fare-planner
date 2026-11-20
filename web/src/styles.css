@@ -182,3 +182,11 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
   .full { display: none; }
   .short { display: inline; }
 }
+
+.active { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 0.85rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
+.chip.on { background: var(--official-bg); color: var(--official-fg); border-color: transparent; font-weight: 600; }
+.chip.off { color: var(--muted); border-style: dashed; }
+.link { background: none; border: 0; padding: 8px 4px; min-height: 40px; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: underline; }
+.hint { flex-basis: 100%; margin: 0; font-size: 0.8rem; }
