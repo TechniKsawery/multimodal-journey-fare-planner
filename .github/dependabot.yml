@@ -34,3 +34,9 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 14
+  - package-ecosystem: "npm"
+    directory: "/core"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 14
