@@ -190,3 +190,5 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 .chip.off { color: var(--muted); border-style: dashed; }
 .link { background: none; border: 0; padding: 8px 4px; min-height: 40px; color: var(--accent); cursor: pointer; font-weight: 600; text-decoration: underline; }
 .hint { flex-basis: 100%; margin: 0; font-size: 0.8rem; }
+
+.foot { max-width: 1080px; margin: 0 auto; padding: 8px var(--gap) 32px; font-size: 0.8rem; opacity: 0.85; }

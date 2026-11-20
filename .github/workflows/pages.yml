@@ -1,0 +1,81 @@
+name: Deploy beta PWA to GitHub Pages
+
+# Publishes the static build of web/ (no server, no secrets). Runs only from main.
+# One-time setup by the repo owner: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'data/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+# Least privilege by default; the deploy job adds only what Pages needs.
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Validate data against JSON Schemas
+        run: npm run validate-data
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # The build must contain no secrets and no affiliate/API tokens, and no third-party hosts
+      # except the documented Transitous API.
+      - name: Scan build output for secrets and unexpected hosts
+        run: |
+          set -eu
+          if grep -rEIl -i 'travelpayouts|api[_-]?key|secret|token|authorization|bearer|BEGIN (RSA|EC|OPENSSH|PRIVATE)|ghp_[A-Za-z0-9]{20,}|github_pat_|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{30,}' dist; then
+            echo "::error::Possible secret or forbidden token reference in build output"; exit 1
+          fi
+          # external hosts present in the bundle (http/https URLs), minus the allow-list
+          bad=$(grep -rEIoh 'https?://[A-Za-z0-9.-]+' dist | sort -u \
+            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl)$' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::Unexpected external hosts in build output:"; echo "$bad"; exit 1
+          fi
+
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

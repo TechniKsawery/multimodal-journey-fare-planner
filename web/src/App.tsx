@@ -134,6 +134,16 @@ export function App() {
           )}
         </section>
       </main>
+
+      <footer class="foot">
+        <p>{t.footerAttr}</p>
+        <p>
+          <a href="transitous-proto.html">{t.footerLive}</a> ·{' '}
+          <a href="https://github.com/TechniKsawery/multimodal-journey-fare-planner/blob/main/DATA_SOURCES.md" rel="noopener noreferrer">
+            {t.footerSources}
+          </a>
+        </p>
+      </footer>
     </>
   );
 }

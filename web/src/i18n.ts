@@ -2,7 +2,10 @@ export type Lang = 'pl' | 'en';
 
 const pl = {
   title: 'Planer podróży PL ↔ DE',
-  demo: 'Dane przykładowe: kwoty służą tylko do prezentacji interfejsu, nie są cenami z cenników.',
+  demo: 'WERSJA BETA. Dane przykładowe: kwoty służą tylko do prezentacji interfejsu, nie są cenami z cenników ani wiążącą ofertą.',
+  footerAttr: 'Dane tras: Transitous · Dane map © współtwórcy OpenStreetMap (ODbL) · Darmowy, niekomercyjny projekt open-source, niepowiązany z żadnym przewoźnikiem.',
+  footerLive: 'Wypróbuj wyszukiwanie tras na żywo (Transitous, bez cen)',
+  footerSources: 'Źródła danych',
   from: 'Skąd',
   to: 'Dokąd',
   date: 'Data',
@@ -68,7 +71,10 @@ const pl = {
 
 const en: typeof pl = {
   title: 'PL ↔ DE travel planner',
-  demo: 'Sample data: amounts only demonstrate the interface and are not real fares.',
+  demo: 'BETA VERSION. Sample data: amounts only demonstrate the interface and are not real fares or a binding offer.',
+  footerAttr: 'Route data: Transitous · Map data © OpenStreetMap contributors (ODbL) · Free, non-commercial open-source project, not affiliated with any carrier.',
+  footerLive: 'Try live route search (Transitous, no prices)',
+  footerSources: 'Data sources',
   from: 'From',
   to: 'To',
   date: 'Date',
