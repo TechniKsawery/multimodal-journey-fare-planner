@@ -2,6 +2,8 @@
 odcinkami kolejowymi DB w wariancie, żeby demo.py/app.py mogły pokazać "kup kartę, zaoszczędzisz X"
 bez ręcznego wyciągania dystansu DB przez wywołującego."""
 
+from datetime import date
+
 from fares.cards import CardSuggestion, suggest_bahncard_for_total_price
 from fares.db import flexpreis_upper_bound
 from fares.model import Carrier
@@ -54,13 +56,16 @@ def suggest_bahncard_for_itinerary(
     age: int | None = None,
     journeys_per_year: int = 2,
     existing_bahncard: str | None = None,
+    reference_date: date | None = None,
 ) -> list[CardSuggestion]:
     """Sugestie BahnCard dla odcinków DB w tym wariancie. Pusta lista, jeśli wariant nie ma
     żadnego odcinka DB Fernverkehr (BahnCard obniża tylko Flexpreis DB, nie inne przewoźniki),
     albo jeśli user już ma kartę z rabatem równym lub lepszym niż każdy dostępny wariant.
 
     existing_bahncard: karta już zadeklarowana przez usera w formularzu ("25"/"50"/"100"/None) —
-    przekazywana dalej, żeby nie sugerować kupna karty, którą user już ma."""
+    przekazywana dalej, żeby nie sugerować kupna karty, którą user już ma.
+
+    reference_date: dzień, na który liczymy cenę karty (promocje mają okna dat); domyślnie dziś."""
     total_upper_bound = db_flexpreis_upper_bound_total(itinerary)
     if total_upper_bound <= 0:
         return []
@@ -69,4 +74,5 @@ def suggest_bahncard_for_itinerary(
         journeys_per_year=journeys_per_year,
         age=age,
         existing_bahncard=existing_bahncard,
+        reference_date=reference_date,
     )

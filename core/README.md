@@ -112,6 +112,19 @@ generated itineraries; floats compared with a tolerance) and `test/transitousCli
 recorded live responses yet: the first recording (4-5 reference routes) should be done from a
 machine with access and added as fixtures.
 
+## Place names and card suggestions (for the UI)
+
+- `src/places/aliases.ts`: city names in the six UI languages from `data/places/aliases.json` (shape validated on load).
+  `findCity(text)` finds a city by any spelling, `localQuery(text)` turns typed text into the local names the
+  geocoder expects ("Cologne" -> "Köln"), `localizeName(name, lang)` / `placeText(name, lang)` show a geocoder
+  name in the interface language with the local name next to it, `aliasNames()` feeds typo correction.
+- `src/routing/cardSuggestions.ts`: `suggestBahncardForItinerary(itinerary, age, journeysPerYear, existingBahncard, referenceDate?)`
+  sums the Flexpreis of the individual DB legs (cross-border PL<->DE legs are excluded, their BahnCard rules are
+  already in the price) and returns the card suggestions; empty when there is no DB leg or the user's card is as good.
+  Pass `referenceDate` (ISO date) to pin the day the card price is computed for (promotions have date windows).
+
+Golden vectors: `core/golden/places.json` (about 1.6k spellings x 8 languages), `core/golden/card_suggestions.json` (5.6k itinerary x profile cases).
+
 ## i18n
 
 `src/i18n/index.ts` renders `Msg` objects (`{key, params}`) in the six UI languages (`renderMsg`, `t`,
