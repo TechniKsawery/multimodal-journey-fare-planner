@@ -9,7 +9,7 @@ const EXPECT: Record<string, [priced: number, total: number]> = {
   "Lublin-Berlin": [2, 2],
   "Warszawa-Berlin": [1, 1],
   "Krakow-Hamburg": [3, 3],
-  "Wroclaw-Drezno": [1, 2], // KD with statutory student discount is now priced; trilex has no confirmed tariff yet
+  "Wroclaw-Drezno": [0, 2], // KD (percent-based relief) and trilex have no confirmed tariff yet
 };
 
 describe("price coverage on reference routes", () => {
