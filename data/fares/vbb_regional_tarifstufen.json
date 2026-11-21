@@ -1,0 +1,133 @@
+{
+  "_zrodlo": "VBB-Tarif, broszura taryfowa (46. wydanie, 'Stand: 11. August 2026'), Anlage 4 'Fahrpreisübersicht Bartarif', 'Gültig ab 1. Januar 2026', Tabelle 2.1 Einzelfahrausweise (s. 146 broszury; spis treści podaje s. 145). Zasada ustalania cen: Teil B, pkt 4 (s. 42): do pięciu Waben wg liczby przejechanych Waben, powyżej pięciu Waben wg odległości w linii prostej między środkami Waben stacji startowej i docelowej, z pominięciem przebiegu linii. Pełny tekst broszury dostarczył Ksavi 2026-11-21; oryginał: https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere.pdf",
+  "_uwaga": "Cennik biletu jednorazowego VBB poza Berlinem i miastami (Landkreise): tarify L2-L6 (liczba Waben) i R2-RD (odległość w linii prostej w km, od 6 Waben). Aby przypisać relację (np. Berlin–Frankfurt (Oder)) do stopnia R trzeba znać odległość między ŚRODKAMI Waben obu stacji; mapowanie stacja->Wabe jest w osobnej broszurze 'Alle Zielorte' i w tekście go nie ma. Dlatego kalkulator z samymi współrzędnymi stacji dostanie najwyżej SZACUNEK (stopień wg odległości stacji, nie Waben). Nie wpisano żadnej konkretnej relacji. Dopuszcza się wiele stopni dla jednej relacji (wegabhängig); bilet niższego stopnia nie obejmuje drogi o wyższym stopniu bez Umwegkarte. Tabela dotyczy cen obowiązujących od 1.01.2026; VBB ogłosiło zmiany od 1.01.2027 (patrz vbb_brandenburg_stadte.json), dla stopni R/L brak tej informacji w źródle.",
+  "waluta": "EUR",
+  "klasa": 2,
+  "nazwa_przewoznika": "VBB (Landkreise Brandenburgii, taryfa regionalna)",
+  "typ_ceny": "oficjalna_taryfa",
+  "as_of": "2026-01-01",
+  "data_weryfikacji": "2026-11-21",
+  "zrodlo_url": "https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere.pdf",
+  "einzelfahrausweis_wg_waben": [
+    {
+      "tarifstufe": "L2",
+      "zakres": "bis 2 Waben",
+      "normalny": 2.2,
+      "ulgowy": 1.8,
+      "tarifstufe_ulgowy": "L2E"
+    },
+    {
+      "tarifstufe": "L3",
+      "zakres": "3 Waben",
+      "normalny": 3.2,
+      "ulgowy": 2.5,
+      "tarifstufe_ulgowy": "L3E"
+    },
+    {
+      "tarifstufe": "L4",
+      "zakres": "4 Waben",
+      "normalny": 4.0,
+      "ulgowy": 3.1,
+      "tarifstufe_ulgowy": "L4E"
+    },
+    {
+      "tarifstufe": "L5",
+      "zakres": "5 Waben",
+      "normalny": 5.0,
+      "ulgowy": 4.0,
+      "tarifstufe_ulgowy": "L5E"
+    },
+    {
+      "tarifstufe": "L6",
+      "zakres": "über 5 Waben (Landkreise)",
+      "normalny": 6.3,
+      "ulgowy": 4.7,
+      "tarifstufe_ulgowy": "L6E"
+    }
+  ],
+  "einzelfahrausweis_wg_odleglosci_km": [
+    {
+      "tarifstufe": "R2",
+      "odleglosc_do_km": 25,
+      "normalny": 6.3,
+      "ulgowy": 4.7,
+      "tarifstufe_ulgowy": "R2E"
+    },
+    {
+      "tarifstufe": "R3",
+      "odleglosc_do_km": 35,
+      "normalny": 8.1,
+      "ulgowy": 6.0,
+      "tarifstufe_ulgowy": "R3E"
+    },
+    {
+      "tarifstufe": "R4",
+      "odleglosc_do_km": 45,
+      "normalny": 9.8,
+      "ulgowy": 7.3,
+      "tarifstufe_ulgowy": "R4E"
+    },
+    {
+      "tarifstufe": "R5",
+      "odleglosc_do_km": 55,
+      "normalny": 11.8,
+      "ulgowy": 8.9,
+      "tarifstufe_ulgowy": "R5E"
+    },
+    {
+      "tarifstufe": "R6",
+      "odleglosc_do_km": 65,
+      "normalny": 13.9,
+      "ulgowy": 10.5,
+      "tarifstufe_ulgowy": "R6E"
+    },
+    {
+      "tarifstufe": "R7",
+      "odleglosc_do_km": 75,
+      "normalny": 16.2,
+      "ulgowy": 12.2,
+      "tarifstufe_ulgowy": "R7E"
+    },
+    {
+      "tarifstufe": "R8",
+      "odleglosc_do_km": 85,
+      "normalny": 18.2,
+      "ulgowy": 13.8,
+      "tarifstufe_ulgowy": "R8E"
+    },
+    {
+      "tarifstufe": "R9",
+      "odleglosc_do_km": 95,
+      "normalny": 20.0,
+      "ulgowy": 15.2,
+      "tarifstufe_ulgowy": "R9E"
+    },
+    {
+      "tarifstufe": "RA",
+      "odleglosc_do_km": 105,
+      "normalny": 22.3,
+      "ulgowy": 16.8,
+      "tarifstufe_ulgowy": "RAE"
+    },
+    {
+      "tarifstufe": "RB",
+      "odleglosc_do_km": 125,
+      "normalny": 24.8,
+      "ulgowy": 18.9,
+      "tarifstufe_ulgowy": "RBE"
+    },
+    {
+      "tarifstufe": "RD",
+      "odleglosc_do_km": 255,
+      "normalny": 30.3,
+      "ulgowy": 22.9,
+      "tarifstufe_ulgowy": "RDE"
+    }
+  ],
+  "_uwaga_odleglosc": "Nie ma stopnia dla odległości powyżej 255 km (źródło kończy się na RD, 'bis 255 km'); bis 25 km = R2 (od 6 Waben).",
+  "weryfikacja": {
+    "status": "odczytane z oficjalnej broszury VBB (tekst dostarczony przez właściciela projektu), 2026-11-21",
+    "data": "2026-11-21",
+    "url": "https://www.bvg.de/dam/jcr:1ac8cf94-6ad4-4c2e-80bf-038ecfae48d6/vbb-tarifbroschuere.pdf"
+  }
+}
