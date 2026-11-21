@@ -1,0 +1,96 @@
+{
+  "_zrodlo": "Koleje Dolnośląskie, oferta 'Dresden Promotion' (Drezdeńska): regulamin 'obowiązuje od 01.10.2024 r.' https://kolejedolnoslaskie.pl/wp-content/uploads/2024/09/R_Drezdenska_2024-10-01.pdf oraz strona oferty https://kolejedolnoslaskie.pl/en/tariff-offers/dresden-promotion (metadane strony: zmodyfikowana 2026-06-18). Odczyt obu 2026-11-21. Cena 'Dresden-Wroclaw-Spezial' 51 EUR (1 os.) z https://www.laenderbahn.com/trilex/tickets/ (odczyt 2026-11-20, bez daty Stand).",
+  "_uwaga": "Oferta stałych cen KD+DLB (pociągi KD i Die Länderbahn, 2. klasa) z Polski do Drezna Hbf przez Legnicę, Zgorzelec, Bautzen. Podróż musi zaczynać się w Polsce. Regulamin (§3 ust. 3): bezpośrednich pociągów Zgorzelec–Bischofswerda/Drezno Hbf NIE można sprzedać w tej ofercie, tam obowiązuje tylko 'Dresden-Wroclaw-Spezial' DLB. Źródła nie podają daty końca oferty ani wprost, że jest nadal w sprzedaży (strona działa, ale to wniosek, nie potwierdzenie), dlatego flaga oferta_aktualna_potwierdzona=false. Kwoty w PLN (VAT 0%), rzeczywiste ceny w kasie mogą się różnić. Bez ulgi dla seniorów, bez osobnej ceny grupowej poza osobami 2-5. Cena dla innych stacji KD niż w tabeli nie jest w źródle.",
+  "waluta": "PLN",
+  "klasa": 2,
+  "nazwa_przewoznika": "Koleje Dolnośląskie / Die Länderbahn (oferta Dresden Promotion)",
+  "typ_ceny": "oficjalna_oferta_stala",
+  "oferta_aktualna_potwierdzona": false,
+  "obowiazuje_od": "2024-10-01",
+  "data_weryfikacji": "2026-11-21",
+  "zrodlo_url": "https://kolejedolnoslaskie.pl/en/tariff-offers/dresden-promotion",
+  "ceny_za_osobe_do_drezna_hbf": [
+    {
+      "stacja": "Wrocław Główny",
+      "w_jedna_strone": 90,
+      "w_jedna_strone_dziecko_6_15": 45.0,
+      "powrotny_2_dni": 105,
+      "powrotny_2_dni_dziecko_6_15": 52.5,
+      "powrotny_14_dni": 160,
+      "powrotny_14_dni_dziecko_6_15": 80.0
+    },
+    {
+      "stacja": "Jelenia Góra",
+      "w_jedna_strone": 70,
+      "w_jedna_strone_dziecko_6_15": 35.0,
+      "powrotny_2_dni": 85,
+      "powrotny_2_dni_dziecko_6_15": 42.5,
+      "powrotny_14_dni": 125,
+      "powrotny_14_dni_dziecko_6_15": 62.5
+    },
+    {
+      "stacja": "Legnica",
+      "w_jedna_strone": 80,
+      "w_jedna_strone_dziecko_6_15": 40.0,
+      "powrotny_2_dni": 95,
+      "powrotny_2_dni_dziecko_6_15": 47.5,
+      "powrotny_14_dni": 140,
+      "powrotny_14_dni_dziecko_6_15": 70.0
+    },
+    {
+      "stacja": "Bolesławiec",
+      "w_jedna_strone": 80,
+      "w_jedna_strone_dziecko_6_15": 40.0,
+      "powrotny_2_dni": 85,
+      "powrotny_2_dni_dziecko_6_15": 42.5,
+      "powrotny_14_dni": 130,
+      "powrotny_14_dni_dziecko_6_15": 65.0
+    },
+    {
+      "stacja": "Zgorzelec (niedostępne w kanałach internetowych)",
+      "w_jedna_strone": 65,
+      "w_jedna_strone_dziecko_6_15": 32.5,
+      "powrotny_2_dni": 80,
+      "powrotny_2_dni_dziecko_6_15": 40.0,
+      "powrotny_14_dni": 120,
+      "powrotny_14_dni_dziecko_6_15": 60.0
+    },
+    {
+      "stacja": "Zgorzelec Miasto (niedostępne w kanałach internetowych)",
+      "w_jedna_strone": 65,
+      "w_jedna_strone_dziecko_6_15": 32.5,
+      "powrotny_2_dni": 80,
+      "powrotny_2_dni_dziecko_6_15": 40.0,
+      "powrotny_14_dni": 120,
+      "powrotny_14_dni_dziecko_6_15": 60.0
+    }
+  ],
+  "kolejna_osoba_2_do_5_powrotny": {
+    "normalny": 80.0,
+    "dziecko_6_15": 40.0
+  },
+  "bagaz_rower_pies": {
+    "w_jedna_strone": 10.0,
+    "tam_i_z_powrotem": 20.0
+  },
+  "ulgi": {
+    "dziecko_ponizej_6": "bezpłatnie z pasażerem pełnopłatnym",
+    "dziecko_6_15": "50% (ulga handlowa)",
+    "dokument_wieku_wymagany": true
+  },
+  "waznosc": {
+    "w_jedna_strone_dni": 1,
+    "powrotny_2_dni": "powrót w ciągu 2 dni",
+    "powrotny_14_dni": "powrót w ciągu 14 dni"
+  },
+  "dresden_wroclaw_spezial_dlb": {
+    "cena_1_osoba_eur": 51.0,
+    "zrodlo": "https://www.laenderbahn.com/trilex/tickets/",
+    "uwaga": "podana tylko jako nazwa produktu i kwota na stronie trilex; zasięg i warunki nie były czytane"
+  },
+  "weryfikacja": {
+    "status": "odczytane ze stron operatora (KD, DLB) 2026-11-21",
+    "data": "2026-11-21",
+    "url": "https://kolejedolnoslaskie.pl/en/tariff-offers/dresden-promotion"
+  }
+}
