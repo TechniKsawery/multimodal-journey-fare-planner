@@ -122,5 +122,9 @@
   "deutschlandticket": "Mam Deutschlandticket",
   "chipDt": "Deutschlandticket",
   "yes": "Tak",
-  "no": "Nie"
+  "no": "Nie",
+  "otherDayTitle": "Brak połączeń w wybranym dniu.",
+  "otherDayHint": "Pokazuję najbliższe w innych dniach.",
+  "otherDayLater": "{date} ({n} d. później)",
+  "otherDayEarlier": "{date} ({n} d. wcześniej)"
 }

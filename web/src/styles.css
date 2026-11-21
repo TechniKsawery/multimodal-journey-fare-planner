@@ -295,3 +295,4 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 
 .check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; }
 .check input { width: 1.25rem; height: 1.25rem; }
+.tag-other { background: var(--warn-bg, #fff3cd); color: var(--warn-fg, #5c4400); }

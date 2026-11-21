@@ -54,7 +54,7 @@ function plural(lang: Lang, base: string, n: number): string {
 const STRING_KEYS = [
   'title', 'demo', 'footerAttr', 'footerLive', 'footerSources', 'from', 'to', 'date', 'swap',
   'search', 'profile', 'profileSummary', 'who_none', 'who_student', 'who_pupil', 'idCountry',
-  'pl', 'de', 'age', 'bahncard', 'bc_none', 'deutschlandticket', 'chipDt', 'yes', 'no', 'results', 'active', 'inactive', 'change',
+  'pl', 'de', 'age', 'bahncard', 'bc_none', 'deutschlandticket', 'chipDt', 'otherDayTitle', 'otherDayHint', 'yes', 'no', 'results', 'active', 'inactive', 'change',
   'chipDiscount', 'chipId', 'chipBc', 'chipNone', 'chipHint', 'tag_cheapest', 'tag_fastest',
   'tag_safest', 'tab_all', 'tab_fastest', 'tab_cheapest', 'tab_safest', 'filter_confirmed_only', 'filter_no_results',
   'sort', 'sort_price', 'sort_time', 'official', 'ceiling', 'estimate', 'unconfirmed',
@@ -77,6 +77,7 @@ export type Dict = Record<StringKey, string> & {
   fromApi: (n: number) => string;
   budgetLeft: (n: number) => string;
   partialCover: (n: number, m: number) => string;
+  otherDayLabel: (date: string, offset: number) => string;
 };
 
 function build(lang: Lang): Dict {
@@ -90,6 +91,7 @@ function build(lang: Lang): Dict {
     fromApi: (n) => fill(r.fromApi, { n }),
     budgetLeft: (n) => fill(r.budgetLeft, { n }),
     partialCover: (n, m) => fill(r.partialCover, { n, m }),
+    otherDayLabel: (date, offset) => fill(offset > 0 ? r.otherDayLater : r.otherDayEarlier, { date, n: Math.abs(offset) }),
   };
 }
 

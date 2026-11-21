@@ -60,6 +60,7 @@ export function ResultCard({ it, t, lang }: { it: Itinerary; t: Dict; lang: Lang
   return (
     <article class="card">
       <div class="card-head">
+        {it.otherDay && <span class="tag tag-other">{t.otherDayLabel(it.otherDay.date, it.otherDay.offset)}</span>}
         {it.tag && <span class={`tag tag-${it.tag}`}>{t[`tag_${it.tag}` as keyof Dict] as string}</span>}
         <PriceBadge status={it.status} t={t} />
       </div>
