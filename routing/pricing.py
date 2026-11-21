@@ -4,6 +4,7 @@ import re
 
 from fares import deutschlandticket as dticket
 from fares import estimate_price as fares_estimate_price
+from fares import kd_dresden_promotion as kd_dresden
 from fares.international_pkp import estimate_pkp_offer, spi_range_for_segment
 from fares.model import Carrier, DiscountProfile, PriceEstimate, PriceType, Segment
 from flights import ExtrasProfile, FlightSegment
@@ -924,6 +925,80 @@ def _deutschlandticket_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg | 
         ),
         breakdown={"price_verified": True, "deutschlandticket": True, "podstawa": basis, **info},
     )
+
+
+KD_DRESDEN_OPERATORS = (
+    KD_KEYWORDS
+    + ("länderbahn", "laenderbahn", "landerbahn", "trilex")
+)
+"""Operatorzy oferty Dresden Promotion: pociągi KD i Die Länderbahn (trilex)."""
+
+
+def _kd_dresden_leg_ok(leg: Leg) -> bool:
+    return (
+        leg.mode is LegMode.RAIL
+        and leg.extra.get("motis_mode") != "BUS"
+        and _matches_any_word(" ".join(leg.carrier_name.lower().split()), KD_DRESDEN_OPERATORS)
+    )
+
+
+def apply_kd_dresden_promotion(
+    legs: list[Leg], priced: list[PricedLeg], discounts: DiscountProfile
+) -> list[PricedLeg]:
+    """Jeden bilet "Dresden Promotion" za cały ciąg odcinków KD/Länderbahn od stacji z tabeli w Polsce do
+    Drezna Hbf: pierwszy odcinek ciągu dostaje cenę oferty, pozostałe 0 (wliczone). To SZACUNEK
+    (price_verified=False): źródła nie potwierdzają, że oferta jest dziś w sprzedaży. Bezpośrednich
+    pociągów Zgorzelec - Drezno oferta nie obejmuje (regulamin §3 ust. 3), więc ciąg jednoodcinkowy ze
+    Zgorzelca nie jest podmieniany. Bez dopasowania (stacja spoza tabeli, inny przewoźnik, wiek < 6 lat)
+    wyceny zostają bez zmian."""
+    out = list(priced)
+    i = 0
+    while i < len(legs):
+        if not (_kd_dresden_leg_ok(legs[i]) and kd_dresden.is_offer_origin(legs[i].origin_name)):
+            i += 1
+            continue
+        j = i
+        while j < len(legs) and _kd_dresden_leg_ok(legs[j]):
+            if kd_dresden.is_dresden_hbf(legs[j].destination_name):
+                break
+            j += 1
+        if j >= len(legs) or not _kd_dresden_leg_ok(legs[j]):
+            i += 1
+            continue
+        fare = kd_dresden.one_way_price(legs[i].origin_name, discounts.age)
+        direct_zgorzelec = j == i and legs[i].origin_name.lower().startswith("zgorzelec")
+        if fare is None or direct_zgorzelec:
+            i = j + 1
+            continue
+        amount, basis = fare
+        info = kd_dresden.source_info()
+        base = {
+            "price_verified": False,
+            "kd_dresden_promotion": True,
+            "podstawa": basis,
+            "powod_szacunku": "źródło nie potwierdza, że oferta jest dziś w sprzedaży",
+            **info,
+        }
+        for k in range(i, j + 1):
+            first = k == i
+            note = (
+                f"Oferta stała KD + Die Länderbahn 'Dresden Promotion' {legs[i].origin_name} - "
+                f"Drezno Hbf, jeden bilet w jedną stronę, 2. klasa ({basis}): {amount:.2f} PLN "
+                f"(źródło: {info['zrodlo_url']}, odczyt {info['data_weryfikacji']}). Cena niepotwierdzona: "
+                "nie wiadomo, czy oferta jest teraz w sprzedaży."
+                if first
+                else "Wliczone w jeden bilet oferty 'Dresden Promotion' (cena przy pierwszym odcinku)."
+            )
+            out[k] = PricedLeg(
+                leg=legs[k],
+                amount=amount if first else 0.0,
+                currency="PLN",
+                price_type="szacunek",
+                notes=note,
+                breakdown=dict(base),
+            )
+        i = j + 1
+    return out
 
 
 def price_rail_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg:

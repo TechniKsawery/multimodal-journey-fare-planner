@@ -20,7 +20,8 @@ są odchudzane wspólnym dedup po sygnaturze trasy (sekwencja origin/destination
 """
 
 from dataclasses import dataclass, field, replace
-from datetime import date as date_cls, datetime, timedelta
+from datetime import date as date_cls
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from fares.model import DiscountProfile
@@ -136,7 +137,8 @@ def build_flight_leg(
 
 
 def _price_legs(legs: list[Leg], request: RouteRequest):
-    return [pricing.price_leg(leg, request.discounts, request.flight_currency) for leg in legs]
+    priced = [pricing.price_leg(leg, request.discounts, request.flight_currency) for leg in legs]
+    return pricing.apply_kd_dresden_promotion(legs, priced, request.discounts)
 
 
 def _departs_on_request_date(legs: list[Leg], request: RouteRequest) -> bool:
