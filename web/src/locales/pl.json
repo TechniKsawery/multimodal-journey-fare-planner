@@ -118,5 +118,9 @@
   "pageDescription": "Porównywarka połączeń z ceną dla Ciebie: źródło i data weryfikacji przy każdej cenie.",
   "fromApi": "usługa zwróciła {n}",
   "budgetLeft": "Pozostało dziś zapytań o trasy: {n}",
-  "partialCover": "Cena tylko {n} z {m} odc."
+  "partialCover": "Cena tylko {n} z {m} odc.",
+  "deutschlandticket": "Mam Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Tak",
+  "no": "Nie"
 }

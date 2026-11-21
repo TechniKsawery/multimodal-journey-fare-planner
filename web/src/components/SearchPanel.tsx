@@ -28,6 +28,7 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
     t[`who_${profile.status}` as keyof Dict] as string,
     profile.status !== 'none' ? (profile.idCountry === 'pl' ? t.pl : t.de) : '',
     profile.bahncard !== 'none' ? `BahnCard ${profile.bahncard}` : '',
+    profile.deutschlandticket ? 'Deutschlandticket' : '',
   ]
     .filter(Boolean)
     .join(' · ');
@@ -146,6 +147,14 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
               </select>
             </label>
           </div>
+          <label class="check">
+            <input
+              type="checkbox"
+              checked={profile.deutschlandticket === true}
+              onChange={(e) => setP('deutschlandticket', e.currentTarget.checked)}
+            />
+            <span>{t.deutschlandticket}</span>
+          </label>
         </div>
       </details>
 

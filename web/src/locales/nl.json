@@ -114,5 +114,9 @@
   "pageDescription": "Verbindingsvergelijking met de prijs voor jou: bron en controledatum bij elke prijs.",
   "fromApi": "de dienst gaf {n} terug",
   "budgetLeft": "Resterende routeaanvragen vandaag: {n}",
-  "partialCover": "Prijs voor slechts {n} van {m} trajecten"
+  "partialCover": "Prijs voor slechts {n} van {m} trajecten",
+  "deutschlandticket": "Ik heb een Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Ja",
+  "no": "Nee"
 }

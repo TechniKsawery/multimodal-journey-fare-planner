@@ -114,5 +114,9 @@
   "pageDescription": "Comparateur de liaisons avec le prix pour vous : source et date de vérification pour chaque prix.",
   "fromApi": "le service a renvoyé {n}",
   "budgetLeft": "Requêtes d'itinéraire restantes aujourd'hui : {n}",
-  "partialCover": "Prix pour seulement {n} tronçon(s) sur {m}"
+  "partialCover": "Prix pour seulement {n} tronçon(s) sur {m}",
+  "deutschlandticket": "J'ai un Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Oui",
+  "no": "Non"
 }

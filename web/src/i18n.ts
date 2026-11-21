@@ -54,7 +54,7 @@ function plural(lang: Lang, base: string, n: number): string {
 const STRING_KEYS = [
   'title', 'demo', 'footerAttr', 'footerLive', 'footerSources', 'from', 'to', 'date', 'swap',
   'search', 'profile', 'profileSummary', 'who_none', 'who_student', 'who_pupil', 'idCountry',
-  'pl', 'de', 'age', 'bahncard', 'bc_none', 'results', 'active', 'inactive', 'change',
+  'pl', 'de', 'age', 'bahncard', 'bc_none', 'deutschlandticket', 'chipDt', 'yes', 'no', 'results', 'active', 'inactive', 'change',
   'chipDiscount', 'chipId', 'chipBc', 'chipNone', 'chipHint', 'tag_cheapest', 'tag_fastest',
   'tag_safest', 'tab_all', 'tab_fastest', 'tab_cheapest', 'tab_safest', 'filter_confirmed_only', 'filter_no_results',
   'sort', 'sort_price', 'sort_time', 'official', 'ceiling', 'estimate', 'unconfirmed',

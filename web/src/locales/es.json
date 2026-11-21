@@ -114,5 +114,9 @@
   "pageDescription": "Comparador de conexiones con el precio para ti: fuente y fecha de verificación en cada precio.",
   "fromApi": "el servicio devolvió {n}",
   "budgetLeft": "Consultas de rutas restantes hoy: {n}",
-  "partialCover": "Precio solo de {n} de {m} tramos"
+  "partialCover": "Precio solo de {n} de {m} tramos",
+  "deutschlandticket": "Tengo un Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Sí",
+  "no": "No"
 }
