@@ -15,6 +15,7 @@ from routing import motis_client, search_service
 from routing.model import Itinerary, Leg, LegMode, PricedLeg
 from routing.scoring import pick_recommendations
 from ui_helpers import (
+    PRICE_CEILING,
     PRICE_ESTIMATE,
     PRICE_NO_PRICE,
     PRICE_OFFICIAL,
@@ -63,6 +64,13 @@ def _itinerary(*legs, high=None):
 
 def test_oficjalna_taryfa_to_oficjalna():
     assert leg_price_status(_priced()) == PRICE_OFFICIAL
+
+
+def test_cena_bazowa_pkp_to_taryfa_maksymalna_nie_oficjalna():
+    """Cena bazowa PKP IC z cennika to cena maksymalna bez promocji: etykieta CEILING, nie OFFICIAL."""
+    assert leg_price_status(_priced(cena_bazowa=40)) == PRICE_CEILING
+    assert itinerary_price_status(_itinerary(_priced(cena_bazowa=40), _priced())) == PRICE_CEILING
+    assert itinerary_price_status(_itinerary(_priced(cena_bazowa=40), _priced(price_verified=False))) == PRICE_ESTIMATE
 
 
 def test_oficjalna_taryfa_z_jawnym_niepotwierdzeniem_nie_jest_oficjalna():

@@ -19,8 +19,8 @@ describe("buildResults", () => {
   it("prices a Polish IC with the official band table and the student relief", () => {
     const [r] = buildResults([icDomestic], student);
     const leg = r.legs[0];
-    expect(leg.status).toBe("estimate"); // no verification date in the data -> never "official"
-    expect(leg.reason).toBe("noVerifiedDate");
+    expect(leg.status).toBe("ceiling"); // verified band table (2026-11-21): the list price is the maximum before promotions
+    expect(leg.reason).toBeUndefined();
     expect(leg.sourceUrl).toMatch(/^https:\/\/www\.intercity\.pl\//);
     const [plain] = buildResults([icDomestic], none);
     expect(leg.price!).toBeCloseTo(plain.legs[0].price! * 0.49, 1);
@@ -47,7 +47,7 @@ describe("buildResults", () => {
 
   it("mixed PL-DE trip: priced where certain, the rest is explicitly unconfirmed and out of the sum", () => {
     const [r] = buildResults([mixed], student);
-    expect(r.legs.map((l) => l.status)).toEqual(["estimate", "unconfirmed", "unconfirmed"]);
+    expect(r.legs.map((l) => l.status)).toEqual(["ceiling", "unconfirmed", "unconfirmed"]);
     expect(r.legs[1].price).toBeUndefined();
     expect(r.legs[1].reason).toBe("coreFallback");
     expect(r.partial).toBe(true);

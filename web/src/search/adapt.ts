@@ -51,7 +51,10 @@ function unconfirmed(leg: CoreLeg, reason: string, note?: string): PricedLeg {
   return makePricedLeg({ leg, amount: 0, currency: "PLN", price_type: "szacunek", breakdown: { cena_nieznana: true, price_verified: false, ui } });
 }
 
-/** Prices one leg with core/ and classifies the result (official / estimate / unconfirmed). */
+/** PKP IC base price from the price list is the MAXIMUM price before promotions: the real price may be lower. */
+const isCeilingFare = (pl: PricedLeg): boolean => pl.breakdown["cena_bazowa"] !== undefined && pl.breakdown["cena_bazowa"] !== null;
+
+/** Prices one leg with core/ and classifies the result (official / ceiling / estimate / unconfirmed). */
 export function priceOne(leg: CoreLeg, discounts: DiscountProfile): PricedLeg {
   if (leg.mode === LegMode.WALK) return corePriceLeg(leg, discounts);
   let pl: PricedLeg;
@@ -68,7 +71,7 @@ export function priceOne(leg: CoreLeg, discounts: DiscountProfile): PricedLeg {
   const verified = str(bd["data_weryfikacji"]);
   const official = pl.price_type === "oficjalna_taryfa" && !!url && /^https:\/\//.test(url) && !!verified;
   const ui: PriceMeta = {
-    status: official ? "official" : "estimate",
+    status: official ? (isCeilingFare(pl) ? "ceiling" : "official") : "estimate",
     source: url ? new URL(url).hostname : (pl.carrier && SOURCE_LABELS[pl.carrier]) || pl.carrier || undefined,
     sourceUrl: url,
     verified,
@@ -95,7 +98,7 @@ function uiMode(raw: TLeg, core: CoreLeg): Mode {
   return raw.mode === "BUS" || raw.mode === "COACH" ? "bus" : "local";
 }
 
-const RANK: Record<PriceStatus, number> = { official: 0, estimate: 1, unconfirmed: 2 };
+const RANK: Record<PriceStatus, number> = { official: 0, ceiling: 1, estimate: 2, unconfirmed: 3 };
 
 function toUiLeg(raw: TLeg, pl: PricedLeg): Leg {
   const meta = metaOf(pl);
