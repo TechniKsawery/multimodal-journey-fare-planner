@@ -34,3 +34,8 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Fails the PR (not only the later Pages deploy) when the bundle contains a host that is not in
+      # web/allowed-hosts.json. Adding a host there is a deliberate, reviewed change.
+      - name: Check external hosts in build output
+        run: npm run check-hosts

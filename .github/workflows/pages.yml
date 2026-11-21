@@ -57,16 +57,11 @@ jobs:
           if grep -rEIl -i -e 'BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY' -e 'ghp_[A-Za-z0-9]{20,}' -e 'github_pat_[A-Za-z0-9_]{20,}' -e 'AKIA[0-9A-Z]{16}' -e 'AIza[0-9A-Za-z_-]{30,}' -e 'sk-[A-Za-z0-9]{32,}' -e 'bearer +[A-Za-z0-9._-]{20,}' -e '(api[_-]?key|secret|token|authorization)["'"'"']? *[:=] *["'"'"'][A-Za-z0-9._/+-]{20,}["'"'"']' dist; then
             echo "::error::Possible secret or forbidden token reference in build output"; exit 1
           fi
-          # external hosts present in the bundle (http/https URLs), minus the allow-list.
-          # The tariff modules from core/ carry source links (documentation, shown as links in the UI,
-          # never fetched: CSP connect-src allows only api.transitous.org), so those carrier/city
-          # tariff sites are listed here too. www.travelpayouts.com appears only inside a bundled CLI
-          # message (registration hint), never as a request target.
-          bad=$(grep -rEIoh 'https?://[A-Za-z0-9.-]+' dist | sort -u \
-            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl|bip\.poznan\.pl|eezy\.nrw|kolejedolnoslaskie\.pl|kolejemalopolskie\.com\.pl|krakow\.pl|lka\.lodzkie\.pl|mpk\.krakow\.pl|warszawa19115\.pl|www\.bvg\.de|www\.hvv\.de|www\.laenderbahn\.com|www\.mazowieckie\.com\.pl|www\.mvv-muenchen\.de|www\.skm\.pkp\.pl|www\.vrr\.de|www\.vrs\.de|www\.wroclaw\.pl|www\.wtp\.waw\.pl|www\.ztm\.poznan\.pl|www\.zvon\.de|zdtm\.lublin\.eu|lubika\.zdtm\.lublin\.eu|raildude\.com|travel-dealz\.de|www\.vzbv\.de|www\.travelpayouts\.com|ztp\.krakow\.pl)$' || true)
-          if [ -n "$bad" ]; then
-            echo "::error::Unexpected external hosts in build output:"; echo "$bad"; exit 1
-          fi
+          # External hosts: the allow-list lives in web/allowed-hosts.json (single source of truth, shared
+          # with the Web CI that runs on every PR). It holds the Transitous API plus documentation/source
+          # links bundled from core/ and data/, which are shown as links and never fetched (CSP connect-src
+          # allows only api.transitous.org).
+          node scripts/check-hosts.mjs
 
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
