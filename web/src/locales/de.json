@@ -142,5 +142,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Nicht selbstständig lebensfähig (37 %)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Blind / nicht selbstständig lebensfähig (51 %)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Begleitperson einer behinderten Person (95 %)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Nichtberuflicher Wehrdienst (78 %)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Nichtberuflicher Wehrdienst (78 %)",
+  "citizenship": "Staatsangehörigkeit (optional)",
+  "cit_none": "Keine Angabe",
+  "cit_PL": "Polnisch",
+  "cit_UE": "EU (nicht polnisch)",
+  "cit_poza_UE": "Außerhalb der EU",
+  "eligibilityTitle": "Gelten die Ermäßigungen für dich",
+  "citizenshipHint": "Beeinflusst nur die Hinweise zur Anerkennung, nie die Preise."
 }

@@ -156,6 +156,19 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
             />
             <span>{t.deutschlandticket}</span>
           </label>
+          <label>
+            <span>{t.citizenship}</span>
+            <small class="muted">{t.citizenshipHint}</small>
+            <select
+              value={profile.citizenship ?? ''}
+              onChange={(e) => setP('citizenship', (e.currentTarget.value || undefined) as Profile['citizenship'])}
+            >
+              <option value="">{t.cit_none}</option>
+              <option value="PL">{t.cit_PL}</option>
+              <option value="UE">{t.cit_UE}</option>
+              <option value="poza_UE">{t.cit_poza_UE}</option>
+            </select>
+          </label>
           <ExtraOptions t={t} profile={profile} onProfile={onProfile} />
         </div>
       </details>

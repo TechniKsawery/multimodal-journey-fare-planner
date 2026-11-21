@@ -12,6 +12,7 @@ export function baseDiscountProfile(p: Profile): DiscountProfile {
   const out: DiscountProfile = { ...defaultProfile(), ...defaultDiscountsForAge(age), age };
   out.bahncard = p.bahncard === "none" ? null : p.bahncard;
   out.deutschlandticket = p.deutschlandticket === true;
+  out.obywatelstwo = p.citizenship ?? null;
   if (p.idCountry === "de" && p.status !== "none") {
     // A German ID is not an accepted basis for the Polish statutory relief (not verified) -> none.
     out.legitymacja_zagraniczna = true;

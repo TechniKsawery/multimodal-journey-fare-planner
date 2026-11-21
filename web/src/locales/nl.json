@@ -142,5 +142,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Niet zelfstandig kunnen leven (37%)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Blind / niet zelfstandig kunnen leven (51%)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Begeleider of gids van een persoon met een handicap (95%)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Niet-beroepsmatige militaire dienst (78%)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Niet-beroepsmatige militaire dienst (78%)",
+  "citizenship": "Nationaliteit (optioneel)",
+  "cit_none": "Niet opgeven",
+  "cit_PL": "Pools",
+  "cit_UE": "EU (niet Pools)",
+  "cit_poza_UE": "Buiten de EU",
+  "eligibilityTitle": "Gelden de kortingen voor jou",
+  "citizenshipHint": "Beïnvloedt alleen de waarschuwingen over erkenning, nooit de prijzen."
 }

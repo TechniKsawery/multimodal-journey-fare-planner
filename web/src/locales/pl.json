@@ -146,5 +146,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Niezdolny do samodzielnej egzystencji (37%)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Niewidomy / niezdolny do samodzielnej egzystencji (51%)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Opiekun lub przewodnik osoby niepełnosprawnej (95%)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Żołnierz niezawodowej służby wojskowej (78%)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Żołnierz niezawodowej służby wojskowej (78%)",
+  "citizenship": "Obywatelstwo (opcjonalnie)",
+  "cit_none": "Nie podaję",
+  "cit_PL": "Polskie",
+  "cit_UE": "UE (inne niż polskie)",
+  "cit_poza_UE": "Spoza UE",
+  "eligibilityTitle": "Czy ulgi przysługują",
+  "citizenshipHint": "Wpływa tylko na ostrzeżenia o uznawaniu ulg, nie na ceny."
 }

@@ -59,6 +59,8 @@ export interface Profile {
   bahncard: 'none' | '25' | '50' | '100';
   /** Holds a Deutschlandticket (optional: profiles saved earlier have no such field). */
   deutschlandticket?: boolean;
+  /** Citizenship (optional): only steers the eligibility warnings, never a price. undefined = not given. */
+  citizenship?: 'PL' | 'UE' | 'poza_UE';
   /** Manual choices from "More options": DiscountProfile field -> value; they win over defaults derived from age/status. */
   overrides?: Record<string, boolean | string>;
 }

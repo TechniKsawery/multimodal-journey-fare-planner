@@ -11,6 +11,9 @@ import { MotisError } from '../../core/src/routing/errors';
 import { planBudget, searchRoutes, suggest, type GeocodeSuggestion } from './search/service';
 import { buildResults } from './search/adapt';
 import { comparePrice } from './search/sort';
+import { warningsFor } from '../../core/src/fares/foreignerEligibility';
+import { renderMsg } from '../../core/src/i18n';
+import { toDiscountProfile } from './search/profile';
 
 type Theme = 'auto' | 'light' | 'dark';
 type Sort = 'price' | 'time';
@@ -193,6 +196,14 @@ export function App() {
     return list;
   }, [allResults, onlyFullyPriced, tab, sort]);
 
+  const eligibilityWarnings = useMemo(() => {
+    try {
+      return warningsFor(toDiscountProfile(profile)).map((m) => renderMsg(m, lang));
+    } catch (e) {
+      console.error('eligibility warnings failed', e);
+      return [];
+    }
+  }, [profile, lang]);
   const showForeignWarn = profile.status !== 'none' && profile.idCountry === 'pl';
 
   return (
@@ -312,6 +323,16 @@ export function App() {
               </div>
 
               <ActiveSettings t={t} profile={profile} onChange={editProfile} />
+              {eligibilityWarnings.length > 0 && (
+                <div class="callout" role="note">
+                  <b>{t.eligibilityTitle}:</b>
+                  <ul>
+                    {eligibilityWarnings.map((w) => (
+                      <li key={w}>{w}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {showForeignWarn && (
                 <p class="callout">
                   <b>{t.warnTitle}:</b> {t.warnText}

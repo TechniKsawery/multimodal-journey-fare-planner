@@ -142,5 +142,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Incapable de vivre de façon autonome (37 %)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Aveugle / incapable de vivre de façon autonome (51 %)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Accompagnateur ou guide d'une personne handicapée (95 %)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Service militaire non professionnel (78 %)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Service militaire non professionnel (78 %)",
+  "citizenship": "Nationalité (facultatif)",
+  "cit_none": "Non précisée",
+  "cit_PL": "Polonaise",
+  "cit_UE": "UE (autre que polonaise)",
+  "cit_poza_UE": "Hors UE",
+  "eligibilityTitle": "Les réductions s'appliquent-elles à toi ?",
+  "citizenshipHint": "N'influence que les avertissements de reconnaissance, jamais les prix."
 }
