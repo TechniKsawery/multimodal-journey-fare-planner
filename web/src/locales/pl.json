@@ -153,5 +153,6 @@
   "cit_UE": "UE (inne niż polskie)",
   "cit_poza_UE": "Spoza UE",
   "eligibilityTitle": "Czy ulgi przysługują",
-  "citizenshipHint": "Wpływa tylko na ostrzeżenia o uznawaniu ulg, nie na ceny."
+  "citizenshipHint": "Wpływa tylko na ostrzeżenia o uznawaniu ulg, nie na ceny.",
+  "flightsNote": "Loty nie są obsługiwane: szukamy tylko pociągów, autobusów i transportu miejskiego."
 }

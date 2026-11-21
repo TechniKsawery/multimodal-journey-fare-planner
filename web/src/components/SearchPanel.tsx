@@ -1,5 +1,5 @@
 import type { Profile } from '../types';
-import type { Dict } from '../i18n';
+import type { Dict, Lang } from '../i18n';
 import { ExtraOptions } from './ExtraOptions';
 import { PlaceInput, type PlaceValue } from './PlaceInput';
 
@@ -12,6 +12,7 @@ export interface Query {
 
 interface Props {
   t: Dict;
+  lang: Lang;
   busy: boolean;
   query: Query;
   profile: Profile;
@@ -22,7 +23,7 @@ interface Props {
   onProfileOpen: (o: boolean) => void;
 }
 
-export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSearch, profileOpen, onProfileOpen }: Props) {
+export function SearchPanel({ t, lang, busy, query, profile, onQuery, onProfile, onSearch, profileOpen, onProfileOpen }: Props) {
   const set = <K extends keyof Query>(k: K, v: Query[K]) => onQuery({ ...query, [k]: v });
   const setP = <K extends keyof Profile>(k: K, v: Profile[K]) => onProfile({ ...profile, [k]: v });
   const summary = [
@@ -44,6 +45,7 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
     >
       <div class="route">
         <PlaceInput
+          lang={lang}
           label={t.from}
           value={query.from}
           onChange={(v) => set('from', v)}
@@ -59,6 +61,7 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
           ⇅
         </button>
         <PlaceInput
+          lang={lang}
           label={t.to}
           value={query.to}
           onChange={(v) => set('to', v)}

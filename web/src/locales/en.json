@@ -149,5 +149,6 @@
   "cit_UE": "EU (other than Polish)",
   "cit_poza_UE": "Outside the EU",
   "eligibilityTitle": "Do the discounts apply to you",
-  "citizenshipHint": "Only affects eligibility warnings, never prices."
+  "citizenshipHint": "Only affects eligibility warnings, never prices.",
+  "flightsNote": "Flights are not supported: we only search trains, buses and local transport."
 }

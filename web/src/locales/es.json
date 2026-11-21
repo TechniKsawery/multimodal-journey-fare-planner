@@ -149,5 +149,6 @@
   "cit_UE": "UE (distinta de la polaca)",
   "cit_poza_UE": "Fuera de la UE",
   "eligibilityTitle": "¿Te corresponden los descuentos?",
-  "citizenshipHint": "Solo influye en los avisos de reconocimiento, nunca en los precios."
+  "citizenshipHint": "Solo influye en los avisos de reconocimiento, nunca en los precios.",
+  "flightsNote": "No se admiten vuelos: solo buscamos trenes, autobuses y transporte urbano."
 }

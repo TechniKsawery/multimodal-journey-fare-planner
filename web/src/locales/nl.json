@@ -149,5 +149,6 @@
   "cit_UE": "EU (niet Pools)",
   "cit_poza_UE": "Buiten de EU",
   "eligibilityTitle": "Gelden de kortingen voor jou",
-  "citizenshipHint": "Beïnvloedt alleen de waarschuwingen over erkenning, nooit de prijzen."
+  "citizenshipHint": "Beïnvloedt alleen de waarschuwingen over erkenning, nooit de prijzen.",
+  "flightsNote": "Vluchten worden niet ondersteund: we zoeken alleen treinen, bussen en lokaal vervoer."
 }

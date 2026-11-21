@@ -246,6 +246,7 @@ export function App() {
         <aside class="side">
           <SearchPanel
             t={t}
+            lang={lang}
             query={query}
             profile={profile}
             onQuery={setQuery}
@@ -264,7 +265,12 @@ export function App() {
             </p>
           )}
           {!raw ? (
-            !error && <p class="muted">{busy ? t.searching : t.empty}</p>
+            !error && (
+              <>
+                <p class="muted">{busy ? t.searching : t.empty}</p>
+                <p class="muted small-note">{t.flightsNote}</p>
+              </>
+            )
           ) : allResults.length === 0 ? (
             <div class="muted">
               <p>{t.noResults}</p>
@@ -339,6 +345,7 @@ export function App() {
                 </p>
               )}
               <p class="muted small-note">{t.priceNote}</p>
+              <p class="muted small-note">{t.flightsNote}</p>
               {(tab === 'cheapest' || (tab === 'all' && sort === 'price')) && <p class="muted small-note">{t.sortHintPrice}</p>}
 
               {results.some((it) => it.otherDay) && (
