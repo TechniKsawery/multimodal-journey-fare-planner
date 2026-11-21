@@ -26,7 +26,7 @@ describe("buildResults", () => {
     expect(leg.price!).toBeCloseTo(plain.legs[0].price! * 0.49, 1);
   });
 
-  it("never prices EIC/EIP: unconfirmed, no amount, no total", () => {
+  it("never prices EIC/EIP without a sourced tariff: unconfirmed, no amount, no total", () => {
     const [r] = buildResults([eicDomestic], student);
     expect(r.legs[0].price).toBeUndefined();
     expect(r.legs[0].status).toBe("unconfirmed");
@@ -109,5 +109,49 @@ describe("BahnCard 100", () => {
     expect(toDiscountProfile({ ...none, bahncard: "100" }).bahncard).toBe("100");
     const [r] = buildResults([iceDomestic], { ...none, bahncard: "100" });
     expect(r.legs[0].price).toBe(0);
+  });
+});
+
+describe("fully priced filtering and recommendations", () => {
+  it("distinguishes fully priced itineraries from partial/unpriced ones", () => {
+    const res = buildResults([icDomestic, mixed, eicDomestic], student);
+    const fullyPriced = res.filter((it) => !it.partial && !it.noPrice);
+    expect(fullyPriced.map((it) => it.legs[0].carrier)).toEqual(["PKP Intercity IC 1310"]);
+
+    const partialOrUnpriced = res.filter((it) => it.partial || it.noPrice);
+    expect(partialOrUnpriced.length).toBe(2);
+  });
+});
+
+describe("no invented prices for legs without a sourced tariff", () => {
+  const leg = (from: string, to: string, agencyName: string, routeShortName: string, mode: string) => ({
+    startTime: "2026-11-23T15:15:00Z",
+    endTime: "2026-11-23T17:20:00Z",
+    duration: 7500,
+    transfers: 0,
+    legs: [
+      {
+        mode,
+        from: { name: from, lat: 51.2, lon: 22.5, tz: "Europe/Warsaw" },
+        to: { name: to, lat: 52.1, lon: 20.9, tz: "Europe/Warsaw" },
+        startTime: "2026-11-23T15:15:00Z",
+        endTime: "2026-11-23T17:20:00Z",
+        duration: 7500,
+        agencyName,
+        routeShortName,
+      },
+    ],
+  });
+
+  it("leaves FlixBus unconfirmed (no per-km rate without a source)", () => {
+    const [r] = buildResults([leg("Lublin, Bus Station", "Warsaw, Chopin Airport", "FlixBus-eu", "FlixBus 1252", "COACH")], none);
+    expect(r.legs[0].price).toBeUndefined();
+    expect(r.legs[0].status).toBe("unconfirmed");
+  });
+
+  it("leaves NEB RB26 Kostrzyn-Berlin unconfirmed (table not in data/)", () => {
+    const [r] = buildResults([leg("Kostrzyn", "S+U Lichtenberg Bhf (Berlin)", "NEB Niederbarnimer Eisenbahn", "RB26", "REGIONAL_RAIL")], none);
+    expect(r.legs[0].price).toBeUndefined();
+    expect(r.legs[0].status).toBe("unconfirmed");
   });
 });
