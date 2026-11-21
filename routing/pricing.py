@@ -2,6 +2,7 @@
 
 import re
 
+from fares import deutschlandticket as dticket
 from fares import estimate_price as fares_estimate_price
 from fares.international_pkp import estimate_pkp_offer, spi_range_for_segment
 from fares.model import Carrier, DiscountProfile, PriceEstimate, PriceType, Segment
@@ -885,6 +886,46 @@ def price_bilet_graniczny_zasieki_forst_leg(leg: Leg, discounts: DiscountProfile
     )
 
 
+
+def _deutschlandticket_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg | None:
+    """Odcinek lokalny/regionalny w Niemczech dla posiadacza Deutschlandticket (albo BahnCard 100,
+    która je zawiera): 0 EUR dopłaty, ze źródłem i datą. None = nie dotyczy (brak biletu albo
+    odcinek poza zakresem). Zakres WYŁĄCZNIE z cytatów w data/fares/deutschlandticket.json: oba
+    końce w Niemczech (przejazdy do Polski nie są w źródle -> nie uznajemy), tryb regionalny
+    (REGIONAL_RAIL/REGIONAL_FAST_RAIL/SUBURBAN/BUS/TRAM/SUBWAY — bez HIGHSPEED_RAIL, LONG_DISTANCE,
+    NIGHT_RAIL i COACH), nie DB Fernverkehr/FlixTrain/FlixBus, nie linia ICE/IC/EC. Tryb "RAIL"
+    bez bliższego określenia też nie jest uznawany: nie wiemy, czy to Nahverkehr."""
+    basis = dticket.holder_basis(discounts)
+    if basis is None or leg.mode is LegMode.WALK:
+        return None
+    motis_mode = leg.extra.get("motis_mode")
+    if motis_mode not in dticket.SCOPE["tryby_motis_regionalne"]:
+        return None
+    if leg.mode is LegMode.RAIL and motis_mode not in ("REGIONAL_RAIL", "REGIONAL_FAST_RAIL"):
+        return None
+    name = leg.carrier_name.lower()
+    if infer_rail_carrier(leg.carrier_name) is not None or "flix" in name:
+        return None
+    if not dticket.line_allowed(str(leg.extra.get("route_short_name") or ""), basis):
+        return None
+    if _leg_endpoint_country(leg, "origin") != "DE" or _leg_endpoint_country(leg, "destination") != "DE":
+        return None
+    info = dticket.source_info(basis)
+    return PricedLeg(
+        leg=leg,
+        amount=0.0,
+        currency="EUR",
+        price_type="oficjalna_taryfa",
+        notes=(
+            "Pokryte posiadanym "
+            + ("BahnCard 100 (ma wliczone Deutschlandticket)" if basis == dticket.BASIS_BAHNCARD_100 else "Deutschlandticket")
+            + f" — 0 EUR dopłaty (zasady: {info['zrodlo_url']}, sprawdzono {info['data_weryfikacji']}). "
+            "Sam bilet/abonament kosztuje osobno."
+        ),
+        breakdown={"price_verified": True, "deutschlandticket": True, "podstawa": basis, **info},
+    )
+
+
 def price_rail_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg:
     if leg.mode is not LegMode.RAIL:
         raise ValueError(f"price_rail_leg wymaga LegMode.RAIL, dostał {leg.mode}")
@@ -893,6 +934,9 @@ def price_rail_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg:
         return price_kd_zgorzelec_gorlitz_leg(leg)
     if is_bilet_graniczny_zasieki_forst(leg):
         return price_bilet_graniczny_zasieki_forst_leg(leg, discounts)
+    covered = _deutschlandticket_leg(leg, discounts)
+    if covered is not None:
+        return covered
 
     name_carrier = infer_rail_carrier(leg.carrier_name)
     if is_cross_border_pl_de(leg):
@@ -988,6 +1032,18 @@ def price_rail_leg(leg: Leg, discounts: DiscountProfile) -> PricedLeg:
             "a EIC/EIP ma w cenniku PKP Intercity ceny ustalane per relacja, których nie mamy. "
             f"{notes}"
         )
+    if carrier is Carrier.DB and discounts.bahncard == "100" and result.amount == 0.0:
+        # BahnCard 100: "gilt für beliebig viele Fahrten in allen Zügen der Deutschen Bahn (ICE, IC/EC,
+        # ...)" — 0 jest tu potwierdzone źródłem (nie szacunkiem tabeli Flexpreis), data/fares/deutschlandticket.json.
+        bc = dticket.SCOPE["bahncard_100"]
+        breakdown = {
+            **breakdown,
+            "price_verified": True,
+            "zrodlo_url": bc["zrodlo_url"],
+            "data_weryfikacji": bc["data_weryfikacji"],
+            "cytat": bc["cytat_zakres"],
+        }
+        price_type = PriceType.OFFICIAL.value
 
     return PricedLeg(
         leg=leg,
@@ -1248,6 +1304,10 @@ def price_bus_leg(leg: Leg, discounts: DiscountProfile | None = None) -> PricedL
             breakdown=result.breakdown,
             carrier=Carrier.ZVON_GORLITZ,
         )
+
+    covered = _deutschlandticket_leg(leg, discounts)
+    if covered is not None:
+        return covered
 
     local_carrier = infer_pl_local_rail_carrier(leg)
     if local_carrier is not None:

@@ -4,13 +4,59 @@
   "_uwaga": "Deutschlandticket to ogólnoniemiecki bilet miesięczny (abonament, można anulować co miesiąc) na CAŁY transport regionalny/lokalny w Niemczech (S-Bahn, U-Bahn, tramwaje, autobusy, RE/RB) — NIE obejmuje pociągów dalekobieżnych DB Fernverkehr (ICE/IC/EC) ani FlixBus/FlixTrain. To NIE jest zniżka jak BahnCard (rabat % na bilety), tylko osobny produkt zastępujący pojedyncze bilety lokalne (u nas: VRR/eezy.nrw) do limitu 'nieograniczone przejazdy'.",
   "_uwaga_vrr": "Sufit miesięczny własnej taryfy VRR eezy.nrw (fares/data/vrr_eezy.json: sufit_miesieczny_2_klasa) to również 63 EUR — Deutschlandticket kosztuje TYLE SAMO co miesięczny sufit samego VRR. Deutschlandticket opłaca się bardziej niż zostanie przy pojedynczych biletach/sufitach VRR TYLKO gdy: (a) liczba/koszt przejazdów VRR w miesiącu i tak przekroczyłby sufit VRR (patrz próg niżej), ORAZ (b) pasażer jeździ też lokalnym transportem POZA obszarem VRR w tym samym miesiącu (bo wtedy Deutschlandticket pokrywa to za darmo, a bilet VRR — nie).",
   "waluta": "EUR",
-  "cena_miesieczna": 63.00,
+  "cena_miesieczna": 63.0,
   "obowiazuje_od": "2026-01-01",
   "historia_cen": [
-    {"cena": 49.00, "od": "2023-05-01"},
-    {"cena": 58.00, "od": "2025-01-01"},
-    {"cena": 63.00, "od": "2026-01-01"},
-    {"cena": 66.80, "od": "2027-01-01"}
+    {
+      "cena": 49.0,
+      "od": "2023-05-01"
+    },
+    {
+      "cena": 58.0,
+      "od": "2025-01-01"
+    },
+    {
+      "cena": 63.0,
+      "od": "2026-01-01"
+    },
+    {
+      "cena": 66.8,
+      "od": "2027-01-01"
+    }
   ],
-  "_uwaga_indeksacja": "Od 1.01.2027 cena wynosi 66,80 EUR/mies. (bahn.de 2026-11-03; komunikat Bayerisches Staatsministerium 30.09.2026). Kolejne zmiany po 2027 nie są potwierdzone. Uwaga: pole cena_miesieczna to cena OBECNA (63 EUR do 31.12.2026); kod nie wybiera ceny wg daty z historia_cen."
+  "_uwaga_indeksacja": "Od 1.01.2027 cena wynosi 66,80 EUR/mies. (bahn.de 2026-11-03; komunikat Bayerisches Staatsministerium 30.09.2026). Kolejne zmiany po 2027 nie są potwierdzone. Uwaga: pole cena_miesieczna to cena OBECNA (63 EUR do 31.12.2026); kod nie wybiera ceny wg daty z historia_cen.",
+  "zrodlo_url": "https://www.bahn.de/angebot/regio/deutschland-ticket",
+  "data_weryfikacji": "2026-11-20",
+  "zakres_posiadacza": {
+    "_opis": "Zasady zakresu ważności dla POSIADACZA biletu (profil: deutschlandticket=true albo BahnCard 100). Kod wycenia odcinek objęty zakresem jako 0 EUR DOPŁATY (sam bilet kosztuje cena_miesieczna, to nie cena przejazdu). Zakres tylko z cytatów poniżej; czego źródło nie nazywa (np. IRE przy samym Deutschlandticket, relacje do Polski), kod NIE uznaje za objęte.",
+    "zrodlo_url": "https://www.bahn.de/angebot/regio/deutschland-ticket",
+    "data_weryfikacji": "2026-11-20",
+    "stand_strony": "Stand: November 2026 (treść strony; meta og:description podaje Oktober 2026)",
+    "cytat_obowiazuje": "Das Deutschland-Ticket gilt in allen Nahverkehrszügen (RB, RE, S-Bahn) und öffentlichen Verkehrsmitteln (Bus, Straßenbahn, U-Bahn)",
+    "cytat_nie_obowiazuje": "Das Deutschland-Ticket gilt nicht in Zügen der DB Fernverkehr AG (IC, EC, ICE) und anderer Fernverkehrsanbieter wie FlixTrain.",
+    "cytat_turystyczne": "Das Ticket gilt nicht in Verkehrsmitteln, die überwiegend zu touristischen oder historischen Zwecken betrieben werden.",
+    "uwaga_transgraniczne": "Źródło nie wspomina o Polsce ani przejazdach transgranicznych — odcinki przekraczające granicę PL/DE NIE są uznawane za objęte.",
+    "uwaga_flixbus": "FlixBus nie jest wymieniony na stronie; wykluczony, bo to autokar dalekobieżny (nie Nahverkehr).",
+    "bahncard_100": {
+      "zrodlo_url": "https://www.bahn.de/faq/wofuer-kann-ich-die-bahncard-100-nutzen",
+      "data_weryfikacji": "2026-11-20",
+      "cytat_zakres": "Die (Probe) BahnCard 100 gilt für beliebig viele Fahrten in allen Zügen der Deutschen Bahn (ICE, IC/EC, ÖBB-Nightjet, IRE, RE, RB, S-Bahn) und den Zügen der privaten Nahverkehrsbahnen.",
+      "cytat_deutschlandticket": "Das Deutschland-Ticket ist kostenfrei in die BahnCard 100 integriert.",
+      "uwaga": "BahnCard 100 obejmuje zakres Deutschlandticket (bilet wliczony) oraz — wg powyższego cytatu — IRE; pociągi DB Fernverkehr wycenia db.py (mnożnik 0,0)."
+    },
+    "tryby_motis_regionalne": [
+      "REGIONAL_RAIL",
+      "REGIONAL_FAST_RAIL",
+      "SUBURBAN",
+      "BUS",
+      "TRAM",
+      "SUBWAY"
+    ],
+    "tryby_motis_dalekobiezne_wykluczone": [
+      "HIGHSPEED_RAIL",
+      "LONG_DISTANCE",
+      "NIGHT_RAIL",
+      "COACH"
+    ]
+  }
 }

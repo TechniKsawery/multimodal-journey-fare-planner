@@ -22,6 +22,15 @@ Poznań, Wrocław), POLREGIO/KD/KŚ krajowo, KM/KMŁ/SKM/ŁKA, Zgorzelec–Görl
 Odcinki z `price_verified=false` (zapasowe PLN/km, ryczałt 4 zł) trzeba w UI traktować jak „niepotwierdzone"
 i nie wliczać do sumy (`priceVerified` / `priceStatus` w `routing/model.ts`).
 
+## Deutschlandticket i BahnCard 100 (profil: `deutschlandticket`, `bahncard: "100"`)
+
+Posiadacz Deutschlandticket (BahnCard 100 ma je wliczone) płaci 0 EUR dopłaty za odcinki lokalne i regionalne w Niemczech
+(RB/RE/S-Bahn/U-Bahn/tramwaj/autobus). Zakres wyłącznie z cytatów bahn.de w `data/fares/deutschlandticket.json::zakres_posiadacza`
+(sprawdzono 2026-11-20). Nie obejmuje: ICE/IC/EC (DB Fernverkehr), FlixTrain/FlixBus, trybów MOTIS HIGHSPEED_RAIL/LONG_DISTANCE/NIGHT_RAIL/COACH,
+gołego trybu `RAIL` (nie wiadomo, czy to Nahverkehr) ani przejazdów PL↔DE (źródło nie wspomina o Polsce). IRE uznajemy tylko przy BahnCard 100
+(jej źródło go wymienia, strona Deutschlandticket nie). Pociągi turystyczne/zabytkowe są wyłączone w źródle, ale nie umiemy ich rozpoznać.
+BahnCard 100 w pociągach DB Fernverkehr daje 0 EUR potwierdzone źródłem (cytat w tym samym pliku). Cena samego abonamentu: `cena_miesieczna`.
+
 ## Prawdziwe braki danych (bez zgadywania — co trzeba zweryfikować)
 
 | Przewoźnik / relacja | Dziś | Źródło do zweryfikowania |
@@ -29,7 +38,7 @@ i nie wliczać do sumy (`priceVerified` / `priceStatus` w `routing/model.ts`).
 | DB Fernverkehr (ICE/IC) w DE | model Flexpreis (regresja), zawsze „szacunek" | ceny DB są dynamiczne, bahn.de blokuje boty; potrzebna decyzja: pokazywać „od–do" zamiast kwoty albo zostawić niepotwierdzone |
 | PKP IC EC/EIC/EIP krajowe | pasma TLK/IC jako szacunek | cennik PKP IC per relacja (intercity.pl) |
 | PKP IC / DB Warszawa–Berlin i inne PL–DE | kategoria wg linii prostej, szacunek | oferty „Bilet międzynarodowy" / SPI PL–DE na intercity.pl i bahn.de, per relacja |
-| DB Regio, ODEG, metronom, trilex, Die Länderbahn poza NRW i obszarami miast | brak | taryfy landów: VBB (Berlin-Brandenburg), VVO/Sachsentarif, Niedersachsentarif/HVV-Umland, Deutschlandticket (bilet okresowy, nie cena za przejazd — wymaga flagi „mam D-Ticket" w profilu) |
+| DB Regio, ODEG, metronom, trilex, Die Länderbahn poza NRW i obszarami miast | brak (0 EUR tylko dla posiadacza Deutschlandticket/BahnCard 100, patrz niżej) | taryfy landów: VBB (Berlin-Brandenburg), VVO/Sachsentarif, Niedersachsentarif/HVV-Umland |
 | Koleje Dolnośląskie Wrocław–Görlitz/Zgorzelec, DB Regio Szczecin–Angermünde/Berlin, ODEG Kostrzyn/Frankfurt(O)–Berlin | brak (odcinek transgraniczny przewoźnika spoza PKP IC/DB) | cenniki KD i POLREGIO dla relacji międzynarodowych, VBB/Brandenburg |
 | Koleje Wielkopolskie, Arriva RP, inne spółki samorządowe w PL | brak | cenniki poszczególnych spółek (dziś tylko POLREGIO/KD/KŚ/KM/KMŁ/SKM/ŁKA) |
 | „Przewozy Regionalne" (nazwa w niektórych feedach) | brak | potwierdzić, że to ta sama spółka co POLREGIO (zmiana nazwy), dopiero wtedy dopisać do `PL_REGIONAL_RAIL_KEYWORDS` |

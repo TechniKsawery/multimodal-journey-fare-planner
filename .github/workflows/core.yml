@@ -36,6 +36,7 @@ jobs:
           python tools/golden/generate_motis.py
           python tools/golden/generate_pricing.py
           python tools/golden/generate_i18n.py
+          python tools/golden/generate_deutschlandticket.py
           git diff --exit-code -- core/golden core/src/i18n/locales
 
       - name: Install core

@@ -2,6 +2,7 @@
 // (geography first, names only as a fallback) and who runs it. Flights are NOT ported: price_flight_leg
 // needs the Travelpayouts API (not allowed by Transitous's non-commercial terms, see the plan, decision 8.4).
 import { estimatePrice } from "../fares/calculator";
+import * as dticket from "../fares/deutschlandticket";
 import { estimatePkpOffer, spiRangeForSegment } from "../fares/internationalPkp";
 import { Carrier, PriceType, defaultProfile, makeSegment, type DiscountProfile, type PriceEstimate, type Segment } from "../fares/model";
 import { ValueError, formatFixed, matchesAnyWord, round2, truthy } from "../pyCompat";
@@ -536,11 +537,43 @@ export function priceBiletGranicznyZasiekiForstLeg(leg: Leg, discounts: Discount
   return fromEstimate(leg, result, Carrier.BILET_GRANICZNY_ZASIEKI_FORST);
 }
 
+/**
+ * A local/regional leg in Germany for a Deutschlandticket (or BahnCard 100, which includes one) holder: 0 EUR extra, with source and date.
+ * null = not applicable. The scope is ONLY what the quotes in data/fares/deutschlandticket.json say: both ends in Germany, a regional
+ * MOTIS mode (no HIGHSPEED_RAIL / LONG_DISTANCE / NIGHT_RAIL / COACH), not DB Fernverkehr / FlixTrain / FlixBus, not an ICE/IC/EC line.
+ * A bare "RAIL" mode is not accepted either: we cannot tell whether it is Nahverkehr.
+ */
+export function deutschlandticketLeg(leg: Leg, discounts: DiscountProfile): PricedLeg | null {
+  const basis = dticket.holderBasis(discounts);
+  if (basis === null || leg.mode === LegMode.WALK) return null;
+  const motisMode = extraGet(leg, "motis_mode");
+  if (typeof motisMode !== "string" || !(dticket.SCOPE.tryby_motis_regionalne as readonly string[]).includes(motisMode)) return null;
+  if (leg.mode === LegMode.RAIL && motisMode !== "REGIONAL_RAIL" && motisMode !== "REGIONAL_FAST_RAIL") return null;
+  if (inferRailCarrier(leg.carrier_name) !== null || lower(leg.carrier_name).includes("flix")) return null;
+  const route = leg.extra["route_short_name"];
+  if (!dticket.lineAllowed(truthy(route) ? String(route) : "", basis)) return null;
+  if (legEndpointCountry(leg, "origin") !== "DE" || legEndpointCountry(leg, "destination") !== "DE") return null;
+  const info = dticket.sourceInfo(basis);
+  return makePricedLeg({
+    leg,
+    amount: 0.0,
+    currency: "EUR",
+    price_type: "oficjalna_taryfa",
+    notes:
+      "Pokryte posiadanym " +
+      (basis === dticket.BASIS_BAHNCARD_100 ? "BahnCard 100 (ma wliczone Deutschlandticket)" : "Deutschlandticket") +
+      ` — 0 EUR dopłaty (zasady: ${info["zrodlo_url"]}, sprawdzono ${info["data_weryfikacji"]}). Sam bilet/abonament kosztuje osobno.`,
+    breakdown: { price_verified: true, deutschlandticket: true, podstawa: basis, ...info },
+  });
+}
+
 export function priceRailLeg(leg: Leg, discounts: DiscountProfile): PricedLeg {
   if (leg.mode !== LegMode.RAIL) throw new ValueError(`price_rail_leg wymaga LegMode.RAIL, dostał ${leg.mode}`);
 
   if (isKdZgorzelecGorlitz(leg)) return priceKdZgorzelecGorlitzLeg(leg);
   if (isBiletGranicznyZasiekiForst(leg)) return priceBiletGranicznyZasiekiForstLeg(leg, discounts);
+  const covered = deutschlandticketLeg(leg, discounts);
+  if (covered !== null) return covered;
 
   const nameCarrier = inferRailCarrier(leg.carrier_name);
   let carrier: Carrier | null;
@@ -627,6 +660,13 @@ export function priceRailLeg(leg: Leg, discounts: DiscountProfile): PricedLeg {
       "Pociąg EIC/EIP: cena NIEPOTWIERDZONA — szacunek wg cennika TLK/IC (pasma odległości), " +
       "a EIC/EIP ma w cenniku PKP Intercity ceny ustalane per relacja, których nie mamy. " +
       notes;
+  }
+  if (carrier === Carrier.DB && discounts.bahncard === "100" && result.amount === 0.0) {
+    // BahnCard 100 "gilt für beliebig viele Fahrten in allen Zügen der Deutschen Bahn (ICE, IC/EC, ...)": the 0 is confirmed by the
+    // source here, not an estimate from the Flexpreis table.
+    const bc = dticket.SCOPE.bahncard_100;
+    breakdown = { ...breakdown, price_verified: true, zrodlo_url: bc.zrodlo_url, data_weryfikacji: bc.data_weryfikacji, cytat: bc.cytat_zakres };
+    priceType = PriceType.OFFICIAL;
   }
   return makePricedLeg({ leg, amount: result.amount, currency: result.currency, price_type: priceType, notes, breakdown, carrier });
 }
@@ -722,6 +762,9 @@ export function priceBusLeg(leg: Leg, discountsIn: DiscountProfile | null = null
     const result = estimatePrice(makeSegment({ carrier: Carrier.ZVON_GORLITZ, origin: leg.origin_name, destination: leg.destination_name, discounts }));
     return fromEstimate(leg, result, Carrier.ZVON_GORLITZ, { breakdown: result.breakdown });
   }
+
+  const covered = deutschlandticketLeg(leg, discounts);
+  if (covered !== null) return covered;
 
   const localCarrier = inferPlLocalRailCarrier(leg);
   if (localCarrier !== null) return pricePlLocalRailLeg(leg, localCarrier, discounts);

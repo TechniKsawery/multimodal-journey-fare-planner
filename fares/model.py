@@ -174,6 +174,10 @@ class DiscountProfile:
     zagranicznej legitymacji (chyba że ISIC/Euro26)."""
 
     legitymacja_zagraniczna: bool = False
+    deutschlandticket: bool = False  # pasażer MA Deutschlandticket (abonament): lokalne/regionalne
+    # odcinki w Niemczech (RB/RE/S-Bahn/U-Bahn/tramwaj/autobus, bez ICE/IC/EC i FlixBusa) = 0 EUR
+    # dopłaty; zakres i źródło: fares/deutschlandticket.py. BahnCard 100 ma je wliczone
+    # (bahncard == "100" daje ten sam efekt bez tej flagi).
     """Czy legitymacja szkolna/studencka jest ZAGRANICZNA (wydana poza Polską). Niezależna od
     `obywatelstwo`: steruje wyłącznie ostrzeżeniami o uznawaniu legitymacji w MPK/ZTM
     (Warszawa, Kraków, Poznań, Lublin, Wrocław) w fares/foreigner_eligibility.py — nie zmienia ceny."""

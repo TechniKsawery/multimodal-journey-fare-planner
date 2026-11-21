@@ -42,6 +42,14 @@ python tools/golden/generate_fares.py   # also generate_misc.py, generate_scorin
 | `leg.depart.date()` as the travel date | `toISOString().slice(0, 10)` (UTC date) | MOTIS times are UTC (`Z`), so the date is the same as in the oracle; note that a local departure just after midnight belongs to the previous UTC day in both |
 | `fares/flixbus.py` live FlixBus API when `travel_date` is set | always the PLN/km fallback (`price_verified: false`) | unofficial API, no CORS/ToS guarantee; golden vectors cover the fallback path |
 
+## Deutschlandticket / BahnCard 100 (for the UI)
+
+`DiscountProfile` has a `deutschlandticket: boolean` field (default `false`; `parseDiscountProfile` accepts it) next to `bahncard: "25" | "50" | "100" | null`.
+A holder of either (BahnCard 100 includes the Deutschlandticket) pays 0 EUR extra for local/regional legs in Germany; `priceLeg` returns them as
+`oficjalna_taryfa`, `price_verified: true`, with `breakdown.zrodlo_url` and `data_weryfikacji` (`routing/pricing.ts::deutschlandticketLeg`, scope in
+`data/fares/deutschlandticket.json::zakres_posiadacza`). ICE/IC/EC, FlixBus/FlixTrain, bare `RAIL` legs and PL↔DE legs are NOT covered; see PRICING_GAPS.md.
+The subscription price itself is `cena_miesieczna` there. Feed `priceLeg` the legs from `itineraryToLegs` (it needs `motis_mode`, `route_short_name` and coordinates in `leg.extra`).
+
 ## Transitous client (for the UI)
 
 `src/routing/transitousClient.ts` is a pure module: `fetch`, clock and sleep are injected, nothing
