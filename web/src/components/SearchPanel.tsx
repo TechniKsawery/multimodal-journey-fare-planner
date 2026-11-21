@@ -1,5 +1,6 @@
 import type { Profile } from '../types';
 import type { Dict } from '../i18n';
+import { ExtraOptions } from './ExtraOptions';
 import { PlaceInput, type PlaceValue } from './PlaceInput';
 
 export interface Query {
@@ -155,6 +156,7 @@ export function SearchPanel({ t, busy, query, profile, onQuery, onProfile, onSea
             />
             <span>{t.deutschlandticket}</span>
           </label>
+          <ExtraOptions t={t} profile={profile} onProfile={onProfile} />
         </div>
       </details>
 
