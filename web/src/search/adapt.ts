@@ -18,6 +18,12 @@ import { priceLeg as corePriceLeg } from "../../../core/src/routing/pricing";
 import { buildItinerary, pickRecommendations } from "../../../core/src/routing/scoring";
 import type { Itinerary, Leg, Mode, PriceStatus, Profile, Transfer } from "../types";
 import { toDiscountProfile } from "./profile";
+import {
+  resolveFlixbus,
+  resolveNebRb26,
+  resolvePkpPremium,
+  resolveStatutoryDiscount,
+} from "./customFares";
 
 // Raw Transitous (MOTIS v6) itinerary/leg: only what this adapter reads.
 interface TPlace { name: string; lat: number; lon: number; tz?: string }
@@ -63,6 +69,23 @@ export function priceOne(leg: CoreLeg, discounts: DiscountProfile): PricedLeg {
   } catch {
     return unconfirmed(leg, "calcError");
   }
+
+  // 1. NEB RB26 cross-border regional (Kostrzyn ↔ Berlin)
+  const neb = resolveNebRb26(leg, discounts);
+  if (neb) return neb;
+
+  // 2. PKP Intercity EIP (Pendolino) & EIC
+  const premium = resolvePkpPremium(leg, pl, discounts);
+  if (premium) return premium;
+
+  // 3. PolRegio / KD / KŚ statutory discount (student 51%, pupil 37%)
+  const statutory = resolveStatutoryDiscount(pl);
+  if (statutory) return statutory;
+
+  // 4. FlixBus (dynamic pricing distance estimate)
+  const flix = resolveFlixbus(leg, pl);
+  if (flix) return flix;
+
   const bd = pl.breakdown;
   if (!priceKnown(pl) || bd["price_verified"] === false || truthy(bd["wartosc_zastepcza"])) {
     return unconfirmed(leg, "coreFallback", str(bd["powod_szacunku"]) ?? (bd["kategoria_pociagu"] ? str(pl.notes) : undefined));
