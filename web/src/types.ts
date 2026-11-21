@@ -1,5 +1,5 @@
 /** Status ceny: odpowiada zasadzie projektu "nigdy nie zgaduj cen". */
-export type PriceStatus = 'official' | 'estimate' | 'unconfirmed';
+export type PriceStatus = 'official' | 'ceiling' | 'estimate' | 'unconfirmed';
 
 export type Mode = 'rail' | 'bus' | 'local' | 'flight' | 'walk';
 

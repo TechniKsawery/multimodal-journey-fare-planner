@@ -14,7 +14,7 @@ from html import escape
 import streamlit as st
 
 # Klasa plakietki wg rodzaju statusu ceny (klucze jak w ui_helpers._STATUS_KEY).
-BADGE_KINDS = ("official", "estimate", "no_price")
+BADGE_KINDS = ("official", "ceiling", "estimate", "no_price")
 
 _TOKENS = {
     "--mw-card": "light-dark(#FFFFFF, #27272A)",
@@ -30,6 +30,10 @@ _TOKENS = {
     "--mw-official-bg": "light-dark(#DCFCE7, rgba(34,197,94,.16))",
     "--mw-official-border": "light-dark(#86EFAC, rgba(74,222,128,.35))",
     "--mw-official-dot": "light-dark(#16A34A, #4ADE80)",
+    "--mw-ceiling-text": "light-dark(#1E40AF, #93C5FD)",
+    "--mw-ceiling-bg": "light-dark(#DBEAFE, rgba(59,130,246,.16))",
+    "--mw-ceiling-border": "light-dark(#93C5FD, rgba(96,165,250,.35))",
+    "--mw-ceiling-dot": "light-dark(#2563EB, #93C5FD)",
     "--mw-estimate-text": "light-dark(#854D0E, #FCD34D)",
     "--mw-estimate-bg": "light-dark(#FEF3C7, rgba(245,158,11,.18))",
     "--mw-estimate-border": "light-dark(#FCD34D, rgba(251,191,36,.35))",

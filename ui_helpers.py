@@ -116,11 +116,12 @@ def render_other_day_section(other_day, render_itinerary) -> None:
 # price_verified / price_type / breakdown), nic nie jest przeliczane ani zgadywane.
 
 PRICE_OFFICIAL = "OFFICIAL"
+PRICE_CEILING = "CEILING"
 PRICE_ESTIMATE = "ESTIMATE"
 PRICE_NO_PRICE = "NO_PRICE"
-_STATUS_RANK = {PRICE_OFFICIAL: 0, PRICE_ESTIMATE: 1, PRICE_NO_PRICE: 2}
-_STATUS_KEY = {PRICE_OFFICIAL: "official", PRICE_ESTIMATE: "estimate", PRICE_NO_PRICE: "no_price"}
-_STATUS_EMOJI = {PRICE_OFFICIAL: "🟢", PRICE_ESTIMATE: "🟡", PRICE_NO_PRICE: "⚪"}
+_STATUS_RANK = {PRICE_OFFICIAL: 0, PRICE_CEILING: 1, PRICE_ESTIMATE: 2, PRICE_NO_PRICE: 3}
+_STATUS_KEY = {PRICE_OFFICIAL: "official", PRICE_CEILING: "ceiling", PRICE_ESTIMATE: "estimate", PRICE_NO_PRICE: "no_price"}
+_STATUS_EMOJI = {PRICE_OFFICIAL: "🟢", PRICE_CEILING: "🔵", PRICE_ESTIMATE: "🟡", PRICE_NO_PRICE: "⚪"}
 
 
 def leg_price_status(p) -> str | None:
@@ -129,7 +130,7 @@ def leg_price_status(p) -> str | None:
     NO_PRICE: kwoty nie znamy albo jest to wartość zastępcza (breakdown["wartosc_zastepcza"]).
     ESTIMATE: kwota znana, ale nie jest sztywną taryfą — przedział (zakres_cen), price_type
     "szacunek" albo cena niepotwierdzona. OFFICIAL: wyłącznie price_type "oficjalna_taryfa" ORAZ
-    price_verified; przy wątpliwości status jest słabszy, nigdy mocniejszy."""
+    price_verified; CEILING: to samo, ale cena bazowa PKP IC (maksymalna, bez promocji); przy wątpliwości status jest słabszy, nigdy mocniejszy."""
     if p.leg.mode is LegMode.WALK:
         return None
     if not p.price_known or p.breakdown.get("wartosc_zastepcza"):
@@ -137,6 +138,9 @@ def leg_price_status(p) -> str | None:
     if p.breakdown.get("zakres_cen"):
         return PRICE_ESTIMATE
     if p.price_verified and p.price_type == PriceType.OFFICIAL.value:
+        # PKP IC: cena bazowa z cennika to cena MAKSYMALNA bez promocji (rzeczywista może być niższa)
+        if p.breakdown.get("cena_bazowa") is not None:
+            return PRICE_CEILING
         return PRICE_OFFICIAL
     return PRICE_ESTIMATE
 

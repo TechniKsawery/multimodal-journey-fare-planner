@@ -205,9 +205,11 @@ TEXTS = {
     # --- status ceny, źródło, data weryfikacji (ekran wyniku) ---
     "badge.official": "OFFICIAL FARE",
     "badge.estimate": "ESTIMATE",
+    "badge.ceiling": "MAX. FARE",
     "badge.no_price": "NO CONFIRMED FARE",
     "badge.explain_official": "Price from the carrier's official tariff.",
     "badge.explain_estimate": "Indicative or dynamic price — the actual cost depends on when you buy from the carrier.",
+    "badge.explain_ceiling": "Price from the carrier's tariff (maximum, before promotions). The real price may be lower.",
     "badge.explain_no_price": "At least one leg has no official tariff in our data — the amount is incomplete or a placeholder. Check the price with the carrier before travelling.",
     "col.price_status": "Price status",
     "col.source": "Fare source",

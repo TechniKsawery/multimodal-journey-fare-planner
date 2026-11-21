@@ -8,6 +8,8 @@
   --accent-text: #ffffff;
   --official-bg: #dcf3e4;
   --official-fg: #0b5a2a;
+  --ceiling-bg: #dbe8fb;
+  --ceiling-fg: #1b3f85;
   --estimate-bg: #fff0c9;
   --estimate-fg: #6b4a00;
   --unconfirmed-bg: #e8eaee;
@@ -32,6 +34,8 @@
     --accent-text: #0b1220;
     --official-bg: #12301e;
     --official-fg: #7ee2a0;
+    --ceiling-bg: #13284a;
+    --ceiling-fg: #9cc0f7;
     --estimate-bg: #3a2e0a;
     --estimate-fg: #f6cf6b;
     --unconfirmed-bg: #2a2f36;
@@ -51,6 +55,8 @@
   --accent-text: #0b1220;
   --official-bg: #12301e;
   --official-fg: #7ee2a0;
+  --ceiling-bg: #13284a;
+  --ceiling-fg: #9cc0f7;
   --estimate-bg: #3a2e0a;
   --estimate-fg: #f6cf6b;
   --unconfirmed-bg: #2a2f36;
@@ -158,6 +164,7 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 .tag { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); }
 .badge { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
 .badge-official { background: var(--official-bg); color: var(--official-fg); }
+.badge-ceiling { background: var(--ceiling-bg); color: var(--ceiling-fg); }
 .badge-estimate { background: var(--estimate-bg); color: var(--estimate-fg); }
 .badge-unconfirmed { background: var(--unconfirmed-bg); color: var(--unconfirmed-fg); }
 .toggle {

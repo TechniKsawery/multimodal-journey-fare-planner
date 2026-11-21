@@ -205,9 +205,11 @@ TEXTS = {
     # --- status ceny, źródło, data weryfikacji (ekran wyniku) ---
     "badge.official": "OFFICIEEL TARIEF",
     "badge.estimate": "SCHATTING",
+    "badge.ceiling": "MAX. TARIEF",
     "badge.no_price": "GEEN TARIEF",
     "badge.explain_official": "Prijs uit het officiële tarief van de vervoerder.",
     "badge.explain_estimate": "Indicatieve of dynamische prijs — de werkelijke kosten hangen af van het moment van aankoop bij de vervoerder.",
+    "badge.explain_ceiling": "Prijs uit het tarief van de vervoerder (maximum, zonder acties). De werkelijke prijs kan lager zijn.",
     "badge.explain_no_price": "Voor minstens één traject is er geen officieel tarief in onze gegevens — het bedrag is onvolledig of een vervangwaarde. Controleer de prijs bij de vervoerder voor vertrek.",
     "col.price_status": "Prijsstatus",
     "col.source": "Tariefbron",

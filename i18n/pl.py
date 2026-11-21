@@ -215,9 +215,11 @@ TEXTS = {
     # --- status ceny, źródło, data weryfikacji (ekran wyniku) ---
     "badge.official": "OFICJALNA TARYFA",
     "badge.estimate": "SZACUNEK",
+    "badge.ceiling": "TARYFA MAKS.",
     "badge.no_price": "BRAK CENY",
     "badge.explain_official": "Cena z oficjalnego cennika przewoźnika.",
     "badge.explain_estimate": "Cena orientacyjna lub dynamiczna — rzeczywisty koszt zależy od momentu zakupu u przewoźnika.",
+    "badge.explain_ceiling": "Cena z cennika przewoźnika (maksymalna, bez promocji). Realna cena może być niższa.",
     "badge.explain_no_price": "Co najmniej jeden odcinek nie ma oficjalnego cennika w bazie — kwota jest niepełna albo zastępcza. Przed wyjazdem sprawdź cenę u przewoźnika.",
     "col.price_status": "Status ceny",
     "col.source": "Źródło cennika",

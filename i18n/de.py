@@ -205,9 +205,11 @@ TEXTS = {
     # --- status ceny, źródło, data weryfikacji (ekran wyniku) ---
     "badge.official": "OFFIZIELLER TARIF",
     "badge.estimate": "SCHÄTZUNG",
+    "badge.ceiling": "HÖCHSTPREIS",
     "badge.no_price": "KEIN TARIF",
     "badge.explain_official": "Preis aus dem offiziellen Tarif des Verkehrsunternehmens.",
     "badge.explain_estimate": "Richtpreis oder dynamischer Preis — die tatsächlichen Kosten hängen vom Kaufzeitpunkt beim Anbieter ab.",
+    "badge.explain_ceiling": "Preis aus dem Tarif des Anbieters (Höchstpreis, ohne Aktionen). Der tatsächliche Preis kann niedriger sein.",
     "badge.explain_no_price": "Für mindestens einen Abschnitt liegt kein offizieller Tarif vor — der Betrag ist unvollständig oder ein Platzhalter. Prüfe den Preis vor der Reise beim Anbieter.",
     "col.price_status": "Preisstatus",
     "col.source": "Tarifquelle",
