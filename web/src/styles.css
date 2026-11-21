@@ -292,3 +292,6 @@ legend { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; padding: 0;
 .primary:disabled { opacity: 0.6; cursor: progress; }
 
 .link-btn { background: none; border: 0; padding: 12px 0; min-height: 44px; color: var(--accent); text-decoration: underline; cursor: pointer; }
+
+.check { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; }
+.check input { width: 1.25rem; height: 1.25rem; }

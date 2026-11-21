@@ -55,4 +55,6 @@ export interface Profile {
   idCountry: 'pl' | 'de';
   age: number;
   bahncard: 'none' | '25' | '50' | '100';
+  /** Holds a Deutschlandticket (optional: profiles saved earlier have no such field). */
+  deutschlandticket?: boolean;
 }

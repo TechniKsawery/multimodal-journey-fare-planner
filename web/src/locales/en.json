@@ -114,5 +114,9 @@
   "pageDescription": "Connection comparison with the price for you: source and verification date for every price.",
   "fromApi": "service returned {n}",
   "budgetLeft": "Route requests left today: {n}",
-  "partialCover": "Price for only {n} of {m} legs"
+  "partialCover": "Price for only {n} of {m} legs",
+  "deutschlandticket": "I have a Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Yes",
+  "no": "No"
 }

@@ -31,6 +31,10 @@ export function ActiveSettings({
           : `${t.chipBc}: ${t.chipNone}`,
       on: profile.bahncard !== 'none',
     },
+    {
+      label: `${t.chipDt}: ${profile.deutschlandticket || profile.bahncard === '100' ? t.yes : t.no}`,
+      on: profile.deutschlandticket === true || profile.bahncard === '100',
+    },
   ];
   return (
     <div class="active" aria-label={t.active}>

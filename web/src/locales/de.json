@@ -114,5 +114,9 @@
   "pageDescription": "Verbindungsvergleich mit dem Preis für dich: Quelle und Prüfdatum bei jedem Preis.",
   "fromApi": "Dienst lieferte {n}",
   "budgetLeft": "Heute noch verfügbare Routenabfragen: {n}",
-  "partialCover": "Preis nur für {n} von {m} Abschnitten"
+  "partialCover": "Preis nur für {n} von {m} Abschnitten",
+  "deutschlandticket": "Ich habe ein Deutschlandticket",
+  "chipDt": "Deutschlandticket",
+  "yes": "Ja",
+  "no": "Nein"
 }
