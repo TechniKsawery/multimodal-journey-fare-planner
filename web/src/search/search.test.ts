@@ -111,3 +111,16 @@ describe("BahnCard 100", () => {
     expect(r.legs[0].price).toBe(0);
   });
 });
+
+describe("fully priced filtering and recommendations", () => {
+  it("distinguishes fully priced itineraries from partial ones", () => {
+    const res = buildResults([icDomestic, mixed, eicDomestic], student);
+    const fullyPriced = res.filter((it) => !it.partial && !it.noPrice);
+    expect(fullyPriced.length).toBe(1);
+    expect(fullyPriced[0].legs[0].carrier).toBe("PKP Intercity IC 1310");
+    expect(fullyPriced[0].status).toBe("ceiling");
+
+    const partialOrUnpriced = res.filter((it) => it.partial || it.noPrice);
+    expect(partialOrUnpriced.length).toBe(2);
+  });
+});
