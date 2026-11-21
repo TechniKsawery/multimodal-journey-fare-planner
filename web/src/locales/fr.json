@@ -149,5 +149,6 @@
   "cit_UE": "UE (autre que polonaise)",
   "cit_poza_UE": "Hors UE",
   "eligibilityTitle": "Les réductions s'appliquent-elles à toi ?",
-  "citizenshipHint": "N'influence que les avertissements de reconnaissance, jamais les prix."
+  "citizenshipHint": "N'influence que les avertissements de reconnaissance, jamais les prix.",
+  "flightsNote": "Les vols ne sont pas pris en charge : nous cherchons uniquement des trains, des bus et les transports locaux."
 }

@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'preact/hooks';
 import { BudgetExceededError } from '../transitous';
 import { suggest, type GeocodeSuggestion } from '../search/service';
-import type { Dict } from '../i18n';
+import type { Dict, Lang } from '../i18n';
+import { placeText } from '../../../core/src/places/aliases';
 
 export interface PlaceValue {
   text: string;
@@ -13,6 +14,7 @@ interface Props {
   value: PlaceValue;
   onChange: (v: PlaceValue) => void;
   t: Dict;
+  lang: Lang;
   enterkeyhint: 'next' | 'search';
 }
 
@@ -26,7 +28,7 @@ const describe = (m: GeocodeSuggestion): string =>
     .join(' · ');
 
 /** Autouzupełnianie miejsc (Transitous /geocode): debounce, anulowanie, cache i budżet są w kliencie. */
-export function PlaceInput({ label, value, onChange, t, enterkeyhint }: Props) {
+export function PlaceInput({ label, value, onChange, t, lang, enterkeyhint }: Props) {
   const [options, setOptions] = useState<GeocodeSuggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
@@ -124,7 +126,7 @@ export function PlaceInput({ label, value, onChange, t, enterkeyhint }: Props) {
                 pick(o);
               }}
             >
-              <span>{o.name}</span>
+              <span>{placeText(o.name, lang)}</span>
               <small>{describe(o)}</small>
             </li>
           ))}

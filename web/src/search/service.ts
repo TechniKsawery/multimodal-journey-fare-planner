@@ -9,6 +9,7 @@ import {
   fastBudget,
   type GeocodeSuggestion,
 } from "../../../core/src/routing/transitousClient";
+import { fold, localQuery } from "../../../core/src/places/aliases";
 import { MotisError } from "../../../core/src/routing/errors";
 import { BudgetExceededError, DEFAULT_DAILY_GEOCODE_BUDGET, DEFAULT_DAILY_PLAN_BUDGET, QueryBudget } from "../transitous";
 
@@ -29,8 +30,22 @@ async function metered<T>(budget: QueryBudget, fn: () => Promise<T>): Promise<T>
   }
 }
 
-export const suggest = (text: string, signal?: AbortSignal): Promise<GeocodeSuggestion[]> =>
-  metered(geocodeBudget, () => client.geocodeSuggestions(text, 7, signal));
+/**
+ * Better order for the geocoder's answers: exact name first, then names that start with what was typed,
+ * then the rest; the geocoder's own order is kept inside each group (stable sort).
+ */
+export function rankSuggestions(typed: string, list: GeocodeSuggestion[]): GeocodeSuggestion[] {
+  const q = fold(localQuery(typed));
+  const score = (s: GeocodeSuggestion): number => {
+    const n = fold(s.name);
+    return n === q ? 0 : n.startsWith(q) ? 1 : 2;
+  };
+  return list.map((s, i) => ({ s, i, k: score(s) })).sort((a, b) => a.k - b.k || a.i - b.i).map((x) => x.s);
+}
+
+/** Place suggestions. City names in any language ("Cologne", "Krakau") are turned into the local ones first. */
+export const suggest = async (text: string, signal?: AbortSignal): Promise<GeocodeSuggestion[]> =>
+  rankSuggestions(text, await metered(geocodeBudget, () => client.geocodeSuggestions(localQuery(text), 7, signal)));
 
 /** Raw Transitous itineraries for one search (empty array = the service found nothing). */
 export async function searchRoutes(

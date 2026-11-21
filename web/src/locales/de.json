@@ -149,5 +149,6 @@
   "cit_UE": "EU (nicht polnisch)",
   "cit_poza_UE": "Außerhalb der EU",
   "eligibilityTitle": "Gelten die Ermäßigungen für dich",
-  "citizenshipHint": "Beeinflusst nur die Hinweise zur Anerkennung, nie die Preise."
+  "citizenshipHint": "Beeinflusst nur die Hinweise zur Anerkennung, nie die Preise.",
+  "flightsNote": "Flüge werden nicht unterstützt: Wir suchen nur Züge, Busse und den Nahverkehr."
 }
