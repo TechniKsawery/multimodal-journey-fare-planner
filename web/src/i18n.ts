@@ -1,220 +1,123 @@
-export type Lang = 'pl' | 'en';
+import plJson from './locales/pl.json';
+import enJson from './locales/en.json';
+import deJson from './locales/de.json';
+import esJson from './locales/es.json';
+import frJson from './locales/fr.json';
+import nlJson from './locales/nl.json';
 
-const pl = {
-  title: 'Planer podróży PL ↔ DE',
-  demo: 'WERSJA BETA. Połączenia pochodzą z Transitous. Cenę liczymy tylko tam, gdzie mamy cennik ze źródłem; resztę oznaczamy jako niepotwierdzoną i nie wliczamy do sumy. To nie jest oferta ani bilet.',
-  footerAttr: 'Dane tras: Transitous · Dane map © współtwórcy OpenStreetMap (ODbL) · Darmowy, niekomercyjny projekt open-source, niepowiązany z żadnym przewoźnikiem.',
-  footerLive: 'Wypróbuj wyszukiwanie tras na żywo (Transitous, bez cen)',
-  footerSources: 'Źródła danych',
-  from: 'Skąd',
-  to: 'Dokąd',
-  date: 'Data',
-  swap: 'Zamień miejscami',
-  search: 'Szukaj połączeń',
-  profile: 'Kto podróżuje',
-  profileSummary: 'Profil',
-  who_none: 'Bez ulgi',
-  who_student: 'Student',
-  who_pupil: 'Uczeń',
-  idCountry: 'Legitymacja wydana w',
-  pl: 'Polsce',
-  de: 'Niemczech',
-  age: 'Wiek',
-  bahncard: 'BahnCard',
-  bc_none: 'Brak',
-  results: 'Wyniki',
-  active: 'Uwzględniono w cenach',
-  inactive: 'nieaktywne',
-  change: 'Zmień w profilu',
-  chipDiscount: 'Ulga',
-  chipId: 'legitymacja',
-  chipBc: 'BahnCard',
-  chipNone: 'brak',
-  chipHint: 'Nieaktywne ulgi nie są liczone w cenach.',
-  resultsCount: (n: number) => `${n} ${n === 1 ? 'wariant' : n < 5 ? 'warianty' : 'wariantów'}`,
-  tag_cheapest: 'Najtańsze',
-  tag_fastest: 'Najszybsze',
-  tag_safest: 'Najspokojniejsze',
-  sort: 'Sortuj',
-  sort_price: 'Cena',
-  sort_time: 'Czas',
-  official: 'Oficjalna taryfa',
-  estimate: 'Szacunek',
-  unconfirmed: 'Niepotwierdzona',
-  official_hint: 'Cena z cennika przewoźnika.',
-  estimate_hint: 'Cena zmienna lub przybliżona. Realna kwota zależy od zakupu.',
-  unconfirmed_hint: 'Brak ceny w bazie. Nie wliczono jej do sumy.',
-  partial: 'Suma częściowa',
-  transfersN: (n: number) => (n === 0 ? 'Bez przesiadek' : n === 1 ? '1 przesiadka' : `${n} przesiadki`),
-  details: 'Szczegóły i źródła',
-  hide: 'Zwiń',
-  source: 'Źródło',
-  verified: 'Zweryfikowano',
-  buy: 'Sprawdź u przewoźnika',
-  tight: 'Krótka przesiadka',
-  minutes: 'min',
-  instead: 'zamiast',
-  warnTitle: 'Przed jazdą',
-  warnText: 'Ulga z polskiej legitymacji nie działa na kolei w Niemczech.',
-  theme: 'Motyw',
-  themeAuto: 'Auto',
-  themeLight: 'Jasny',
-  themeDark: 'Ciemny',
-  lang: 'Język',
-  skip: 'Przejdź do wyników',
-  empty: 'Wpisz trasę i wybierz „Szukaj połączeń”.',
-  mode_rail: 'Pociąg',
-  mode_bus: 'Autobus',
-  mode_flight: 'Lot',
-  mode_walk: 'Pieszo',
-  time: 'Godzina',
-  searching: 'Szukam połączeń…',
-  placePlaceholder: 'Miasto, dworzec lub adres',
-  noPlaces: 'Brak podpowiedzi. Spróbuj innej pisowni.',
-  geocodeBudget: 'Dzienny limit podpowiedzi wyczerpany. Wpisz pełną nazwę i wyszukaj.',
-  geocodeDown: 'Podpowiedzi chwilowo niedostępne. Wpisz pełną nazwę i wyszukaj.',
-  noResults: 'Nie znaleziono połączeń dla tej trasy i godziny.',
-  errBudget: 'Wykorzystano dzienny limit zapytań o trasy (chroni darmową usługę Transitous). Spróbuj jutro.',
-  errBusy: 'Usługa tras jest chwilowo przeciążona (429). Spróbuj za kilka minut.',
-  errNetwork: 'Brak połączenia z usługą tras (sieć, blokada lub CORS). Sprawdź internet i spróbuj ponownie.',
-  errGeneric: 'Nie udało się pobrać połączeń. Spróbuj ponownie za chwilę.',
-  errPlace: 'Wybierz początek i cel podróży (wpisz co najmniej 2 znaki).',
-  errTime: 'Podaj poprawną datę i godzinę.',
-  errPast: 'Ta godzina już minęła. Wybierz późniejszą godzinę lub inny dzień.',
-  queryUsed: 'Zapytanie',
-  fromApi: (n: number) => `usługa zwróciła ${n}`,
-  tryTomorrow: 'Spróbuj jutro od 6:00',
-  priceNote: 'Ceny wg Twojego profilu. Odcinki bez źródła ceny są oznaczone jako niepotwierdzone i nie wchodzą do sumy. Euro przeliczamy stałym kursem NBP z 2026-10-09 (4,3775) tylko do porównań.',
-  budgetLeft: (n: number) => `Pozostało dziś zapytań o trasy: ${n}`,
-  noPrice: 'Brak potwierdzonej ceny',
-  partialCover: (n: number, m: number) => `Cena tylko ${n} z ${m} odc.`,
-  mode_local: 'Transport miejski',
-  reason_crossBorder: 'Odcinek na granicy lub przez granicę PL/DE: taryfa międzynarodowa jeszcze nie jest podłączona.',
-  reason_premiumTrain: 'Pociąg EIC/EIP: cena ustalana per relacja, nie mamy jej w bazie.',
-  reason_unknownCategory: 'Nie rozpoznano kategorii pociągu (TLK/IC), więc nie zgadujemy ceny.',
-  reason_flixbus: 'FlixBus: ceny na żywo nie są pobierane, brak potwierdzonej taryfy.',
-  reason_local: 'Taryfa lokalna lub regionalna dla tego odcinka nie jest jeszcze podłączona.',
-  reason_otherCarrier: 'Brak cennika tego przewoźnika w bazie.',
-  reason_calcError: 'Kalkulator nie obsłużył tego odcinka.',
-  reason_coreFallback: 'Brak potwierdzonej taryfy dla tego odcinka (nie zgadujemy ceny).',
-  reason_noCoords: 'Brak współrzędnych odcinka.',
-  reason_noVerifiedDate: 'Pasma cennika nie mają zapisanej daty weryfikacji, więc to szacunek, nie potwierdzona taryfa.',
-  reason_dbModel: 'Model szacunkowy Flexpreis (nie cena z rozkładu); realna cena DB może się różnić nawet o ±40%.',
+export const LANGS = ['pl', 'en', 'de', 'es', 'fr', 'nl'] as const;
+export type Lang = (typeof LANGS)[number];
+
+export const LANG_NAMES: Record<Lang, string> = {
+  pl: 'Polski',
+  en: 'English',
+  de: 'Deutsch',
+  es: 'Español',
+  fr: 'Français',
+  nl: 'Nederlands',
 };
 
-const en: typeof pl = {
-  title: 'PL ↔ DE travel planner',
-  demo: 'BETA VERSION. Connections come from Transitous. We only calculate a price where we hold a sourced tariff; everything else is marked unconfirmed and left out of the total. This is not an offer or a ticket.',
-  footerAttr: 'Route data: Transitous · Map data © OpenStreetMap contributors (ODbL) · Free, non-commercial open-source project, not affiliated with any carrier.',
-  footerLive: 'Try live route search (Transitous, no prices)',
-  footerSources: 'Data sources',
-  from: 'From',
-  to: 'To',
-  date: 'Date',
-  swap: 'Swap',
-  search: 'Search connections',
-  profile: 'Who is travelling',
-  profileSummary: 'Profile',
-  who_none: 'No discount',
-  who_student: 'Student',
-  who_pupil: 'Pupil',
-  idCountry: 'ID issued in',
-  pl: 'Poland',
-  de: 'Germany',
-  age: 'Age',
-  bahncard: 'BahnCard',
-  bc_none: 'None',
-  results: 'Results',
-  active: 'Applied to prices',
-  inactive: 'off',
-  change: 'Change in profile',
-  chipDiscount: 'Discount',
-  chipId: 'ID',
-  chipBc: 'BahnCard',
-  chipNone: 'none',
-  chipHint: 'Discounts that are off are not counted in prices.',
-  resultsCount: (n: number) => `${n} ${n === 1 ? 'option' : 'options'}`,
-  tag_cheapest: 'Cheapest',
-  tag_fastest: 'Fastest',
-  tag_safest: 'Most relaxed',
-  sort: 'Sort',
-  sort_price: 'Price',
-  sort_time: 'Time',
-  official: 'Official fare',
-  estimate: 'Estimate',
-  unconfirmed: 'Unconfirmed',
-  official_hint: 'Price from the operator’s tariff.',
-  estimate_hint: 'Variable or approximate price. The real amount depends on purchase.',
-  unconfirmed_hint: 'No price in our data. Not included in the total.',
-  partial: 'Partial total',
-  transfersN: (n: number) => (n === 0 ? 'Direct' : n === 1 ? '1 transfer' : `${n} transfers`),
-  details: 'Details and sources',
-  hide: 'Collapse',
-  source: 'Source',
-  verified: 'Verified',
-  buy: 'Check with operator',
-  tight: 'Short transfer',
-  minutes: 'min',
-  instead: 'instead of',
-  warnTitle: 'Before you ride',
-  warnText: 'A Polish student discount is not valid on German rail.',
-  theme: 'Theme',
-  themeAuto: 'Auto',
-  themeLight: 'Light',
-  themeDark: 'Dark',
-  lang: 'Language',
-  skip: 'Skip to results',
-  empty: 'Enter a route and choose “Search connections”.',
-  mode_rail: 'Train',
-  mode_bus: 'Bus',
-  mode_flight: 'Flight',
-  mode_walk: 'Walk',
-  time: 'Time',
-  searching: 'Searching…',
-  placePlaceholder: 'City, station or address',
-  noPlaces: 'No suggestions. Try another spelling.',
-  geocodeBudget: 'Daily suggestion limit reached. Type the full name and search.',
-  geocodeDown: 'Suggestions are temporarily unavailable. Type the full name and search.',
-  noResults: 'No connections found for this route and time.',
-  errBudget: 'Daily route request limit reached (it protects the free Transitous service). Try again tomorrow.',
-  errBusy: 'The routing service is busy (429). Try again in a few minutes.',
-  errNetwork: 'Cannot reach the routing service (network, block or CORS). Check your connection and try again.',
-  errGeneric: 'Could not load connections. Please try again shortly.',
-  errPlace: 'Choose a start and a destination (at least 2 characters).',
-  errTime: 'Enter a valid date and time.',
-  errPast: 'That time has already passed. Pick a later time or another day.',
-  queryUsed: 'Query',
-  fromApi: (n: number) => `service returned ${n}`,
-  tryTomorrow: 'Try tomorrow from 6:00',
-  priceNote: 'Prices follow your profile. Legs without a sourced price are marked unconfirmed and left out of the total. Euro is converted at a fixed NBP rate from 2026-10-09 (4.3775), for comparison only.',
-  budgetLeft: (n: number) => `Route requests left today: ${n}`,
-  noPrice: 'No confirmed price',
-  partialCover: (n: number, m: number) => `Price for only ${n} of ${m} legs`,
-  mode_local: 'Local transport',
-  reason_crossBorder: 'Leg at or across the PL/DE border: the international tariff is not connected yet.',
-  reason_premiumTrain: 'EIC/EIP train: priced per relation, not in our data.',
-  reason_unknownCategory: 'Train category (TLK/IC) not recognised, so we do not guess a price.',
-  reason_flixbus: 'FlixBus: live prices are not fetched, no confirmed tariff.',
-  reason_local: 'The local or regional tariff for this leg is not connected yet.',
-  reason_otherCarrier: 'No tariff for this operator in our data.',
-  reason_calcError: 'The calculator could not handle this leg.',
-  reason_coreFallback: 'No confirmed tariff for this leg (we do not guess a price).',
-  reason_noCoords: 'Leg coordinates are missing.',
-  reason_noVerifiedDate: 'The tariff bands have no recorded verification date, so this is an estimate, not a confirmed fare.',
-  reason_dbModel: 'Flexpreis estimate model (not a timetable price); the real DB fare can differ by up to ±40%.',
+export const LOCALE: Record<Lang, string> = {
+  pl: 'pl-PL',
+  en: 'en-GB',
+  de: 'de-DE',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  nl: 'nl-NL',
 };
 
-export const dict = { pl, en };
-export type Dict = typeof pl;
+export const RAW: Record<Lang, Record<string, string>> = {
+  pl: plJson,
+  en: enJson,
+  de: deJson,
+  es: esJson,
+  fr: frJson,
+  nl: nlJson,
+};
 
-export function fmtDuration(min: number): string {
+type Params = Record<string, string | number>;
+
+function fill(s: string, p: Params): string {
+  return s.replace(/\{(\w+)\}/g, (_, k) => String(p[k] ?? ''));
+}
+
+/** Plural key suffix for a language (Intl.PluralRules), e.g. one/few/many/other. */
+function pluralKey(lang: Lang, n: number): string {
+  return new Intl.PluralRules(LOCALE[lang]).select(n);
+}
+
+function plural(lang: Lang, base: string, n: number): string {
+  const r = RAW[lang];
+  return fill(r[`${base}_${pluralKey(lang, n)}`] ?? r[`${base}_other`] ?? '', { n });
+}
+
+const STRING_KEYS = [
+  'title', 'demo', 'footerAttr', 'footerLive', 'footerSources', 'from', 'to', 'date', 'swap',
+  'search', 'profile', 'profileSummary', 'who_none', 'who_student', 'who_pupil', 'idCountry',
+  'pl', 'de', 'age', 'bahncard', 'bc_none', 'results', 'active', 'inactive', 'change',
+  'chipDiscount', 'chipId', 'chipBc', 'chipNone', 'chipHint', 'tag_cheapest', 'tag_fastest',
+  'tag_safest', 'sort', 'sort_price', 'sort_time', 'official', 'estimate', 'unconfirmed',
+  'official_hint', 'estimate_hint', 'unconfirmed_hint', 'partial', 'details', 'hide', 'source',
+  'verified', 'buy', 'tight', 'minutes', 'instead', 'warnTitle', 'warnText', 'theme', 'themeAuto',
+  'themeLight', 'themeDark', 'lang', 'skip', 'empty', 'mode_rail', 'mode_bus', 'mode_flight',
+  'mode_walk', 'mode_local', 'time', 'searching', 'placePlaceholder', 'noPlaces', 'geocodeBudget',
+  'geocodeDown', 'noResults', 'errBudget', 'errBusy', 'errNetwork', 'errGeneric', 'errPlace',
+  'errTime', 'errPast', 'queryUsed', 'tryTomorrow', 'priceNote', 'noPrice', 'reason_crossBorder',
+  'reason_premiumTrain', 'reason_unknownCategory', 'reason_flixbus', 'reason_local',
+  'reason_otherCarrier', 'reason_calcError', 'reason_coreFallback', 'reason_noCoords',
+  'reason_noVerifiedDate', 'reason_dbModel', 'appError', 'reload', 'pageTitle', 'pageDescription',
+] as const;
+
+type StringKey = (typeof STRING_KEYS)[number];
+
+export type Dict = Record<StringKey, string> & {
+  resultsCount: (n: number) => string;
+  transfersN: (n: number) => string;
+  fromApi: (n: number) => string;
+  budgetLeft: (n: number) => string;
+  partialCover: (n: number, m: number) => string;
+};
+
+function build(lang: Lang): Dict {
+  const r = RAW[lang];
+  const base = {} as Record<StringKey, string>;
+  for (const k of STRING_KEYS) base[k] = r[k] ?? RAW.en[k] ?? k;
+  return {
+    ...base,
+    resultsCount: (n) => plural(lang, 'resultsCount', n),
+    transfersN: (n) => (n === 0 ? r.transfers_0 : plural(lang, 'transfers', n)),
+    fromApi: (n) => fill(r.fromApi, { n }),
+    budgetLeft: (n) => fill(r.budgetLeft, { n }),
+    partialCover: (n, m) => fill(r.partialCover, { n, m }),
+  };
+}
+
+export const dict = Object.fromEntries(LANGS.map((l) => [l, build(l)])) as Record<Lang, Dict>;
+
+export function isLang(x: unknown): x is Lang {
+  return typeof x === 'string' && (LANGS as readonly string[]).includes(x);
+}
+
+/** First supported language from the browser's preferences, else English. */
+export function detectLang(prefs: readonly string[] | undefined): Lang {
+  for (const p of prefs ?? []) {
+    const base = p.toLowerCase().split('-')[0];
+    if (isLang(base)) return base;
+  }
+  return 'en';
+}
+
+export function fmtDuration(min: number, lang: Lang = 'pl'): string {
+  const r = RAW[lang];
   const h = Math.floor(min / 60);
   const m = Math.round(min % 60);
-  return h ? `${h} h ${String(m).padStart(2, '0')} min` : `${m} min`;
+  return h
+    ? fill(r.duration, { h, m: String(m).padStart(2, '0') })
+    : fill(r.durationMin, { m });
 }
 
 export function fmtMoney(n: number, cur: string, lang: Lang): string {
-  return new Intl.NumberFormat(lang === 'pl' ? 'pl-PL' : 'en-GB', {
+  return new Intl.NumberFormat(LOCALE[lang], {
     style: 'currency',
     currency: cur,
     maximumFractionDigits: 0,
