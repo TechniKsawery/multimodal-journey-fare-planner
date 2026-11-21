@@ -3,6 +3,7 @@
 // needs the Travelpayouts API (not allowed by Transitous's non-commercial terms, see the plan, decision 8.4).
 import { estimatePrice } from "../fares/calculator";
 import * as dticket from "../fares/deutschlandticket";
+import * as kdDresden from "../fares/kdDresdenPromotion";
 import { estimatePkpOffer, spiRangeForSegment } from "../fares/internationalPkp";
 import { Carrier, PriceType, defaultProfile, makeSegment, type DiscountProfile, type PriceEstimate, type Segment } from "../fares/model";
 import { ValueError, formatFixed, matchesAnyWord, round2, truthy } from "../pyCompat";
@@ -565,6 +566,69 @@ export function deutschlandticketLeg(leg: Leg, discounts: DiscountProfile): Pric
       ` — 0 EUR dopłaty (zasady: ${info["zrodlo_url"]}, sprawdzono ${info["data_weryfikacji"]}). Sam bilet/abonament kosztuje osobno.`,
     breakdown: { price_verified: true, deutschlandticket: true, podstawa: basis, ...info },
   });
+}
+
+export const KD_DRESDEN_OPERATORS = [...KD_KEYWORDS, "länderbahn", "laenderbahn", "landerbahn", "trilex"] as const;
+
+const kdDresdenLegOk = (leg: Leg): boolean => isRailNotBus(leg) && matchesAnyWord(squash(leg.carrier_name), KD_DRESDEN_OPERATORS);
+
+/**
+ * One "Dresden Promotion" ticket for the whole run of KD / Die Länderbahn legs from a listed Polish station to Dresden Hbf:
+ * the first leg of the run gets the offer's price, the rest 0 (included). It is an ESTIMATE (price_verified=false): the
+ * sources do not confirm the offer is on sale today. Direct Zgorzelec–Dresden trains are not part of the offer (rules
+ * §3 par. 3), so a single-leg run from Zgorzelec is left alone. No match (station outside the table, other operator,
+ * age below 6) leaves the prices unchanged.
+ */
+export function applyKdDresdenPromotion(legs: Leg[], priced: PricedLeg[], discounts: DiscountProfile): PricedLeg[] {
+  const out = [...priced];
+  let i = 0;
+  while (i < legs.length) {
+    if (!(kdDresdenLegOk(legs[i]) && kdDresden.isOfferOrigin(legs[i].origin_name))) {
+      i += 1;
+      continue;
+    }
+    let j = i;
+    while (j < legs.length && kdDresdenLegOk(legs[j])) {
+      if (kdDresden.isDresdenHbf(legs[j].destination_name)) break;
+      j += 1;
+    }
+    if (j >= legs.length || !kdDresdenLegOk(legs[j])) {
+      i += 1;
+      continue;
+    }
+    const fare = kdDresden.oneWayPrice(legs[i].origin_name, discounts.age);
+    const directZgorzelec = j === i && lower(legs[i].origin_name).startsWith("zgorzelec");
+    if (fare === null || directZgorzelec) {
+      i = j + 1;
+      continue;
+    }
+    const [amount, basis] = fare;
+    const info = kdDresden.sourceInfo();
+    const base = {
+      price_verified: false,
+      kd_dresden_promotion: true,
+      podstawa: basis,
+      powod_szacunku: "źródło nie potwierdza, że oferta jest dziś w sprzedaży",
+      ...info,
+    };
+    for (let k = i; k <= j; k++) {
+      const first = k === i;
+      const note = first
+        ? `Oferta stała KD + Die Länderbahn 'Dresden Promotion' ${legs[i].origin_name} - Drezno Hbf, jeden bilet w jedną stronę, 2. klasa (${basis}): ${formatFixed(amount, 2)} PLN ` +
+          `(źródło: ${info.zrodlo_url}, odczyt ${info.data_weryfikacji}). Cena niepotwierdzona: nie wiadomo, czy oferta jest teraz w sprzedaży.`
+        : "Wliczone w jeden bilet oferty 'Dresden Promotion' (cena przy pierwszym odcinku).";
+      out[k] = makePricedLeg({
+        leg: legs[k],
+        amount: first ? amount : 0,
+        currency: "PLN",
+        price_type: "szacunek",
+        notes: note,
+        breakdown: { ...base },
+      });
+    }
+    i = j + 1;
+  }
+  return out;
 }
 
 export function priceRailLeg(leg: Leg, discounts: DiscountProfile): PricedLeg {

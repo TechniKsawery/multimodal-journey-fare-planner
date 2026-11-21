@@ -23,7 +23,7 @@ import {
   type SkippedVariant,
 } from "./model";
 import { allItineraries, fastestItinerary, haversineKm, itineraryToLegs, MAIN_QUERY_ITINERARIES, type Raw } from "./motis";
-import { priceLeg } from "./pricing";
+import { applyKdDresdenPromotion, priceLeg } from "./pricing";
 import { buildItinerary } from "./scoring";
 import { MIN_TRANSFER_MINUTES_WALK } from "./transfers";
 import { FAST_QUERY_ITINERARIES, type QueryBudget, type StopRef } from "./transitousClient";
@@ -126,7 +126,12 @@ const dayNumber = (isoDate: string): number => Date.parse(`${isoDate}T00:00:00Z`
 
 // ---- shared helpers ---------------------------------------------------------------------------------------------------
 
-const priceLegs = (legs: Leg[], request: RouteRequest) => legs.map((leg) => priceLeg(leg, request.discounts));
+const priceLegs = (legs: Leg[], request: RouteRequest) =>
+  applyKdDresdenPromotion(
+    legs,
+    legs.map((leg) => priceLeg(leg, request.discounts)),
+    request.discounts,
+  );
 
 /** True when the first leg departs on the day of the search (local time). MOTIS has no upper bound, so without this
  * filter connections of the next day show up in the results. An overnight trip that starts that evening still passes. */

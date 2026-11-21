@@ -134,6 +134,14 @@ source and a new key is added there. Parameters can be strings, numbers, boolean
 `joined([...], sep)` and `pyFloat(x)` (a Python float that must print as `5.0`; JS numbers cannot tell it
 from `5`). Domain code returns `Text = string | Msg`; the UI calls `tm(text, lang)`.
 
+## KD "Dresden Promotion" (for the UI)
+
+`applyKdDresdenPromotion(legs, priced, discounts)` (in `src/routing/pricing.ts`, called by the search) replaces the prices of a
+run of KD / Die Länderbahn legs from a listed Polish station to Dresden Hbf with ONE ticket price (first leg = fare, the
+rest 0). It is always an unconfirmed estimate (`price_verified=false`, `breakdown.oferta_aktualna_potwierdzona=false`):
+the operator pages do not say the offer is on sale today. Age 6-15 gets the child fare, under 6 and unlisted stations get no match.
+Data: `data/fares/kd_dresden_promotion.json` (source URL and verification date inside).
+
 ## Inventory gate
 
 `test/inventory.test.ts` (fed by `core/golden/inventory.json`, generated from the oracle) fails when a Python

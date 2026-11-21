@@ -40,6 +40,7 @@ jobs:
           python tools/golden/generate_variants.py
           python tools/golden/generate_places.py
           python tools/golden/generate_inventory.py
+          python tools/golden/generate_kd_dresden.py
           git diff --exit-code -- core/golden core/src/i18n/locales
 
       - name: Install core

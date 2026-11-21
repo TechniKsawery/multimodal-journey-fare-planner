@@ -6,7 +6,6 @@ import { Carrier } from "../src/fares/model";
 /** Data files that core/src does not read, with the reason. Adding a file here is a conscious decision. */
 const NOT_USED_BY_CORE: Record<string, string> = {
   "data/fares/flixbus_calibration.json": "input of scripts/calibrate_flixbus.py only; the app uses flixbus_fallback.json",
-  "data/fares/kd_dresden_promotion.json": "KD fixed fares Wrocław/Zgorzelec–Dresden (source + date in the file), not wired into any calculator yet (Python does not read it either)",
   "data/fares/trilex_sachsen_gorlitz_drezno.json": "tariff data not wired into any calculator yet (Python does not read it either)",
   "data/fares/vbb_anschlusstarif_pl.json": "tariff data not wired into any calculator yet (Python does not read it either)",
   "data/fares/vbb_brandenburg_stadte.json": "tariff data not wired into any calculator yet (Python does not read it either)",
