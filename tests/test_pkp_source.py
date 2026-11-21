@@ -53,7 +53,8 @@ def test_ulga_dodaje_url_tabeli_ulg():
     assert r.breakdown["zrodlo_ulgi_url"] == ULGI
 
 
-def test_bez_daty_w_danych_nie_ma_daty_w_breakdown():
+def test_bez_daty_w_danych_nie_ma_daty_w_breakdown(monkeypatch):
+    monkeypatch.setitem(pkp._TABLE, "data_weryfikacji", None)
     r = pkp.estimate(_seg(155))
     assert "data_weryfikacji" not in r.breakdown
     assert leg_source(type("P", (), {"breakdown": r.breakdown})()) == (CENNIK, None)
