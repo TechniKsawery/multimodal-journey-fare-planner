@@ -54,7 +54,7 @@ function plural(lang: Lang, base: string, n: number): string {
 const STRING_KEYS = [
   'title', 'demo', 'footerAttr', 'footerLive', 'footerSources', 'from', 'to', 'date', 'swap',
   'search', 'profile', 'profileSummary', 'who_none', 'who_student', 'who_pupil', 'idCountry',
-  'pl', 'de', 'age', 'bahncard', 'bc_none', 'deutschlandticket', 'chipDt', 'sortHintPrice', 'otherDayTitle', 'otherDayHint', 'yes', 'no', 'results', 'active', 'inactive', 'change',
+  'pl', 'de', 'age', 'bahncard', 'bc_none', 'deutschlandticket', 'chipDt', 'sortHintPrice', 'moreOptions', 'moreOptionsHint', 'pkpRelief', 'pkpAuto', 'childWithGuardian', 'resetExtras', 'kind_reduced', 'kind_free', 'kind_child', 'kind_disabled', 'pkp_brak', 'pkp_dzieci_do_4_lat', 'pkp_dzieci_mlodziez_szkolna_do_24_lat', 'pkp_student_do_26_lat_doktorant_do_35_lat', 'pkp_emeryci_rencisci_2_przejazdy_rok', 'pkp_niezdolni_do_samodzielnej_egzystencji', 'pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji', 'pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej', 'pkp_zolnierze_niezawodowej_sluzby_wojskowej', 'otherDayTitle', 'otherDayHint', 'yes', 'no', 'results', 'active', 'inactive', 'change',
   'chipDiscount', 'chipId', 'chipBc', 'chipNone', 'chipHint', 'tag_cheapest', 'tag_fastest',
   'tag_safest', 'tab_all', 'tab_fastest', 'tab_cheapest', 'tab_safest', 'filter_confirmed_only', 'filter_no_results',
   'sort', 'sort_price', 'sort_time', 'official', 'ceiling', 'estimate', 'unconfirmed',

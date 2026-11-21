@@ -157,3 +157,23 @@ describe("no invented prices for legs without a sourced tariff", () => {
     expect(r.legs[0].status).toBe("unconfirmed");
   });
 });
+
+import { BOOL_FIELDS, FIELDS_WITH_OTHER_CONTROL } from './extraOptions';
+import { defaultProfile } from '../../../core/src/fares/model';
+
+describe('more options', () => {
+  it('every DiscountProfile field has a control or an explicit exception', () => {
+    const covered = new Set<string>([...BOOL_FIELDS.map((f) => f.key), ...FIELDS_WITH_OTHER_CONTROL]);
+    expect(Object.keys(defaultProfile()).filter((k) => !covered.has(k))).toEqual([]);
+  });
+  it('manual choices win over defaults, unknown or mistyped ones are ignored', () => {
+    const base = { status: 'none' as const, idCountry: 'pl' as const, age: 30, bahncard: 'none' as const };
+    expect(toDiscountProfile(base).ztm_lublin_ulgowy).toBe(false);
+    const d = toDiscountProfile({ ...base, overrides: { ztm_lublin_ulgowy: true, pkp_ulga_kod: 'emeryci_rencisci_2_przejazdy_rok', nope: true, mpk_krakow_ulgowy: 'x', age: 5 as unknown as boolean } });
+    expect(d.ztm_lublin_ulgowy).toBe(true);
+    expect(d.pkp_ulga_kod).toBe('emeryci_rencisci_2_przejazdy_rok');
+    expect(d.mpk_krakow_ulgowy).toBe(false);
+    expect(d.age).toBe(30);
+    expect('nope' in d).toBe(false);
+  });
+});
