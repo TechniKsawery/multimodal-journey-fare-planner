@@ -56,6 +56,7 @@ export function App() {
   const [error, setError] = useState<ErrKey | null>(null);
   const [detail, setDetail] = useState('');
   const [sent, setSent] = useState('');
+  const [sentDate, setSentDate] = useState('');
   const [left, setLeft] = useState(() => planBudget.remaining());
   const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
@@ -120,7 +121,8 @@ export function App() {
       if (ctrl.signal.aborted) return;
       console.info('[search] itineraries from Transitous:', itineraries.length);
       setRaw(itineraries);
-      setSent(`${from.name} → ${to.name}, ${query.date} ${query.time}`);
+      setSent(`${from.name} → ${to.name}, ${override?.date ?? query.date} ${override?.time ?? query.time}`);
+      setSentDate(override?.date ?? query.date);
       if (itineraries.length === 0) console.warn('[search] empty itineraries for', from.lat, from.lon, to.lat, to.lon, when.toISOString());
     } catch (e) {
       if ((e as Error)?.name === 'AbortError') return;
@@ -144,12 +146,12 @@ export function App() {
 
   const allResults = useMemo(() => {
     try {
-      return raw ? buildResults(raw, profile) : [];
+      return raw ? buildResults(raw, profile, sentDate || undefined) : [];
     } catch (e) {
       console.error('buildResults failed', e);
       return [];
     }
-  }, [raw, profile]);
+  }, [raw, profile, sentDate]);
 
   const fullyPricedCount = useMemo(
     () => allResults.filter((it) => !it.partial && !it.noPrice).length,
@@ -322,6 +324,11 @@ export function App() {
               )}
               <p class="muted small-note">{t.priceNote}</p>
 
+              {results.some((it) => it.otherDay) && (
+                <p class="callout" role="status">
+                  <b>{t.otherDayTitle}</b> {t.otherDayHint}
+                </p>
+              )}
               {results.length === 0 ? (
                 <div class="muted">
                   <p>{t.filter_no_results}</p>

@@ -33,3 +33,22 @@ describe('Deutschlandticket in the UI profile', () => {
     expect(off.price === 0 && off.status === 'official').toBe(false);
   });
 });
+
+describe('requested day vs other days', () => {
+  const p = { status: 'none' as const, idCountry: 'pl' as const, age: 30, bahncard: 'none' as const };
+  const route = [referenceRoutes['Warszawa-Berlin']]; // departs 2026-11-24 (Warsaw time)
+  it('keeps connections of the requested day, untagged-free of other-day marks', () => {
+    const r = buildResults(route, p, '2026-11-24');
+    expect(r).toHaveLength(1);
+    expect(r[0].otherDay).toBeUndefined();
+  });
+  it('with nothing on that day shows the nearest other-day ones, marked and untagged', () => {
+    const r = buildResults(route, p, '2026-11-23');
+    expect(r).toHaveLength(1);
+    expect(r[0].otherDay).toEqual({ date: '2026-11-24', offset: 1 });
+    expect(r[0].tag).toBeUndefined();
+  });
+  it('ignores connections more than 3 days away', () => {
+    expect(buildResults(route, p, '2026-11-10')).toEqual([]);
+  });
+});

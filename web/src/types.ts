@@ -48,6 +48,8 @@ export interface Itinerary {
   /** ile odcinków ma znaną cenę / ile jest wszystkich (bez dojść pieszo) */
   pricedLegs?: number;
   totalLegs?: number;
+  /** Set when the connection is NOT on the requested day (shown only when nothing runs that day). */
+  otherDay?: { date: string; offset: number };
 }
 
 export interface Profile {

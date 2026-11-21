@@ -14,6 +14,7 @@ import {
   type PricedLeg,
 } from "../../../core/src/routing/model";
 import { itineraryToLegs, type Raw } from "../../../core/src/routing/motis";
+import { OTHER_DAY_MAX_DAYS, OTHER_DAY_MAX_VARIANTS, localDate } from "../../../core/src/routing/variants";
 import { priceLeg as corePriceLeg } from "../../../core/src/routing/pricing";
 import { buildItinerary, pickRecommendations } from "../../../core/src/routing/scoring";
 import type { Itinerary, Leg, Mode, PriceStatus, Profile, Transfer } from "../types";
@@ -171,8 +172,31 @@ function plainItinerary(it: TItinerary, index: number): Itinerary | null {
 }
 
 /** Prices every itinerary for the given profile and ranks it with core/. Pure: same input, same output. */
-export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
-  const raw = input.filter(isValidItinerary);
+const DAY_MS = 86_400_000;
+const dayNumber = (isoDate: string): number => Date.parse(`${isoDate}T00:00:00Z`) / DAY_MS;
+
+/**
+ * Same rule as core/ (variants.ts): only connections that depart on the requested day (Warsaw time) count;
+ * the service also returns later days. When NOTHING runs that day, the nearest connections of other days
+ * (up to OTHER_DAY_MAX_DAYS away, at most OTHER_DAY_MAX_VARIANTS) are shown, clearly marked, with no tags.
+ */
+export function splitByDay(raw: TItinerary[], requestDate: string): { list: TItinerary[]; other: Map<TItinerary, { date: string; offset: number }> } {
+  const day = (it: TItinerary) => localDate(new Date(it.startTime));
+  const same = raw.filter((it) => day(it) === requestDate);
+  if (same.length > 0 || raw.length === 0) return { list: same, other: new Map() };
+  const other = new Map<TItinerary, { date: string; offset: number }>();
+  const near = [...raw]
+    .filter((it) => it.legs.some((l) => l.mode !== "WALK"))
+    .sort((a, b) => Date.parse(a.startTime) - Date.parse(b.startTime))
+    .filter((it) => Math.abs(dayNumber(day(it)) - dayNumber(requestDate)) <= OTHER_DAY_MAX_DAYS)
+    .slice(0, OTHER_DAY_MAX_VARIANTS);
+  for (const it of near) other.set(it, { date: day(it), offset: dayNumber(day(it)) - dayNumber(requestDate) });
+  return { list: near, other };
+}
+
+export function buildResults(input: unknown[], profile: Profile, requestDate?: string): Itinerary[] {
+  const valid = input.filter(isValidItinerary);
+  const { list: raw, other } = requestDate ? splitByDay(valid, requestDate) : { list: valid, other: new Map<TItinerary, { date: string; offset: number }>() };
   const discounts = toDiscountProfile(profile);
   const fallbacks: Itinerary[] = [];
   const built = raw.flatMap((it, index) => {
@@ -215,7 +239,13 @@ export function buildResults(input: unknown[], profile: Profile): Itinerary[] {
 
   const priced = usable.flatMap((b) => {
     try {
-      return [toUi(b)];
+      const ui = toUi(b);
+      const od = other.get(b.it);
+      if (od) {
+        ui.otherDay = od;
+        ui.tag = undefined;
+      }
+      return [ui];
     } catch (e) {
       console.error("mapping failed for itinerary", b.index, e);
       const p = plainItinerary(b.it, b.index);

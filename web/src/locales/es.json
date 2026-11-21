@@ -118,5 +118,9 @@
   "deutschlandticket": "Tengo un Deutschlandticket",
   "chipDt": "Deutschlandticket",
   "yes": "Sí",
-  "no": "No"
+  "no": "No",
+  "otherDayTitle": "No hay conexiones el día elegido.",
+  "otherDayHint": "Se muestran las más próximas en otros días.",
+  "otherDayLater": "{date} ({n} d después)",
+  "otherDayEarlier": "{date} ({n} d antes)"
 }
