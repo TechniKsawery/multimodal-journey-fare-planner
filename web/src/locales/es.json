@@ -122,5 +122,6 @@
   "otherDayTitle": "No hay conexiones el día elegido.",
   "otherDayHint": "Se muestran las más próximas en otros días.",
   "otherDayLater": "{date} ({n} d después)",
-  "otherDayEarlier": "{date} ({n} d antes)"
+  "otherDayEarlier": "{date} ({n} d antes)",
+  "sortHintPrice": "Orden por precio: primero las rutas con precio completo (de la más barata), luego las de precio parcial (la suma cubre solo parte de los tramos, no es comparable) y al final las sin precio."
 }

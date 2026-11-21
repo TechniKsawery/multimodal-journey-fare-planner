@@ -122,5 +122,6 @@
   "otherDayTitle": "Aucune liaison le jour choisi.",
   "otherDayHint": "Voici les plus proches, d'autres jours.",
   "otherDayLater": "{date} ({n} j plus tard)",
-  "otherDayEarlier": "{date} ({n} j plus tôt)"
+  "otherDayEarlier": "{date} ({n} j plus tôt)",
+  "sortHintPrice": "Ordre par prix : d'abord les trajets entièrement tarifés (du moins cher), puis ceux à prix partiel (la somme ne couvre qu'une partie des tronçons, donc non comparable), enfin ceux sans prix."
 }

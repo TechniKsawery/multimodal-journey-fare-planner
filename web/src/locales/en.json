@@ -122,5 +122,6 @@
   "otherDayTitle": "No connections on the chosen day.",
   "otherDayHint": "Showing the nearest ones on other days.",
   "otherDayLater": "{date} ({n} d later)",
-  "otherDayEarlier": "{date} ({n} d earlier)"
+  "otherDayEarlier": "{date} ({n} d earlier)",
+  "sortHintPrice": "Price order: fully priced routes first (cheapest first), then partly priced ones (the sum covers only some legs, so it is not comparable), then routes without a price."
 }

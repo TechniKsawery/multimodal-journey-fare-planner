@@ -126,5 +126,6 @@
   "otherDayTitle": "Brak połączeń w wybranym dniu.",
   "otherDayHint": "Pokazuję najbliższe w innych dniach.",
   "otherDayLater": "{date} ({n} d. później)",
-  "otherDayEarlier": "{date} ({n} d. wcześniej)"
+  "otherDayEarlier": "{date} ({n} d. wcześniej)",
+  "sortHintPrice": "Kolejność wg ceny: najpierw trasy w pełni wycenione (od najtańszej), potem z ceną częściową (suma obejmuje tylko część odcinków, więc nie jest porównywalna), na końcu bez ceny."
 }
