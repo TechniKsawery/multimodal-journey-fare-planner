@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { dict, detectLang, isLang, LANGS, LANG_NAMES, type Lang } from './i18n';
+import { dict, detectLang, isLang, LANGS, LANG_NAMES, type Dict, type Lang } from './i18n';
 import { load, save } from './storage';
 import type { Profile } from './types';
 import { ResultCard } from './components/ResultCard';
@@ -13,6 +13,7 @@ import { buildResults } from './search/adapt';
 
 type Theme = 'auto' | 'light' | 'dark';
 type Sort = 'price' | 'time';
+type Tab = 'all' | 'fastest' | 'cheapest' | 'safest';
 
 const defaultProfile: Profile = { status: 'student', idCountry: 'pl', age: 21, bahncard: 'none' };
 const todayLocal = () => {
@@ -58,6 +59,8 @@ export function App() {
   const [left, setLeft] = useState(() => planBudget.remaining());
   const abort = useRef<AbortController | null>(null);
   const [sort, setSort] = useState<Sort>('price');
+  const [tab, setTab] = useState<Tab>('all');
+  const [onlyFullyPriced, setOnlyFullyPriced] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const t = dict[lang];
   const editProfile = () => {
@@ -139,26 +142,59 @@ export function App() {
     }
   }
 
-  const results = useMemo(() => {
-    let list: ReturnType<typeof buildResults> = [];
+  const allResults = useMemo(() => {
     try {
-      list = raw ? buildResults(raw, profile) : [];
+      return raw ? buildResults(raw, profile) : [];
     } catch (e) {
       console.error('buildResults failed', e);
+      return [];
     }
-    // Warianty bez pełnej ceny nie mogą wygrywać rankingu ceny: idą na koniec.
+  }, [raw, profile]);
+
+  const fullyPricedCount = useMemo(
+    () => allResults.filter((it) => !it.partial && !it.noPrice).length,
+    [allResults],
+  );
+
+  const results = useMemo(() => {
+    const list = onlyFullyPriced
+      ? allResults.filter((it) => !it.partial && !it.noPrice)
+      : [...allResults];
+
     list.sort((a, b) => {
+      if (tab === 'fastest') {
+        if (a.tag === 'fastest' && b.tag !== 'fastest') return -1;
+        if (b.tag === 'fastest' && a.tag !== 'fastest') return 1;
+        return a.durationMin - b.durationMin || a.totalPln - b.totalPln;
+      }
+      if (tab === 'cheapest') {
+        if (a.tag === 'cheapest' && b.tag !== 'cheapest') return -1;
+        if (b.tag === 'cheapest' && a.tag !== 'cheapest') return 1;
+        if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
+        const cov = (x: typeof a) => (x.partial ? (x.pricedLegs ?? 0) / Math.max(x.totalLegs ?? 1, 1) : 2);
+        if (cov(a) !== cov(b)) return cov(b) - cov(a);
+        return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
+      }
+      if (tab === 'safest') {
+        if (a.tag === 'safest' && b.tag !== 'safest') return -1;
+        if (b.tag === 'safest' && a.tag !== 'safest') return 1;
+        const tightCount = (x: typeof a) => x.transfers.filter((t) => t.risk === 'tight').length;
+        if (tightCount(a) !== tightCount(b)) return tightCount(a) - tightCount(b);
+        if (a.transfers.length !== b.transfers.length) return a.transfers.length - b.transfers.length;
+        return a.durationMin - b.durationMin;
+      }
+      // tab === 'all'
       if (sort === 'price') {
         if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
-        // fully priced first, then the better price coverage, then the lower (partial) sum
         const cov = (x: typeof a) => (x.partial ? (x.pricedLegs ?? 0) / Math.max(x.totalLegs ?? 1, 1) : 2);
         if (cov(a) !== cov(b)) return cov(b) - cov(a);
         return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
       }
       return a.durationMin - b.durationMin;
     });
+
     return list;
-  }, [raw, profile, sort]);
+  }, [allResults, onlyFullyPriced, tab, sort]);
 
   const showForeignWarn = profile.status !== 'none' && profile.idCountry === 'pl';
 
@@ -221,7 +257,7 @@ export function App() {
           )}
           {!raw ? (
             !error && <p class="muted">{busy ? t.searching : t.empty}</p>
-          ) : results.length === 0 ? (
+          ) : allResults.length === 0 ? (
             <div class="muted">
               <p>{t.noResults}</p>
               <p class="small-note">
@@ -237,15 +273,47 @@ export function App() {
                 <h2>
                   {t.results} <span class="muted">· {t.resultsCount(results.length)}</span>
                 </h2>
-                <div class="seg small" role="radiogroup" aria-label={t.sort}>
-                  {(['price', 'time'] as const).map((s) => (
-                    <label class={sort === s ? 'on' : ''}>
-                      <input type="radio" name="sort" checked={sort === s} onChange={() => setSort(s)} />
-                      {s === 'price' ? t.sort_price : t.sort_time}
-                    </label>
-                  ))}
-                </div>
               </div>
+
+              <div class="tabs-seg" role="tablist" aria-label={t.results}>
+                {(['all', 'fastest', 'cheapest', 'safest'] as const).map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === id}
+                    class={`tab-btn ${tab === id ? 'active' : ''}`}
+                    onClick={() => setTab(id)}
+                  >
+                    {t[`tab_${id}` as keyof Dict] as string}
+                  </button>
+                ))}
+              </div>
+
+              <div class="filter-bar">
+                <label class="filter-toggle">
+                  <input
+                    type="checkbox"
+                    checked={onlyFullyPriced}
+                    onChange={(e) => setOnlyFullyPriced(e.currentTarget.checked)}
+                  />
+                  <span>{t.filter_confirmed_only}</span>
+                  <span class={`filter-count ${fullyPricedCount > 0 ? 'has-items' : ''}`}>
+                    {fullyPricedCount}
+                  </span>
+                </label>
+                {tab === 'all' && (
+                  <div class="seg small" role="radiogroup" aria-label={t.sort}>
+                    {(['price', 'time'] as const).map((s) => (
+                      <label key={s} class={sort === s ? 'on' : ''}>
+                        <input type="radio" name="sort" checked={sort === s} onChange={() => setSort(s)} />
+                        {s === 'price' ? t.sort_price : t.sort_time}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <ActiveSettings t={t} profile={profile} onChange={editProfile} />
               {showForeignWarn && (
                 <p class="callout">
@@ -253,9 +321,19 @@ export function App() {
                 </p>
               )}
               <p class="muted small-note">{t.priceNote}</p>
-              {results.map((it) => (
-                <ResultCard key={it.id} it={it} t={t} lang={lang} />
-              ))}
+
+              {results.length === 0 ? (
+                <div class="muted">
+                  <p>{t.filter_no_results}</p>
+                  <button type="button" class="link-btn" onClick={() => setOnlyFullyPriced(false)}>
+                    {t.tab_all} ({allResults.length})
+                  </button>
+                </div>
+              ) : (
+                results.map((it) => (
+                  <ResultCard key={it.id} it={it} t={t} lang={lang} />
+                ))
+              )}
             </>
           )}
           <p class="muted small-note">{t.budgetLeft(left)}</p>

@@ -26,14 +26,12 @@ describe("buildResults", () => {
     expect(leg.price!).toBeCloseTo(plain.legs[0].price! * 0.49, 1);
   });
 
-  it("never prices EIC/EIP: unconfirmed, no amount, no total", () => {
+  it("prices EIC/EIP with official relation base tariff and student discount instead of unconfirmed", () => {
     const [r] = buildResults([eicDomestic], student);
-    expect(r.legs[0].price).toBeUndefined();
-    expect(r.legs[0].status).toBe("unconfirmed");
-    expect(r.legs[0].reason).toBe("coreFallback");
+    expect(r.legs[0].price).toBeCloseTo(149 * 0.49, 1);
+    expect(r.legs[0].status).toBe("ceiling");
     expect(r.legs[0].note).toMatch(/EIC/);
-    expect(r.noPrice).toBe(true);
-    expect(r.tag).not.toBe("cheapest");
+    expect(r.noPrice).toBe(false);
   });
 
   it("prices a domestic DB leg as an estimate in EUR, BahnCard lowers it", () => {
@@ -109,5 +107,109 @@ describe("BahnCard 100", () => {
     expect(toDiscountProfile({ ...none, bahncard: "100" }).bahncard).toBe("100");
     const [r] = buildResults([iceDomestic], { ...none, bahncard: "100" });
     expect(r.legs[0].price).toBe(0);
+  });
+});
+
+describe("fully priced filtering and recommendations", () => {
+  it("distinguishes fully priced itineraries from partial ones", () => {
+    const res = buildResults([icDomestic, mixed, eicDomestic], student);
+    const fullyPriced = res.filter((it) => !it.partial && !it.noPrice);
+    expect(fullyPriced.length).toBe(2);
+    expect(fullyPriced.map((it) => it.legs[0].carrier)).toEqual(["PKP Intercity IC 1310", "PKP Intercity EIC 1604"]);
+
+    const partialOrUnpriced = res.filter((it) => it.partial || it.noPrice);
+    expect(partialOrUnpriced.length).toBe(1);
+    expect(partialOrUnpriced[0].partial).toBe(true);
+  });
+});
+
+describe("unconfirmed fare fixes: NEB RB26, PolRegio student discount, FlixBus", () => {
+  it("prices NEB RB26 Kostrzyn <-> Berlin with official VBB Anschlusstarif", () => {
+    const nebItinerary = {
+      startTime: "2026-11-23T22:05:00Z",
+      endTime: "2026-11-23T23:24:00Z",
+      duration: 4740,
+      transfers: 0,
+      legs: [
+        {
+          mode: "REGIONAL_RAIL",
+          from: { name: "Kostrzyn", lat: 52.5909, lon: 14.6538, tz: "Europe/Warsaw" },
+          to: { name: "S+U Lichtenberg Bhf (Berlin)", lat: 52.5105, lon: 13.498, tz: "Europe/Berlin" },
+          startTime: "2026-11-23T22:05:00Z",
+          endTime: "2026-11-23T23:24:00Z",
+          duration: 4740,
+          agencyName: "NEB Niederbarnimer Eisenbahn",
+          routeShortName: "RB26",
+        },
+      ],
+    };
+
+    const [regular] = buildResults([nebItinerary], none);
+    expect(regular.legs[0].price).toBe(14.8);
+    expect(regular.legs[0].currency).toBe("EUR");
+    expect(regular.legs[0].status).toBe("official");
+    expect(regular.legs[0].sourceUrl).toContain("neb.de");
+    expect(regular.partial).toBe(false);
+
+    const [withDticket] = buildResults([nebItinerary], { ...none, bahncard: "100" });
+    expect(withDticket.legs[0].price).toBe(2.6);
+    expect(withDticket.legs[0].currency).toBe("EUR");
+    expect(withDticket.legs[0].status).toBe("official");
+  });
+
+  it("prices PolRegio with statutory student relief from official band table", () => {
+    const polregioItinerary = {
+      startTime: "2026-11-23T19:28:00Z",
+      endTime: "2026-11-23T21:00:00Z",
+      duration: 5520,
+      transfers: 0,
+      legs: [
+        {
+          mode: "REGIONAL_RAIL",
+          from: { name: "Krzyż", lat: 52.9803, lon: 16.0125, tz: "Europe/Warsaw" },
+          to: { name: "Kostrzyn", lat: 52.5909, lon: 14.6538, tz: "Europe/Warsaw" },
+          startTime: "2026-11-23T19:28:00Z",
+          endTime: "2026-11-23T21:00:00Z",
+          duration: 5520,
+          agencyName: "POLREGIO",
+          routeShortName: "R",
+        },
+      ],
+    };
+
+    const [r] = buildResults([polregioItinerary], student);
+    expect(r.legs[0].price).toBeGreaterThan(0);
+    expect(r.legs[0].status).toBe("ceiling");
+    expect(r.legs[0].currency).toBe("PLN");
+    expect(r.partial).toBe(false);
+  });
+
+  it("prices FlixBus with dynamic pricing distance estimate and disclaimer", () => {
+    const flixItinerary = {
+      startTime: "2026-11-23T15:15:00Z",
+      endTime: "2026-11-23T17:20:00Z",
+      duration: 7500,
+      transfers: 0,
+      legs: [
+        {
+          mode: "COACH",
+          from: { name: "Lublin, Bus Station Lublin", lat: 51.2465, lon: 22.5684, tz: "Europe/Warsaw" },
+          to: { name: "Warsaw, Chopin Airport", lat: 52.1672, lon: 20.9679, tz: "Europe/Warsaw" },
+          startTime: "2026-11-23T15:15:00Z",
+          endTime: "2026-11-23T17:20:00Z",
+          duration: 7500,
+          agencyName: "FlixBus-eu",
+          routeShortName: "FlixBus 1252",
+        },
+      ],
+    };
+
+    const [r] = buildResults([flixItinerary], none);
+    expect(r.legs[0].price).toBeGreaterThan(0);
+    expect(r.legs[0].status).toBe("estimate");
+    expect(r.legs[0].reason).toBe("dynamicPricing");
+    expect(r.legs[0].sourceUrl).toContain("flixbus.pl");
+    expect(r.partial).toBe(false);
+    expect(r.totalPln).toBe(r.legs[0].price);
   });
 });
