@@ -83,7 +83,7 @@
     "powrotny_2_dni": "powrót w ciągu 2 dni",
     "powrotny_14_dni": "powrót w ciągu 14 dni"
   },
-  "dresden_wroclaw_spezial_dlb": {
+  "_dresden_wroclaw_spezial_dlb": {
     "cena_1_osoba_eur": 51.0,
     "zrodlo": "https://www.laenderbahn.com/trilex/tickets/",
     "uwaga": "podana tylko jako nazwa produktu i kwota na stronie trilex; zasięg i warunki nie były czytane"

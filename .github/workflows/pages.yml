@@ -63,7 +63,7 @@ jobs:
           # tariff sites are listed here too. www.travelpayouts.com appears only inside a bundled CLI
           # message (registration hint), never as a request target.
           bad=$(grep -rEIoh 'https?://[A-Za-z0-9.-]+' dist | sort -u \
-            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl|bip\.poznan\.pl|eezy\.nrw|kolejedolnoslaskie\.pl|kolejemalopolskie\.com\.pl|krakow\.pl|lka\.lodzkie\.pl|mpk\.krakow\.pl|warszawa19115\.pl|www\.bvg\.de|www\.hvv\.de|www\.mazowieckie\.com\.pl|www\.mvv-muenchen\.de|www\.skm\.pkp\.pl|www\.vrr\.de|www\.vrs\.de|www\.wroclaw\.pl|www\.wtp\.waw\.pl|www\.ztm\.poznan\.pl|www\.zvon\.de|zdtm\.lublin\.eu|lubika\.zdtm\.lublin\.eu|raildude\.com|travel-dealz\.de|www\.vzbv\.de|www\.travelpayouts\.com|ztp\.krakow\.pl)$' || true)
+            | grep -vE '^https?://(api\.transitous\.org|transitous\.org|github\.com|www\.w3\.org|www\.bahn\.de|www\.intercity\.pl|intercity\.pl|polregio\.pl|www\.vbb\.de|www\.flixbus\.pl|bip\.poznan\.pl|eezy\.nrw|kolejedolnoslaskie\.pl|kolejemalopolskie\.com\.pl|krakow\.pl|lka\.lodzkie\.pl|mpk\.krakow\.pl|warszawa19115\.pl|www\.bvg\.de|www\.hvv\.de|www\.laenderbahn\.com|www\.mazowieckie\.com\.pl|www\.mvv-muenchen\.de|www\.skm\.pkp\.pl|www\.vrr\.de|www\.vrs\.de|www\.wroclaw\.pl|www\.wtp\.waw\.pl|www\.ztm\.poznan\.pl|www\.zvon\.de|zdtm\.lublin\.eu|lubika\.zdtm\.lublin\.eu|raildude\.com|travel-dealz\.de|www\.vzbv\.de|www\.travelpayouts\.com|ztp\.krakow\.pl)$' || true)
           if [ -n "$bad" ]; then
             echo "::error::Unexpected external hosts in build output:"; echo "$bad"; exit 1
           fi
