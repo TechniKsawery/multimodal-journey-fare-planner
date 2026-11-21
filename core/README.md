@@ -134,6 +134,12 @@ source and a new key is added there. Parameters can be strings, numbers, boolean
 `joined([...], sep)` and `pyFloat(x)` (a Python float that must print as `5.0`; JS numbers cannot tell it
 from `5`). Domain code returns `Text = string | Msg`; the UI calls `tm(text, lang)`.
 
+## Inventory gate
+
+`test/inventory.test.ts` (fed by `core/golden/inventory.json`, generated from the oracle) fails when a Python
+`Carrier` has no TypeScript twin, or when a file in `data/` (schemas aside) is neither read by `core/src` nor listed
+with a reason in the test's `NOT_USED_BY_CORE`. A new tariff file therefore cannot skip the port unnoticed.
+
 ## Status
 
 See the checklist in `mobile-research/plan-pwa-apk-2026-11-15.md` (section 4). Ported so far:
