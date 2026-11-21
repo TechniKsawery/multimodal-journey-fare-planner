@@ -5,7 +5,8 @@
 // lower — that sum is not a price, only a rough estimate. If no variant is confirmed, the nominally
 // cheapest wins and the UI marks it as unconfirmed.
 import { toPln } from "../common/currency";
-import { msg, type Msg } from "../i18n/msg";
+import { msgText } from "../i18n";
+import { isMsg, msg, type Msg, type Text } from "../i18n/msg";
 import { ValueError, formatFixed, round2, truthy } from "../pyCompat";
 import {
   LegMode,
@@ -128,8 +129,8 @@ export function priceRankingNote(key: string, chosen: Itinerary, itineraries: It
 
 const usable = (pl: PricedLeg): boolean => priceKnown(pl) && !truthy(pl.breakdown["wartosc_zastepcza"]);
 
-export function buildItinerary(variantName: string, pricedLegs: PricedLeg[]): Itinerary {
-  if (pricedLegs.length === 0) throw new ValueError(`wariant '${variantName}': brak odcinków`);
+export function buildItinerary(variantName: Text, pricedLegs: PricedLeg[]): Itinerary {
+  if (pricedLegs.length === 0) throw new ValueError(`wariant '${isMsg(variantName) ? msgText(variantName) : variantName}': brak odcinków`);
 
   const totalPricePln = pricedLegs.filter(usable).reduce((sum, pl) => sum + toPln(pl.amount, pl.currency), 0);
   const first = pricedLegs[0].leg;

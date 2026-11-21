@@ -42,6 +42,33 @@ python tools/golden/generate_fares.py   # also generate_misc.py, generate_scorin
 | `leg.depart.date()` as the travel date | `toISOString().slice(0, 10)` (UTC date) | MOTIS times are UTC (`Z`), so the date is the same as in the oracle; note that a local departure just after midnight belongs to the previous UTC day in both |
 | `fares/flixbus.py` live FlixBus API when `travel_date` is set | always the PLN/km fallback (`price_verified: false`) | unofficial API, no CORS/ToS guarantee; golden vectors cover the fallback path |
 
+## Search: variants and recommendations (for the UI)
+
+```ts
+import { createTransitousClient, fastBudget } from "./src/routing/transitousClient";
+import { makeRouteRequest } from "./src/routing/variants";
+import { search } from "./src/routing/search";
+
+const client = createTransitousClient();
+const request = makeRouteRequest({ origin_stop_id: "51.2465,22.5684", destination_stop_id: "51.5049,7.1022",
+  origin_label: "Lublin", destination_label: "Gelsenkirchen", date: "2026-12-01", discounts: profile });
+const { built, skipped, recommendations, other_day } = await search(client, request, { mode: "fast", budget: fastBudget() });
+```
+
+`search` (`routing/search.ts`) builds the rail variants of one query (`routing/variants.ts`), prices every leg with `priceLeg`, rejects
+physically impossible transfers, de-duplicates the same route found twice and picks the recommendations (`{}` when nothing feasible was found).
+Variants that could not be built land in `skipped` with a reason (`Msg`); when the whole result is empty and the service only had connections on
+other days, the nearest of them are in `other_day`. `variant_name` and the reasons are `Text` (a `Msg` to translate with `renderMsg`, or a string).
+
+- **Query budget.** `"fast"` (default) makes ONE query (8 itineraries) — it fits `fastBudget()` (2). `"extended"` also tries the explicit
+  via-hub variant (Poznań Główny, two more queries) and alternative stations, like the Python oracle; use `extendedBudget()` (12).
+  A variant that runs out of budget is skipped with the reason `err.transitous_budget`; the main variants stay.
+- **Time.** `date` + `departure_time` are Warsaw wall-clock time (`localIso` gives the ISO string with the offset, like Python's `fold=0`).
+- **Errors.** Only `MotisError` (no connection, rejected request, budget) turns into a skipped variant; an abort or a bug propagates.
+- **Not ported:** flight hubs (rail + flight + rail, flight + regional) — flights have no live prices here.
+- Any object with `plan()` and `findStopId()` works as the client (a fake in tests); the oracle is checked by `test/variants.golden.test.ts`, which
+  replays the requests the Python code recorded against a synthetic routing world (`tools/golden/generate_variants.py`).
+
 ## Deutschlandticket / BahnCard 100 (for the UI)
 
 `DiscountProfile` has a `deutschlandticket: boolean` field (default `false`; `parseDiscountProfile` accepts it) next to `bahncard: "25" | "50" | "100" | null`.

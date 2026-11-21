@@ -2,7 +2,7 @@
 // Plain data + functions (instead of Python properties) so the objects survive structuredClone/JSON
 // and can cross a Web Worker boundary. Datetimes are `Date` instants (the oracle uses aware datetimes).
 import type { Carrier } from "../fares/model";
-import { msg, type Msg } from "../i18n/msg";
+import { msg, type Msg, type Text } from "../i18n/msg";
 import { truthy } from "../pyCompat";
 import {
   EXTRA_CARRIER_PENALTY_MIN,
@@ -82,7 +82,7 @@ export interface TransferWarning {
 }
 
 export interface Itinerary {
-  variant_name: string;
+  variant_name: Text; // a Msg (translated by the UI) or a plain string
   legs: PricedLeg[];
   total_price_pln: number;
   total_duration_min: number;
@@ -132,8 +132,8 @@ export function valueScore(i: Itinerary): number {
 }
 
 export interface SkippedVariant {
-  variant_name: string;
-  reason: string;
+  variant_name: Text;
+  reason: Text;
 }
 
 export const OTHER_DAY_SECTION_TITLE = "Najbliższe połączenia w innym dniu";
