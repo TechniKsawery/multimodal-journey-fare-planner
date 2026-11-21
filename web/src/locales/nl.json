@@ -122,5 +122,6 @@
   "otherDayTitle": "Geen verbindingen op de gekozen dag.",
   "otherDayHint": "De dichtstbijzijnde op andere dagen worden getoond.",
   "otherDayLater": "{date} ({n} d later)",
-  "otherDayEarlier": "{date} ({n} d eerder)"
+  "otherDayEarlier": "{date} ({n} d eerder)",
+  "sortHintPrice": "Prijsvolgorde: eerst volledig geprijsde routes (goedkoopste eerst), dan gedeeltelijk geprijsde (de som dekt slechts een deel van de trajecten en is niet vergelijkbaar), daarna routes zonder prijs."
 }

@@ -122,5 +122,6 @@
   "otherDayTitle": "Keine Verbindungen am gewählten Tag.",
   "otherDayHint": "Gezeigt werden die nächsten an anderen Tagen.",
   "otherDayLater": "{date} ({n} T. später)",
-  "otherDayEarlier": "{date} ({n} T. früher)"
+  "otherDayEarlier": "{date} ({n} T. früher)",
+  "sortHintPrice": "Preisreihenfolge: zuerst vollständig bepreiste Verbindungen (günstigste zuerst), dann teilweise bepreiste (die Summe deckt nur einen Teil der Abschnitte ab und ist nicht vergleichbar), zuletzt Verbindungen ohne Preis."
 }

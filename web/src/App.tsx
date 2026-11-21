@@ -10,6 +10,7 @@ import { BudgetExceededError as PerSearchBudgetError } from '../../core/src/rout
 import { MotisError } from '../../core/src/routing/errors';
 import { planBudget, searchRoutes, suggest, type GeocodeSuggestion } from './search/service';
 import { buildResults } from './search/adapt';
+import { comparePrice } from './search/sort';
 
 type Theme = 'auto' | 'light' | 'dark';
 type Sort = 'price' | 'time';
@@ -172,10 +173,7 @@ export function App() {
       if (tab === 'cheapest') {
         if (a.tag === 'cheapest' && b.tag !== 'cheapest') return -1;
         if (b.tag === 'cheapest' && a.tag !== 'cheapest') return 1;
-        if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
-        const cov = (x: typeof a) => (x.partial ? (x.pricedLegs ?? 0) / Math.max(x.totalLegs ?? 1, 1) : 2);
-        if (cov(a) !== cov(b)) return cov(b) - cov(a);
-        return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
+        return comparePrice(a, b);
       }
       if (tab === 'safest') {
         if (a.tag === 'safest' && b.tag !== 'safest') return -1;
@@ -187,10 +185,7 @@ export function App() {
       }
       // tab === 'all'
       if (sort === 'price') {
-        if (!!a.noPrice !== !!b.noPrice) return a.noPrice ? 1 : -1;
-        const cov = (x: typeof a) => (x.partial ? (x.pricedLegs ?? 0) / Math.max(x.totalLegs ?? 1, 1) : 2);
-        if (cov(a) !== cov(b)) return cov(b) - cov(a);
-        return a.totalPln - b.totalPln || a.durationMin - b.durationMin;
+        return comparePrice(a, b);
       }
       return a.durationMin - b.durationMin;
     });
@@ -323,6 +318,7 @@ export function App() {
                 </p>
               )}
               <p class="muted small-note">{t.priceNote}</p>
+              {(tab === 'cheapest' || (tab === 'all' && sort === 'price')) && <p class="muted small-note">{t.sortHintPrice}</p>}
 
               {results.some((it) => it.otherDay) && (
                 <p class="callout" role="status">
