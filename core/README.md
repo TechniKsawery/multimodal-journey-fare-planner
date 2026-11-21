@@ -142,6 +142,13 @@ rest 0). It is always an unconfirmed estimate (`price_verified=false`, `breakdow
 the operator pages do not say the offer is on sale today. Age 6-15 gets the child fare, under 6 and unlisted stations get no match.
 Data: `data/fares/kd_dresden_promotion.json` (source URL and verification date inside).
 
+## Data checks
+
+`test/data.consistency.test.ts` ports the JSON-only parts of `tests/test_data_consistency.py` (attractions, city cards,
+fare files: sources with URL and date, currencies, conditions of reduced prices, reduced <= full). They run in the
+TypeScript CI without Python. The "known debt" lists are copied from the Python test; remove a record from them when it gets fixed
+(the tests insist on it).
+
 ## Inventory gate
 
 `test/inventory.test.ts` (fed by `core/golden/inventory.json`, generated from the oracle) fails when a Python
