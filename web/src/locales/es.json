@@ -142,5 +142,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Sin autonomía personal (37 %)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Ciego / sin autonomía personal (51 %)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Acompañante o guía de persona con discapacidad (95 %)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Servicio militar no profesional (78 %)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Servicio militar no profesional (78 %)",
+  "citizenship": "Nacionalidad (opcional)",
+  "cit_none": "No indicar",
+  "cit_PL": "Polaca",
+  "cit_UE": "UE (distinta de la polaca)",
+  "cit_poza_UE": "Fuera de la UE",
+  "eligibilityTitle": "¿Te corresponden los descuentos?",
+  "citizenshipHint": "Solo influye en los avisos de reconocimiento, nunca en los precios."
 }

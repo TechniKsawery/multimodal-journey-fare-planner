@@ -177,3 +177,21 @@ describe('more options', () => {
     expect('nope' in d).toBe(false);
   });
 });
+
+import { warningsFor } from '../../../core/src/fares/foreignerEligibility';
+
+describe('eligibility warnings', () => {
+  const stud = { status: 'student' as const, idCountry: 'pl' as const, age: 22, bahncard: 'none' as const };
+  it('no citizenship given -> nothing to warn about', () => {
+    expect(warningsFor(toDiscountProfile(stud))).toEqual([]);
+  });
+  it('non-EU student gets the PKP warning, Polish citizen none', () => {
+    expect(warningsFor(toDiscountProfile({ ...stud, citizenship: 'poza_UE' })).map((m) => m.key)).toEqual(['foreign.pkp_non_eu']);
+    expect(warningsFor(toDiscountProfile({ ...stud, citizenship: 'PL' }))).toEqual([]);
+  });
+  it('a foreign student card plus a city discount warns about that city only', () => {
+    const keys = warningsFor(toDiscountProfile({ ...stud, idCountry: 'de', overrides: { ztm_poznan_ulgowy: true } })).map((m) => m.key);
+    expect(keys).toContain('foreign.poznan');
+    expect(keys).not.toContain('foreign.krakow');
+  });
+});

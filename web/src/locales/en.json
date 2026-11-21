@@ -142,5 +142,12 @@
   "pkp_niezdolni_do_samodzielnej_egzystencji": "Unable to live independently (37%)",
   "pkp_niewidomi_niezdolni_do_samodzielnej_egzystencji": "Blind / unable to live independently (51%)",
   "pkp_opiekun_lub_przewodnik_osoby_niepelnosprawnej": "Carer or guide of a disabled person (95%)",
-  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Non-professional military service (78%)"
+  "pkp_zolnierze_niezawodowej_sluzby_wojskowej": "Non-professional military service (78%)",
+  "citizenship": "Citizenship (optional)",
+  "cit_none": "Not given",
+  "cit_PL": "Polish",
+  "cit_UE": "EU (other than Polish)",
+  "cit_poza_UE": "Outside the EU",
+  "eligibilityTitle": "Do the discounts apply to you",
+  "citizenshipHint": "Only affects eligibility warnings, never prices."
 }
